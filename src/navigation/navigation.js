@@ -23,6 +23,7 @@ import ChangePassword from "../screens/changePassword"
 import AboutUs from "../screens/aboutUs"
 import MemberShip from "../screens/membership"
 import Notification from "../screens/notification"
+import navigationStyle from "./style"
 
 //Stacks Of Screen To Navigate
 const stack = createNativeStackNavigator()
@@ -134,27 +135,11 @@ const BottomTab = ({ navigation }) => {
                         tabBarIcon: ({ focused }) => {
                             return (
                                 <View style={{ bottom: 18, left: 5 }}>
-                                    <View style={{
-                                        backgroundColor: constants.colors.backGroundLight,
-                                        borderRadius: 30,
-                                        padding: 5,
-                                        justifyContent: 'center'
-                                    }} >
-                                        <View style={{
-                                            justifyContent: 'center',
-                                            backgroundColor: constants.colors.darkBlue,
-                                            height: 50,
-                                            width: 50,
-                                            borderRadius: 30,
-                                            alignSelf: 'center'
-                                        }}>
+                                    <View style={navigationStyle.mainBackgroundView} >
+                                        <View style={navigationStyle.imageView}>
                                             <Image
                                                 resizeMode='contain'
-                                                style={{
-                                                    height: 40,
-                                                    width: 40,
-                                                    alignSelf: 'center'
-                                                }}
+                                                style={navigationStyle.img}
                                                 source={constants.icons.tennisBall} />
                                         </View>
                                     </View>
