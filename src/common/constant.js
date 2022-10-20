@@ -17,7 +17,9 @@ export const constants = {
         changePassword: 'ChangePassword',
         aboutUs: 'AboutUs',
         membership: 'MemberShip',
-        notification:'Notification'
+        notification:'Notification',
+        buyMemberShip:"BuyMemberShip",
+        privateGroupDetails:"PrivateGroupDetails"
     },
     colors: {
         darkGreen: '#1D7A48',
@@ -53,6 +55,15 @@ export const constants = {
         mail: require(`${defaultPath}/mail.png`),
         call: require(`${defaultPath}/call.png`),
         rightArrow: require(`${defaultPath}/rightArrow.png`),
+        cart: require(`${defaultPath}/cart.png`),
+        groupProfile: require(`${defaultPath}/groupProfile.png`),
+        calander: require(`${defaultPath}/Calander.png`),
+        tennisMembership: require(`${defaultPath}/TenisMembership.png`),
+        elizabeth: require(`${defaultPath}/elizabeth.png`),
+        Rackets: require(`${defaultPath}/Rackets.png`),
+        profileMembership: require(`${defaultPath}/ProfileMembership.png`),
+        effilTower: require(`${defaultPath}/effilTower.png`),
+        map: require(`${defaultPath}/map.png`),
     },
     fonts: {
         exo2Regular: 'Exo2-Regular',

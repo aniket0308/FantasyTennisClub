@@ -24,6 +24,8 @@ import AboutUs from "../screens/aboutUs"
 import MemberShip from "../screens/membership"
 import Notification from "../screens/notification"
 import navigationStyle from "./style"
+import BuyMemberShip from "../screens/buyMemberShip"
+import PrivateGroupDetails from "../screens/privateGroupDetails"
 
 //Stacks Of Screen To Navigate
 const stack = createNativeStackNavigator()
@@ -61,7 +63,9 @@ const StackInsideAccount = () => {
             <stack.Screen options={{ headerShown: false }} name="ChangePassword" component={ChangePassword} />
             <stack.Screen options={{ headerShown: false }} name="AboutUs" component={AboutUs} />
             <stack.Screen options={{ headerShown: false }} name="MemberShip" component={MemberShip} />
+            <stack.Screen options={{ headerShown: false }} name="BuyMemberShip" component={BuyMemberShip} />
             <stack.Screen options={{ headerShown: false }} name="Notification" component={Notification} />
+            <stack.Screen options={{ headerShown: false }} name="PrivateGroupDetails" component={PrivateGroupDetails} />
         </stack.Navigator>
     )
 }

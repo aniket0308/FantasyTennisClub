@@ -56,7 +56,7 @@ const Account = ({ navigation }) => {
                                             : item == 'About us'
                                                 ? utils.navigateTo(navigation, constants.screens.aboutUs)
                                                 : item == 'My Memberships'
-                                                    ? utils.navigateTo(navigation, constants.screens.membership)
+                                                    ? utils.navigateTo(navigation, constants.screens.buyMemberShip)
                                                     :item == 'Notifications' 
                                                     ?utils.navigateTo(navigation, constants.screens.notification)
                                                     :item == 'Contact us' 
