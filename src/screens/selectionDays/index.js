@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Image, Platform, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { widthPercentageToDP } from "react-native-responsive-screen";
 import { utils } from "../../common";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
@@ -9,7 +10,6 @@ import selectionDayStyle from "./style";
 const SelectionDays = ({ route, navigation }) => {
 
     const [myPicks, setMyPicks] = useState('')
-console.log('sddsds',myPicks);
     const tempArr = [
         { day: 1 }, { day: 2 }, { day: 3 }, { day: 4 }, { day: 5 }, { day: 6 }, { day: 7 }, { day: 8 }, { day: 9 }, { day: 10 },
         { day: 11 }, { day: 12 }, { day: 13 }, { day: 14, icon: constants.icons.winnerCup }
@@ -57,8 +57,8 @@ console.log('sddsds',myPicks);
                                     {
                                         item.icon
                                             ? <>
-                                                <Image style={{ marginBottom: Platform.OS == "android" ? 10 : 0 }} source={item.icon} resizeMode='contain' />
-                                                <Text style={selectionDayStyle.TxtDay}>Day</Text>
+                                                <Image style={{ marginBottom: Platform.OS == "android" ? 10 : 0,height:widthPercentageToDP(10),width:widthPercentageToDP(12) }} source={item.icon} resizeMode='contain' />
+                                                <Text style={[selectionDayStyle.TxtDay]}>Day</Text>
                                             </> : <>
                                                 <Text style={[selectionDayStyle.txtWhichDay, { color: item.day < 6 ? constants.colors.white : constants.colors.darkGreen }]} >{item.day}</Text>
                                                 <Text style={[selectionDayStyle.TxtDay, { color: item.day < 6 ? constants.colors.white : constants.colors.darkGreen }]}>Day</Text>

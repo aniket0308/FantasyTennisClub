@@ -11,7 +11,7 @@ const dayPickStyle = StyleSheet.create({
         fontFamily: constants.fonts.notoSansBold,
         fontWeight: '600',
         fontSize: 36,
-        marginTop: 40,
+        marginTop: 0,
         color: constants.colors.black
     },
     txtSubmit: {

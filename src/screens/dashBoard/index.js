@@ -86,7 +86,7 @@ const DashBoardHome = ({ navigation }) => {
                 }
                 {
                     item.icon
-                    && <Image style={{ alignSelf: 'center' }} source={constants.icons.whatsApp} />
+                    && <Image style={{ alignSelf: 'center',height: widthPercentageToDP(10),width: widthPercentageToDP(10) }} source={constants.icons.whatsApp} />
                 }
                 <Text style={[dashboardStyle.txtTitle, { fontSize: index == 3 || index == 4 ? 20 : 14, }]} >{item.title}</Text>
             </TouchableOpacity>
@@ -118,7 +118,7 @@ const DashBoardHome = ({ navigation }) => {
                 subTitleStyle={{ alignSelf: 'center', color: constants.colors.darkGreen }}
                 rightIcon={constants.icons.shapeBell}
                 mainViewHeaderStyle={{ paddingBottom: 10, paddingTop: 10 }}
-                resizeMode='stretch'
+                resizeMode='contain'
                 rightIconStyle={{ alignSelf: 'center' }}
             />
 

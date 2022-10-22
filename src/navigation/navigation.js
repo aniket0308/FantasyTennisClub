@@ -87,7 +87,9 @@ const BottomTab = ({ navigation }) => {
                                         resizeMode='contain'
                                         style={{
                                             tintColor: focused ? constants.colors.darkGreen : constants.colors.bottomTabLight,
-                                            alignSelf: 'center'
+                                            alignSelf: 'center',
+                                            height:widthPercentageToDP(7),
+                                            width:widthPercentageToDP(7)
                                         }}
                                     />
                                     <Text
@@ -115,7 +117,9 @@ const BottomTab = ({ navigation }) => {
                                         resizeMode='contain'
                                         style={{
                                             tintColor: focused ? constants.colors.darkGreen : constants.colors.bottomTabLight,
-                                            alignSelf: 'center'
+                                            alignSelf: 'center',
+                                            height:widthPercentageToDP(7),
+                                            width:widthPercentageToDP(7)
                                         }}
                                     />
                                     <Text
@@ -171,7 +175,9 @@ const BottomTab = ({ navigation }) => {
                                         source={constants.icons.rules}
                                         style={{
                                             tintColor: focused ? constants.colors.darkGreen : constants.colors.bottomTabLight,
-                                            alignSelf: 'center'
+                                            alignSelf: 'center',
+                                            height:widthPercentageToDP(7),
+                                            width:widthPercentageToDP(7)
                                         }}
                                         resizeMode='contain'
                                     />
@@ -199,7 +205,10 @@ const BottomTab = ({ navigation }) => {
                                         source={constants.icons.account}
                                         style={{
                                             tintColor: focused ? constants.colors.darkGreen : constants.colors.bottomTabLight,
-                                            alignSelf: 'center'
+                                            alignSelf: 'center',
+                                            height:widthPercentageToDP(7),
+                                            width:widthPercentageToDP(7)
+                                            
                                         }}
                                         resizeMode='contain'
                                     />

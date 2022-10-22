@@ -1,5 +1,6 @@
 import React from "react";
 import { SafeAreaView, StatusBar, Text, View } from "react-native";
+import { widthPercentageToDP } from "react-native-responsive-screen";
 import { constants } from "../../common/constant";
 import { Button, Header } from "../../components";
 import joinWhatsAppStyle from "./style";

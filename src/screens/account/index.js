@@ -1,5 +1,6 @@
 import React from "react";
 import { Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { widthPercentageToDP } from "react-native-responsive-screen";
 import { utils } from "../../common";
 import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
@@ -23,18 +24,18 @@ const Account = ({ navigation }) => {
             >
                 <View style={commonStyle.row}>
                     <Image
-                        style={{ alignSelf: 'center', marginTop: 10 }}
+                        style={{ alignSelf: 'center', marginTop: 10,height:widthPercentageToDP(35),width:widthPercentageToDP(35) }}
                         source={constants.icons.profileImage}
                         resizeMode='contain'
                     />
                     <View style={[commonStyle.column, { marginLeft: 10, marginTop: 10 }]}>
                         <Text style={accountStyle.txtName}>Joanna Oleaga</Text>
                         <View style={[commonStyle.row, { marginVertical: 10 }]}>
-                            <Image resizeMode='contain' style={{ alignSelf: 'center', marginRight: 5 }} source={constants.icons.mail} />
+                            <Image resizeMode='contain' style={accountStyle.img} source={constants.icons.mail} />
                             <Text style={accountStyle.txtSmallName}>joaoleaga@gmail.com</Text>
                         </View>
                         <View style={[commonStyle.row, { marginTop: -5 }]}>
-                            <Image resizeMode='contain' style={{ alignSelf: 'center', marginRight: 5 }} source={constants.icons.call} />
+                            <Image resizeMode='contain' style={accountStyle.img} source={constants.icons.call} />
                             <Text style={accountStyle.txtSmallName}>+17133608496</Text>
                         </View>
                         <TouchableOpacity
@@ -67,7 +68,7 @@ const Account = ({ navigation }) => {
                                     titleStyle={{ color: item == 'Logout' ? constants.colors.white : constants.colors.black }}
                                     imgStyle={{ tintColor: item == 'Logout' ? constants.colors.white : constants.colors.grey }}
                                     title={item}
-                                    rightIcon={constants.icons.rightArrow}
+                                    rightIcon={constants.icons.whiteBackArrow}
                                 />
                             )
                         })

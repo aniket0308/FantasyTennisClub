@@ -64,6 +64,7 @@ export const constants = {
         profileMembership: require(`${defaultPath}/ProfileMembership.png`),
         effilTower: require(`${defaultPath}/effilTower.png`),
         map: require(`${defaultPath}/map.png`),
+        whiteBackArrow: require(`${defaultPath}/whiteBackArrow.png`),
     },
     fonts: {
         exo2Regular: 'Exo2-Regular',

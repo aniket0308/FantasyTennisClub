@@ -69,7 +69,7 @@ const LeaderBoard = ({route}) => {
                     rightIcon={constants.icons.participant}
                     mainViewHeaderStyle={{ paddingBottom: 10, paddingTop: 10 }}
                     resizeMode='stretch'
-                    rightIconStyle={{ height: 40, width: 60, alignSelf: 'center',marginTop:-10 }}
+                    rightIconStyle={{height:widthPercentageToDP(10),width:widthPercentageToDP(15),alignSelf: 'center',marginTop:Platform.OS=='ios'?-15:0 }}
                 />
             </View>
             <View style={leaderBoardStyle.mainViewScore}>

@@ -51,7 +51,7 @@ const BuyMemberShip = ({ navigation }) => {
             <TouchableOpacity
                 onPress={() => utils.navigateTo(navigation, item.text == 'Organize Private Group' || item.text == 'Join Private Group' ? constants.screens.privateGroupDetails : constants.screens.membership, item.text)}
                 style={[buyMemberShipStyle.touchable, { marginRight: index % 2 != 0 ? 0 : 30 }]}>
-                <Image style={{ alignSelf: 'center' }} source={item.icon} />
+                <Image style={{ alignSelf: 'center',height:widthPercentageToDP(22),width:widthPercentageToDP(22) }} source={item.icon} />
                 <Text style={buyMemberShipStyle.text}>{item.text}</Text>
             </TouchableOpacity>
         )

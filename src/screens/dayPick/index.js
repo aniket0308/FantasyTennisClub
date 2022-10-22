@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FlatList, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
 import { constants } from "../../common/constant";
 import { Button } from "../../components";
@@ -46,11 +46,16 @@ const DayPick = ({ route, navigation }) => {
         <View style={dayPickStyle.mainContainer}>
             <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />
             <SafeAreaView />
+            <TouchableOpacity onPress={() => navigation.goBack()} style={{ padding: 5, marginTop: 10, marginLeft: -5 }}>
+                <Image style={{ height: 20, width: 20, tintColor: constants.colors.darkGreen }} source={constants.icons.backArrow} />
+            </TouchableOpacity>
             <Text style={dayPickStyle.txtDay}>Day {route.params <= 9 ? `0${route.params}` : route.params}</Text>
             <Text style={dayPickStyle.txtSubmit}>{isSubmit == false ? 'Submit your picks below' : '‌‌Your Picks have been entered successfully!'}</Text>
             <ScrollView
+                scrollEnabled={isSubmit == true ? false : true}
+                bounces={false}
                 style={{ marginBottom: 25 }}
-                contentContainerStyle={{ justifyContent: 'center', flex:isSubmit==false ?0:1 }}
+                contentContainerStyle={{ justifyContent: 'center', flex: isSubmit == false ? 0 : 1 }}
                 showsVerticalScrollIndicator={false} >
                 {isSubmit == false
                     ? <>

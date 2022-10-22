@@ -22,10 +22,11 @@ const SignUp = ({ navigation }) => {
             <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />
             <SafeAreaView style={{ backgroundColor: constants.colors.backGroundLight }} />
             <Header
-                    title='Become a Member'
-                    subTitle='Complete your details below'
-                    showBackArrow={false}
-                />
+                title='Become a Member'
+                subTitle='Complete your details below'
+                showBackArrow={false}
+                mainViewHeaderStyle={{ paddingLeft: 35 }}
+            />
             <KeyboardAwareScrollView
                 scrollEnabled={true}
                 showsVerticalScrollIndicator={false}
@@ -80,10 +81,10 @@ const SignUp = ({ navigation }) => {
                     btnStyle={{ marginTop: 50 }}
                 />
             </KeyboardAwareScrollView>
-                <View style={signUpStyle.footer}>
-                    <Text style={signUpStyle.txtNewToFantasy} >Already have a Fantasy Tennis Club? </Text>
-                    <Text onPress={()=>utils.navigateTo(navigation,constants.screens.login)} style={signUpStyle.txtSignUp}>Login</Text>
-                </View>
+            <View style={signUpStyle.footer}>
+                <Text style={signUpStyle.txtNewToFantasy} >Already have a Fantasy Tennis Club? </Text>
+                <Text onPress={() => utils.navigateTo(navigation, constants.screens.login)} style={signUpStyle.txtSignUp}>Login</Text>
+            </View>
         </>
     )
 }

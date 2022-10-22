@@ -3,7 +3,8 @@ import { constants } from '../../common/constant'
 
 const signUpStyle=StyleSheet.create({
     container:{
-        backgroundColor:constants.colors.backGroundLight
+        backgroundColor:constants.colors.backGroundLight,
+        paddingBottom:20,
     },
     footer: {
         flexDirection: 'row',

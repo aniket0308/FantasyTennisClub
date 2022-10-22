@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, StatusBar, SafeAreaView, Dimensions, Image } from 'react-native'
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { widthPercentageToDP } from "react-native-responsive-screen";
 import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
 import { Button, FloatingInput, Header } from "../../components";
@@ -23,9 +24,10 @@ const ForgotPassword = ({ navigation }) => {
                 style={[commonStyle.container, forgotPasswordStyle.container]} >
                 <Header
                     title='Forgot Password'
-                    titleStyle={{fontSize:25}}
+                    titleStyle={{fontSize:25,marginTop:10}}
+                    mainViewHeaderStyle={{width:widthPercentageToDP(75)}}
                     showBackArrow={true}
-                    onPress={()=>navigation.goBack()}
+                    onPressLeftIcon={()=>navigation.goBack()}
                 />
                 <Image style={forgotPasswordStyle.imgLogo} source={constants.icons.logo} />
                 <FloatingInput
