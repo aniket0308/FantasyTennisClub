@@ -1,16 +1,46 @@
-import React from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useEffect, useState } from "react";
 import { Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
+import { useDispatch } from "react-redux";
 import { utils } from "../../common";
 import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
 import CardWithImage from "../../components/cardWithImage";
+import { logout } from "../../redux/slice/auth";
 import accountStyle from "./style";
 
 //Account Screen
 const Account = ({ navigation }) => {
 
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [mobileNumber, setMobileNumber] = useState('')
+    const dispatch = useDispatch()
     const tempArr = ['My Memberships', 'Change password', 'Contact us', 'Notifications', 'About us', 'Logout']
+
+    const getData = async () => {
+        try {
+            const nameValue = await AsyncStorage.getItem('@Name')
+            const emailValue = await AsyncStorage.getItem('@Email')
+            const mobileValue = await AsyncStorage.getItem('@MobileNumber')
+            if (nameValue !== null && emailValue !== '' && mobileValue !== '') {
+                // value previously stored
+                setName(nameValue)
+                setEmail(emailValue)
+                setMobileNumber(mobileValue)
+            } else {
+                null
+            }
+        } catch (e) {
+            // error reading value
+            console.log('Error In Getting Item:', e);
+        }
+    }
+
+    useEffect(() => {
+        getData()
+    })
 
     return (
         <View style={accountStyle.mainContiner}>
@@ -24,19 +54,19 @@ const Account = ({ navigation }) => {
             >
                 <View style={commonStyle.row}>
                     <Image
-                        style={{ alignSelf: 'center', marginTop: 10,height:widthPercentageToDP(35),width:widthPercentageToDP(35) }}
+                        style={{ alignSelf: 'center', marginTop: 10, height: widthPercentageToDP(35), width: widthPercentageToDP(35) }}
                         source={constants.icons.profileImage}
                         resizeMode='contain'
                     />
                     <View style={[commonStyle.column, { marginLeft: 10, marginTop: 10 }]}>
-                        <Text style={accountStyle.txtName}>Joanna Oleaga</Text>
+                        <Text style={accountStyle.txtName}>{name != '' ? name : 'Joanna Oleaga'}</Text>
                         <View style={[commonStyle.row, { marginVertical: 10 }]}>
                             <Image resizeMode='contain' style={accountStyle.img} source={constants.icons.mail} />
-                            <Text style={accountStyle.txtSmallName}>joaoleaga@gmail.com</Text>
+                            <Text numberOfLines={1} style={accountStyle.txtSmallName}>{email != '' ? email : "joaoleaga@gmail.com"}</Text>
                         </View>
                         <View style={[commonStyle.row, { marginTop: -5 }]}>
                             <Image resizeMode='contain' style={accountStyle.img} source={constants.icons.call} />
-                            <Text style={accountStyle.txtSmallName}>+17133608496</Text>
+                            <Text style={accountStyle.txtSmallName}>+{mobileNumber != '' ? mobileNumber : '17133608496'}</Text>
                         </View>
                         <TouchableOpacity
                             onPress={() => utils.navigateTo(navigation, constants.screens.changePassword, 'editProfile')}
@@ -58,11 +88,11 @@ const Account = ({ navigation }) => {
                                                 ? utils.navigateTo(navigation, constants.screens.aboutUs)
                                                 : item == 'My Memberships'
                                                     ? utils.navigateTo(navigation, constants.screens.buyMemberShip)
-                                                    :item == 'Notifications' 
-                                                    ?utils.navigateTo(navigation, constants.screens.notification)
-                                                    :item == 'Contact us' 
-                                                    ?utils.navigateTo(navigation, constants.screens.changePassword,'contactUs')
-                                                    :null
+                                                    : item == 'Notifications'
+                                                        ? utils.navigateTo(navigation, constants.screens.notification)
+                                                        : item == 'Contact us'
+                                                            ? utils.navigateTo(navigation, constants.screens.changePassword, 'contactUs')
+                                                            : item == 'Logout' ? dispatch(logout()) : null
                                     }}
                                     containerStyle={{ marginBottom: 10, backgroundColor: item == 'Logout' ? constants.colors.darkBlue : constants.colors.cardColor }}
                                     titleStyle={{ color: item == 'Logout' ? constants.colors.white : constants.colors.black }}

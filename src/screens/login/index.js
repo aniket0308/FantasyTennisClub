@@ -2,10 +2,11 @@ import React, { createRef, useEffect, useRef, useState } from "react";
 import { Text, Image, Dimensions, StatusBar, SafeAreaView, View } from 'react-native'
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import SplashScreen from 'react-native-splash-screen'
+import { useDispatch } from "react-redux";
 import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
 import { Button, FloatingInput } from "../../components";
-import { AuthNavigator } from "../../navigation/navigation";
+import { login } from "../../redux/slice/auth";
 import loginStyle from "./style";
 
 //Login Screen
@@ -14,12 +15,11 @@ const Login = ({ navigation }) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [isPasswordVisible, setIsPasswordVisible] = useState(true)
-
-    // const emailRef = useRef('');
-    // const passwordRef = useRef('');
-
+    const dispatch = useDispatch()
     useEffect(() => {
-        SplashScreen.hide();
+        setTimeout(() => {
+            SplashScreen.hide();
+        }, 1000)
     }, [])
 
     return (
@@ -38,7 +38,7 @@ const Login = ({ navigation }) => {
                     value={email}
                     autoCapitalize='none'
                     blurOnSubmit={true}
-                    // onSubmitRef={() => passwordRef.current.focus()}
+                // onSubmitRef={() => passwordRef.current.focus()}
                 />
                 <FloatingInput
                     // refs={passwordRef}
@@ -58,10 +58,7 @@ const Login = ({ navigation }) => {
                 <Button
                     titleText='Login'
                     btnStyle={{ marginTop: 34 }}
-                    onPress={() => {
-                        alert("hi")
-                        return <AuthNavigator />
-                    }}
+                    onPress={() => dispatch(login({email,password}))}
                 />
                 <SafeAreaView />
             </KeyboardAwareScrollView>

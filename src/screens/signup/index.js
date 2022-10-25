@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { View, Text, StatusBar, Dimensions, SafeAreaView } from 'react-native'
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { useDispatch } from "react-redux";
 import { utils } from "../../common";
 import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
 import { Button, FloatingInput, Header } from "../../components";
+import { registration } from "../../redux/slice/auth";
 import signUpStyle from "./style";
 
 //SignUp (Registration) Screen
@@ -16,6 +18,7 @@ const SignUp = ({ navigation }) => {
     const [confirmPassword, setConfirmPassword] = useState('')
     const [referral, setReferral] = useState('')
     const [mobileNumber, setMobileNumber] = useState('')
+    const dispatch=useDispatch()
 
     return (
         <>
@@ -79,6 +82,7 @@ const SignUp = ({ navigation }) => {
                 <Button
                     titleText='Sign Up'
                     btnStyle={{ marginTop: 50 }}
+                    onPress={()=>dispatch(registration({fullName,email,password,confirmPassword,mobileNumber,referral}))}
                 />
             </KeyboardAwareScrollView>
             <View style={signUpStyle.footer}>
