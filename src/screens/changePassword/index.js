@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { Image, SafeAreaView, StatusBar, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { widthPercentageToDP } from "react-native-responsive-screen";
+import { useDispatch } from "react-redux";
 import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
 import { Button, FloatingInput, Header } from "../../components";
+import { editProfile } from "../../redux/slice/profile";
 import changePasswordStyle from "./style";
 
 const ChangePassword = ({ route, navigation }) => {
@@ -16,6 +18,7 @@ const ChangePassword = ({ route, navigation }) => {
     const [mobileNumber, setMobileNumber] = useState('')
     const [subject, setSubject] = useState('')
     const [text, setText] = useState('')
+    const dispatch =useDispatch()
 
     return (
         <View style={changePasswordStyle.mainContainer}>
@@ -106,6 +109,7 @@ const ChangePassword = ({ route, navigation }) => {
                 <Button
                     titleText={route.params == 'editProfile' ? 'Update' :route.params == 'contactUs'?'Send':'Update Password'}
                     btnStyle={{ marginTop: 30 }}
+                    onPress={()=>{route.params == 'editProfile'?dispatch(editProfile({fullName,mobileNumber,navigation})):''}}
                 />
             </KeyboardAwareScrollView>
         </View>

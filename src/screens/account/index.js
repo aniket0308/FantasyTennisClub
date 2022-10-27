@@ -16,8 +16,14 @@ const Account = ({ navigation }) => {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [mobileNumber, setMobileNumber] = useState('')
+    const [,setRender]=useState({})
     const dispatch = useDispatch()
     const tempArr = ['My Memberships', 'Change password', 'Contact us', 'Notifications', 'About us', 'Logout']
+
+    useEffect(() => {
+        const willFocusSubscription = navigation.addListener("focus", () => setRender({}));
+        return () => willFocusSubscription
+    }, []);
 
     const getData = async () => {
         try {

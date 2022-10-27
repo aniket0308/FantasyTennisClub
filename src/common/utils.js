@@ -22,26 +22,34 @@ export const navigateTo = (navigation, screen, passData) => {
 //Calling API Function
 export const callApi = (path, payload, type) => {
     const urlPath = `${URL}${path}`
-    console.log(`url Called Path:::::${urlPath} type::::${type}`);
     fetch(urlPath, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
+            "Authorization": type != 'login' || type != 'logout' ? `Bearer ${payload.token}` : ''
         },
         body: JSON.stringify(payload)
     })
         .then((res) => res.json())
-        .then((json) => {
-            console.log('What Is Json Token', json);
+        .then(async(json) => {
+
+            if(json.error==true){
+                alert(json.message)
+            }
+
             if (type == 'login') {
                 if (json.data != null) {
                     storeData(json.data)
-                } else if (json.error == true) {
-                        alert(json.message)
                 }
             } else if (type == 'logout') {
                 AsyncStorage.clear()
+            }else if(type == 'editProfile'){
+                if(json.error==false){
+                    await AsyncStorage.setItem('@Name',payload?.name)
+                    await AsyncStorage.setItem('@MobileNumber',payload?.mobile_number)
+                    payload.navigation.goBack()
+                }
             }
             else {
                 if (json.error == true) {

@@ -1,30 +1,29 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createSlice } from '@reduxjs/toolkit'
 import { utils } from '../../common';
 
 const initialState = {
-  
+
 }
 
 export const profileSlice = createSlice({
     name: 'profile',
     initialState,
     reducers: {
-        editProfile: (state, actions) => {
-            const registerObj = {
+        editProfile: async (state, actions) => {
+            const editProfileObj = {
                 name: actions.payload.fullName,
-                email: actions.payload.email,
                 mobile_number: actions.payload.mobileNumber,
-                password: actions.payload.password,
-                confirm_password: actions.payload.confirmPassword,
-                referral: actions.payload.referral
+                token: await AsyncStorage.getItem('@Token'),
+                navigation:actions.payload.navigation
             }
             //calling Api For Update Profile
-            utils.callApi('api/register', registerObj, 'Registered')
+            utils.callApi('api/v1/edit-profile', editProfileObj, 'editProfile')
         },
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { login, logout, registration } = profileSlice.actions
+export const { editProfile } = profileSlice.actions
 
 export default profileSlice.reducer
