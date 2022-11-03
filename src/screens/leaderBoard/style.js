@@ -44,7 +44,8 @@ const leaderBoardStyle = StyleSheet.create({
         marginBottom: 10,
         color: constants.colors.black,
         fontFamily: constants.fonts.notoSansRegular,
-        fontSize: 12
+        fontSize: 12,
+        maxWidth:widthPercentageToDP(25)
     }
 })
 

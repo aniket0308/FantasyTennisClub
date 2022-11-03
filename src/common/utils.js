@@ -32,9 +32,9 @@ export const callApi = (path, payload, type) => {
         body: JSON.stringify(payload)
     })
         .then((res) => res.json())
-        .then(async(json) => {
+        .then(async (json) => {
 
-            if(json.error==true){
+            if (json.error == true) {
                 alert(json.message)
             }
 
@@ -44,10 +44,14 @@ export const callApi = (path, payload, type) => {
                 }
             } else if (type == 'logout') {
                 AsyncStorage.clear()
-            }else if(type == 'editProfile'){
-                if(json.error==false){
-                    await AsyncStorage.setItem('@Name',payload?.name)
-                    await AsyncStorage.setItem('@MobileNumber',payload?.mobile_number)
+            } else if (type == 'editProfile') {
+                if (json.error == false) {
+                    await AsyncStorage.setItem('@Name', payload?.name)
+                    await AsyncStorage.setItem('@MobileNumber', payload?.mobile_number)
+                    payload.navigation.goBack()
+                }
+            } else if (type == 'changePassword') {
+                if (json.error == false) {
                     payload.navigation.goBack()
                 }
             }
@@ -60,4 +64,21 @@ export const callApi = (path, payload, type) => {
             }
         })
         .catch((error) => console.log('Error Is', error))
+}
+
+//calling apis for get
+export const callApiGet =async (path,token) => {
+    const urlPath = `${URL}${path}`
+    try {
+        fetch(urlPath, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    "Authorization":`Bearer ${token}`
+                },
+            }).then((response)=>response.json()).then((json)=>json)
+    } catch (error) {
+        console.log('What Is Error',error);
+    }
 }

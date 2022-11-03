@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
 import { Button, FloatingInput, Header } from "../../components";
-import { editProfile } from "../../redux/slice/profile";
+import { changePassword, editProfile } from "../../redux/slice/profile";
 import changePasswordStyle from "./style";
 
 const ChangePassword = ({ route, navigation }) => {
@@ -109,7 +109,7 @@ const ChangePassword = ({ route, navigation }) => {
                 <Button
                     titleText={route.params == 'editProfile' ? 'Update' :route.params == 'contactUs'?'Send':'Update Password'}
                     btnStyle={{ marginTop: 30 }}
-                    onPress={()=>{route.params == 'editProfile'?dispatch(editProfile({fullName,mobileNumber,navigation})):''}}
+                    onPress={()=>{route.params == 'editProfile'?dispatch(editProfile({fullName,mobileNumber,navigation})):dispatch(changePassword({oldPassword,newPassword,confirmPassword,navigation}))}}
                 />
             </KeyboardAwareScrollView>
         </View>
