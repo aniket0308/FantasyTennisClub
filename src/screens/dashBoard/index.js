@@ -1,4 +1,5 @@
-import React from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useEffect, useState } from "react";
 import { FlatList, Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { utils } from "../../common";
@@ -9,6 +10,28 @@ import dashboardStyle from "./style";
 
 //Dashboard Of Screen Or Say Home Screen
 const DashBoardHome = ({ navigation }) => {
+
+    const [announcements, setAnnouncements] = useState()
+
+    const getAllAnnouncements = async () => {
+        const token = await AsyncStorage.getItem('@Token')
+        //calling api for Announcements
+        fetch('https://fantasytennisclub.com/admin/api/v1/announcements/general', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${token}`
+            },
+        }).
+            then((response) => response.json()).
+            then((json) => setAnnouncements(json.data)).
+            catch(e => console.log('What Is Error In Get Api', e))
+    }
+
+    useEffect(() => {
+        getAllAnnouncements()
+    }, [])
 
     const tempInsightsData = [
         {
@@ -86,7 +109,7 @@ const DashBoardHome = ({ navigation }) => {
                 }
                 {
                     item.icon
-                    && <Image style={{ alignSelf: 'center',height: widthPercentageToDP(10),width: widthPercentageToDP(10) }} source={constants.icons.whatsApp} />
+                    && <Image style={{ alignSelf: 'center', height: widthPercentageToDP(10), width: widthPercentageToDP(10) }} source={constants.icons.whatsApp} />
                 }
                 <Text style={[dashboardStyle.txtTitle, { fontSize: index == 3 || index == 4 ? 20 : 14, }]} >{item.title}</Text>
             </TouchableOpacity>
@@ -99,10 +122,10 @@ const DashBoardHome = ({ navigation }) => {
             <TouchableOpacity
                 onPress={() => utils.navigateTo(navigation, constants.screens.announcements)}
                 style={[dashboardStyle.viewInsights, { backgroundColor: index == 0 ? '#F5F8FA' : constants.colors.white, marginTop: index != 0 ? 10 : 0 }]}>
-                <Text style={dashboardStyle.txtInsights} >{item.insights}</Text>
+                <Text style={dashboardStyle.txtInsights} >{item.title}</Text>
                 <Text
                     numberOfLines={index != 0 ? 3 : 10}
-                    style={dashboardStyle.txtText} >{item.text}</Text>
+                    style={dashboardStyle.txtText} >{item.description}</Text>
             </TouchableOpacity>
         )
     }
@@ -125,7 +148,7 @@ const DashBoardHome = ({ navigation }) => {
             <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
                 <View>
                     <FlatList
-                    style={{marginBottom:25}}
+                        style={{ marginBottom: 25 }}
                         scrollEnabled={false}
                         data={tempData}
                         numColumns={2}
@@ -140,10 +163,11 @@ const DashBoardHome = ({ navigation }) => {
                         <Text onPress={() => utils.navigateTo(navigation, constants.screens.announcements)} style={[dashboardStyle.txtGeneral, { fontSize: 16 }]}>See All</Text>
                     </View>
                     <FlatList
+                    bounces={false}
                         style={{ marginBottom: 20 }}
                         showsVerticalScrollIndicator={false}
                         scrollEnabled={true}
-                        data={tempInsightsData}
+                        data={announcements?.length > 0 ? announcements : []}
                         renderItem={renderInsightData}
                         key={(item) => item}
                         keyExtractor={item => item}

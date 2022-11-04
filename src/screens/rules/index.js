@@ -1,12 +1,12 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { FlatList, SafeAreaView, StatusBar, Text, View } from "react-native";
+import { FlatList, SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
 import rulesStyle from "./style";
 
 //Rules Screen
-const Rules = () => {
+const Rules = ({navigation}) => {
 
     const [rules, setRules] = useState([])
     const [faq, setFaq] = useState([])
@@ -79,15 +79,18 @@ const Rules = () => {
                 title={'Rules and FAQs'}
                 titleStyle={{ marginTop: 5, marginBottom: -10 }}
                 rightIcon={constants.icons.shapeBell}
+                onPressLeftIcon={()=>navigation.goBack()}
             />
-            {
-                rules?.length != 0
-                && <RenderRules />
-            }
-            {
-                faq.length != 0
-                && <RenderFaq />
-            }
+            <ScrollView style={{marginBottom:25}}>
+                {
+                    rules?.length != 0
+                    && <RenderRules />
+                }
+                {
+                    faq.length != 0
+                    && <RenderFaq />
+                }
+            </ScrollView>
         </View>
     )
 }

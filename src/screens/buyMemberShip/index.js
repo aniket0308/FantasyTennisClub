@@ -1,4 +1,5 @@
-import React from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useEffect, useState } from "react";
 import { FlatList, Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { utils } from "../../common";
@@ -8,6 +9,28 @@ import membershipStyle from "../membership/style";
 import buyMemberShipStyle from "./style";
 
 const BuyMemberShip = ({ navigation }) => {
+
+    const [memberShip, setMemberShip] = useState()
+
+    const getAllMemberShips = async () => {
+        const token = await AsyncStorage.getItem('@Token')
+        //calling api for Membership
+        fetch('https://fantasytennisclub.com/admin/api/v1/membership/all', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${token}`
+            },
+        }).
+            then((response) => response.json()).
+            then((json) => setMemberShip(json?.data)).
+            catch(e => console.log('What Is Error In Get Api', e))
+    }
+
+    useEffect(() => {
+        getAllMemberShips()
+    }, [])
 
     const dataArr = [
         {
@@ -47,12 +70,13 @@ const BuyMemberShip = ({ navigation }) => {
 
     //Render Function For Membership
     const renderMemberShip = ({ item, index }) => {
+        console.log('dsds',item);
         return (
             <TouchableOpacity
                 onPress={() => utils.navigateTo(navigation, item.text == 'Organize Private Group' || item.text == 'Join Private Group' ? constants.screens.privateGroupDetails : constants.screens.membership, item.text)}
                 style={[buyMemberShipStyle.touchable, { marginRight: index % 2 != 0 ? 0 : 30 }]}>
-                <Image style={{ alignSelf: 'center',height:widthPercentageToDP(22),width:widthPercentageToDP(22) }} source={item.icon} />
-                <Text style={buyMemberShipStyle.text}>{item.text}</Text>
+                <Image style={{ alignSelf: 'center',height:widthPercentageToDP(22),width:widthPercentageToDP(22) }} source={{uri:item?.banner_image_url}} />
+                <Text numberOfLines={2} style={buyMemberShipStyle.text}>{item?.title}</Text>
             </TouchableOpacity>
         )
     }
@@ -70,7 +94,7 @@ const BuyMemberShip = ({ navigation }) => {
             />
             <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 25 }}>
                 <FlatList
-                    data={dataArr}
+                    data={memberShip?.length>0?memberShip:[]}
                     numColumns={2}
                     style={{ flexDirection: 'row', marginBottom: 25, alignSelf: 'center' }}
                     renderItem={renderMemberShip}

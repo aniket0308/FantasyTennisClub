@@ -75,7 +75,7 @@ const Account = ({ navigation }) => {
                             <Text style={accountStyle.txtSmallName}>+{mobileNumber != '' ? mobileNumber : '17133608496'}</Text>
                         </View>
                         <TouchableOpacity
-                            onPress={() => utils.navigateTo(navigation, constants.screens.changePassword, 'editProfile')}
+                            onPress={() => utils.navigateTo(navigation, constants.screens.changePassword, {editProfile:'editProfile',name,mobileNumber})}
                             style={accountStyle.touchableEditPro}>
                             <Text style={{ alignSelf: 'center', color: constants.colors.white }} >Edit profile</Text>
                         </TouchableOpacity>
@@ -89,7 +89,7 @@ const Account = ({ navigation }) => {
                                 <CardWithImage
                                     onPress={() => {
                                         item == 'Change password'
-                                            ? utils.navigateTo(navigation, constants.screens.changePassword)
+                                            ? utils.navigateTo(navigation, constants.screens.changePassword,'changePassword')
                                             : item == 'About us'
                                                 ? utils.navigateTo(navigation, constants.screens.aboutUs)
                                                 : item == 'My Memberships'

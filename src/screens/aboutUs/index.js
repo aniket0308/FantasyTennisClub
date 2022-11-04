@@ -1,4 +1,5 @@
-import React from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
 import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
@@ -6,6 +7,30 @@ import { Header } from "../../components";
 import aboutUsStyle from "./style";
 
 const AboutUs = ({ navigation }) => {
+
+    const [aboutUs,setAboutUs]=useState()
+
+    //get AboutUs From API
+    const getAboutUsFromApi = async () => {
+        const token = await AsyncStorage.getItem('@Token')
+        //calling api for FAQS
+        fetch('https://fantasytennisclub.com/admin/api/v1/page/about', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${token}`
+            },
+        }).
+            then((response) => response.json()).
+            then((json) => setAboutUs(json)).
+            catch(e => console.log('What Is Error In Get Api', e))
+    }
+
+    useEffect(()=>{
+        getAboutUsFromApi()
+    },[])
+
     return (
         <View style={aboutUsStyle.mainContainer}>
             <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />
@@ -19,7 +44,7 @@ const AboutUs = ({ navigation }) => {
             />
             <View style={aboutUsStyle.txtView}>
             <ScrollView bounces={false} style={{flex:1}}>
-                <Text style={aboutUsStyle.txt}>
+                {/* <Text style={aboutUsStyle.txt}>
                     Fantasy Tennis Club was founded in 2019 by real Tennis Players who enjoy and are passionate about the game of Tennis.
                 </Text>
                 <Text style={[aboutUsStyle.txt, { marginVertical: 20 }]}>
@@ -32,7 +57,10 @@ const AboutUs = ({ navigation }) => {
                     <Text style={[aboutUsStyle.txt]}>
                         Our Mission:   Enhance the tennis experience of our members by becoming part of an interactive community.
                     </Text>
-                </View>
+                </View> */}
+                <Text style={aboutUsStyle.txt}>
+                    {aboutUs.data.content}
+                </Text>
             </ScrollView>
             </View>
         </View>

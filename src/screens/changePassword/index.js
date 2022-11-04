@@ -14,8 +14,8 @@ const ChangePassword = ({ route, navigation }) => {
     const [oldPassword, setOldPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-    const [fullName, setFullName] = useState('')
-    const [mobileNumber, setMobileNumber] = useState('')
+    const [fullName, setFullName] = useState(route.params.name)
+    const [mobileNumber, setMobileNumber] = useState(route.params.mobileNumber)
     const [subject, setSubject] = useState('')
     const [text, setText] = useState('')
     const dispatch =useDispatch()
@@ -25,9 +25,9 @@ const ChangePassword = ({ route, navigation }) => {
             <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />
             <SafeAreaView />
             <Header
-                viewHeaderStyle={{ width: route.params == 'editProfile' ? '65%' : route.params == 'contactUs' ? '65%' : '75%' }}
+                viewHeaderStyle={{ width: route.params.editProfile == 'editProfile' ? '65%' : route.params == 'contactUs' ? '65%' : '78%' }}
                 showBackArrow={true}
-                title={route.params == 'editProfile' ? 'Edit Profile' : route.params == 'contactUs' ? 'Contact Us' : 'Change Password'}
+                title={route.params.editProfile == 'editProfile' ? 'Edit Profile' : route.params == 'contactUs' ? 'Contact Us' : 'Change Password'}
                 titleStyle={{ marginTop: 5, marginBottom: -3 }}
                 onPressLeftIcon={() => navigation.goBack()}
             />
@@ -43,7 +43,7 @@ const ChangePassword = ({ route, navigation }) => {
                         source={constants.icons.profileImage}
                         resizeMode='contain'
                     />}
-                {route.params == undefined
+                {route.params == 'changePassword'
                     ? <>
                         <FloatingInput
                             headerText={'Old Password'}
@@ -107,9 +107,9 @@ const ChangePassword = ({ route, navigation }) => {
                         </>
                 }
                 <Button
-                    titleText={route.params == 'editProfile' ? 'Update' :route.params == 'contactUs'?'Send':'Update Password'}
+                    titleText={route.params.editProfile == 'editProfile' ? 'Update' :route.params == 'contactUs'?'Send':'Update Password'}
                     btnStyle={{ marginTop: 30 }}
-                    onPress={()=>{route.params == 'editProfile'?dispatch(editProfile({fullName,mobileNumber,navigation})):dispatch(changePassword({oldPassword,newPassword,confirmPassword,navigation}))}}
+                    onPress={()=>{route.params.editProfile == 'editProfile'?dispatch(editProfile({fullName,mobileNumber,navigation})):dispatch(changePassword({oldPassword,newPassword,confirmPassword,navigation}))}}
                 />
             </KeyboardAwareScrollView>
         </View>
