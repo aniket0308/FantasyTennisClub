@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { URL } from "../configuration";
+import { isLoaderNotVisible } from "../redux/slice/auth";
 
 //Storing Data In Local Storage
 const storeData = async (payload) => {
@@ -20,7 +21,7 @@ export const navigateTo = (navigation, screen, passData) => {
 }
 
 //Calling API Function
-export const callApi = (path, payload, type) => {
+export const callApi = (path, payload, type, toast, dispatch) => {
     const urlPath = `${URL}${path}`
     fetch(urlPath, {
         method: 'POST',
@@ -33,9 +34,15 @@ export const callApi = (path, payload, type) => {
     })
         .then((res) => res.json())
         .then(async (json) => {
-
+            console.log('what is dispatch',dispatch);
+            if (dispatch != undefined) {
+                dispatch(isLoaderNotVisible())
+            }
             if (json.error == true) {
-                alert(json.message)
+                toast.show(json.message, {
+                    type: 'danger',
+                    placement: 'top'
+                })
             }
 
             if (type == 'login') {
@@ -56,29 +63,42 @@ export const callApi = (path, payload, type) => {
                 }
             }
             else {
+                if (json.error == false) {
+                    toast.show(json.message, {
+                        type: 'success',
+                        placement: 'top'
+                    })
+                }
+                
                 if (json.error == true) {
                     if (type !== 'login') {
-                        alert(`${type} SuccessFully`)
+                        // alert(`${type} SuccessFully`)
                     }
                 }
             }
         })
-        .catch((error) => console.log('Error Is', error))
+        .catch((error) => {
+            toast.show(json.message, {
+                type: 'danger',
+                placement: 'top'
+            })
+            console.log('Error Is', error)
+        })
 }
 
 //calling apis for get
-export const callApiGet =async (path,token) => {
+export const callApiGet = async (path, token) => {
     const urlPath = `${URL}${path}`
     try {
         fetch(urlPath, {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    "Authorization":`Bearer ${token}`
-                },
-            }).then((response)=>response.json()).then((json)=>json)
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "Authorization":`Bearer ${token}`
+            },
+        }).then((response)=>response.json()).then((json)=>json)
     } catch (error) {
-        console.log('What Is Error',error);
+        console.log('What Is Error', error);
     }
 }

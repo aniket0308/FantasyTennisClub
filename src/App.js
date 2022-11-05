@@ -8,6 +8,8 @@
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react'
+import { widthPercentageToDP } from 'react-native-responsive-screen';
+import { ToastProvider } from 'react-native-toast-notifications';
 import { Provider } from 'react-redux';
 import { AuthNavigator, RootNavigator } from './navigation/navigation';
 import { store } from './redux/store';
@@ -16,7 +18,7 @@ const App = () => {
 
   //Variable Used For Authentication
   const [isAuthentication, setIsAuthentication] = useState(true)
-  const [,setRender]=useState()
+  const [, setRender] = useState()
   const getData = async () => {
     try {
       const value = await AsyncStorage.getItem('@Token')
@@ -33,20 +35,28 @@ const App = () => {
       console.log('Error In Getting Item:', e);
     }
   }
-  
 
-  useEffect(()=>{
+  useEffect(() => {
     getData()
   })
 
   return (
-    <Provider store={store}>
-      {
-        isAuthentication == true
-          ? <AuthNavigator />
-          : <RootNavigator />
-      }
-    </Provider>
+    <ToastProvider
+    duration={800}
+      swipeEnabled={true}
+      textStyle={{ fontSize: 16, alignSelf: 'center' }}
+      animationType='slide-in'
+      style={{ alignSelf: 'flex-end', marginRight: 20, maxWidth: widthPercentageToDP(80) }}
+      offset={widthPercentageToDP(10)}
+      >
+      <Provider store={store}>
+        {
+          isAuthentication == true
+            ? <AuthNavigator />
+            : <RootNavigator />
+        }
+      </Provider>
+     </ToastProvider>
   );
 }
 

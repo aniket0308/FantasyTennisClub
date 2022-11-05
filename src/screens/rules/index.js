@@ -1,15 +1,20 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { FlatList, SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
+import { SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
+import { useToast } from "react-native-toast-notifications";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
+import Loader from "../../components/loader";
 import rulesStyle from "./style";
 
 //Rules Screen
-const Rules = ({navigation}) => {
+const Rules = ({ navigation }) => {
 
     const [rules, setRules] = useState([])
     const [faq, setFaq] = useState([])
+    const [rulesLoading, setRulesLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+    const toast = useToast()
 
     //Function For Getting Rules From Api
     const getRulesFromApi = async () => {
@@ -23,8 +28,20 @@ const Rules = ({navigation}) => {
             },
         }).
             then((response) => response.json()).
-            then((json) => setRules(json)).
-            catch(e => console.log('What Is Error In Get Api', e))
+            then((json) => {
+                if (json.success == true) {
+                    setRulesLoading(true)
+                }
+                setRules(json)
+            }).
+            catch(e => {
+                toast.show(e.toString(), {
+                    type: 'danger',
+                    placement: 'top'
+                })
+                setRulesLoading(false)
+                console.log('What Is Error In Get Api', e)
+            })
     }
 
     //get Faq From Api
@@ -40,8 +57,20 @@ const Rules = ({navigation}) => {
             },
         }).
             then((response) => response.json()).
-            then((json) => setFaq(json)).
-            catch(e => console.log('What Is Error In Get Api', e))
+            then((json) => {
+                if (json.success == true) {
+                    setIsLoading(true)
+                }
+                setFaq(json)
+            }).
+            catch(e => {
+                toast.show(e.toString(), {
+                    type: 'danger',
+                    placement: 'top'
+                })
+                setIsLoading(false)
+                console.log('What Is Error In Get Api', e)
+            })
     }
 
     useEffect(() => {
@@ -79,18 +108,21 @@ const Rules = ({navigation}) => {
                 title={'Rules and FAQs'}
                 titleStyle={{ marginTop: 5, marginBottom: -10 }}
                 rightIcon={constants.icons.shapeBell}
-                onPressLeftIcon={()=>navigation.goBack()}
+                onPressLeftIcon={() => navigation.goBack()}
             />
-            <ScrollView style={{marginBottom:25}}>
-                {
-                    rules?.length != 0
-                    && <RenderRules />
-                }
-                {
-                    faq.length != 0
-                    && <RenderFaq />
-                }
-            </ScrollView>
+            {isLoading == true && rulesLoading == true
+                ? <ScrollView style={{ marginBottom: 25 }}>
+                    {
+                        rules?.length != 0
+                        && <RenderRules />
+                    }
+                    {
+                        faq.length != 0
+                        && <RenderFaq />
+                    }
+                </ScrollView>
+                : <Loader />
+            }
         </View>
     )
 }

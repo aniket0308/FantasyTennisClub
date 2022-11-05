@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import { Image, SafeAreaView, StatusBar, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { widthPercentageToDP } from "react-native-responsive-screen";
-import { useDispatch } from "react-redux";
+import { useToast } from "react-native-toast-notifications";
+import { useDispatch, useSelector } from "react-redux";
 import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
 import { Button, FloatingInput, Header } from "../../components";
+import Loader from "../../components/loader";
+import { isLoaderVisible } from "../../redux/slice/auth";
 import { changePassword, editProfile } from "../../redux/slice/profile";
 import changePasswordStyle from "./style";
 
@@ -18,7 +21,9 @@ const ChangePassword = ({ route, navigation }) => {
     const [mobileNumber, setMobileNumber] = useState(route.params.mobileNumber)
     const [subject, setSubject] = useState('')
     const [text, setText] = useState('')
-    const dispatch =useDispatch()
+    const dispatch = useDispatch()
+    const toast = useToast()
+    const isLoading = useSelector((state) => state?.auth?.isLoading)
 
     return (
         <View style={changePasswordStyle.mainContainer}>
@@ -46,6 +51,7 @@ const ChangePassword = ({ route, navigation }) => {
                 {route.params == 'changePassword'
                     ? <>
                         <FloatingInput
+                            textIsEditable={!isLoading}
                             headerText={'Old Password'}
                             textInputStyle={{ marginTop: 30 }}
                             onChangeText={(passwordTxt) => { setOldPassword(passwordTxt) }}
@@ -55,6 +61,7 @@ const ChangePassword = ({ route, navigation }) => {
                             secureTextEntry={true}
                         />
                         <FloatingInput
+                            textIsEditable={!isLoading}
                             headerText={'New Password'}
                             textInputStyle={{ marginTop: 15 }}
                             onChangeText={(passwordTxt) => { setNewPassword(passwordTxt) }}
@@ -64,6 +71,7 @@ const ChangePassword = ({ route, navigation }) => {
                             secureTextEntry={true}
                         />
                         <FloatingInput
+                            textIsEditable={!isLoading}
                             headerText={'Confirm Password'}
                             textInputStyle={{ marginTop: 15 }}
                             onChangeText={(passwordTxt) => { setConfirmPassword(passwordTxt) }}
@@ -76,13 +84,13 @@ const ChangePassword = ({ route, navigation }) => {
                     : route.params == 'contactUs'
                         ? <>
                             <FloatingInput
-                                textInputStyle={{ marginTop: 30,flexGrow:3 }}
+                                textInputStyle={{ marginTop: 30, flexGrow: 3 }}
                                 headerText={'Subject'}
                                 onChangeText={(subject) => { setSubject(subject) }}
                                 value={subject}
                             />
                             <FloatingInput
-                                textInputStyle={{ marginTop: 30, height: 200}}
+                                textInputStyle={{ marginTop: 30, height: 200 }}
                                 numberOfLines={3}
                                 multiline={true}
                                 headerText={'Text'}
@@ -92,12 +100,14 @@ const ChangePassword = ({ route, navigation }) => {
                         </>
                         : <>
                             <FloatingInput
+                                textIsEditable={!isLoading}
                                 textInputStyle={{ marginTop: 30 }}
                                 headerText={'Full Name'}
                                 onChangeText={(nameTxt) => { setFullName(nameTxt) }}
                                 value={fullName}
                             />
                             <FloatingInput
+                                textIsEditable={!isLoading}
                                 headerText={'Mobile Number'}
                                 textInputStyle={{ marginTop: 15 }}
                                 onChangeText={(mobileTxt) => { setMobileNumber(mobileTxt) }}
@@ -106,10 +116,20 @@ const ChangePassword = ({ route, navigation }) => {
                             />
                         </>
                 }
+                {isLoading == true && <Loader />}
                 <Button
-                    titleText={route.params.editProfile == 'editProfile' ? 'Update' :route.params == 'contactUs'?'Send':'Update Password'}
+                    disabled={isLoading == true ? true : false}
+                    titleText={route.params.editProfile == 'editProfile' ? 'Update' : route.params == 'contactUs' ? 'Send' : 'Update Password'}
                     btnStyle={{ marginTop: 30 }}
-                    onPress={()=>{route.params.editProfile == 'editProfile'?dispatch(editProfile({fullName,mobileNumber,navigation})):dispatch(changePassword({oldPassword,newPassword,confirmPassword,navigation}))}}
+                    onPress={() => {
+                        if (route.params.editProfile == 'editProfile') {
+                            dispatch(isLoaderVisible())
+                            dispatch(editProfile({ fullName, mobileNumber, navigation, toast, dispatch }))
+                        } else {
+                            dispatch(isLoaderVisible())
+                            dispatch(changePassword({ oldPassword, newPassword, confirmPassword, navigation, toast, dispatch }))
+                        }
+                    }}
                 />
             </KeyboardAwareScrollView>
         </View>

@@ -2,15 +2,19 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { FlatList, Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
+import { useToast } from "react-native-toast-notifications";
 import { utils } from "../../common";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
+import Loader from "../../components/loader";
 import membershipStyle from "../membership/style";
 import buyMemberShipStyle from "./style";
 
 const BuyMemberShip = ({ navigation }) => {
 
     const [memberShip, setMemberShip] = useState()
+    const [isLoading, setIsLoading] = useState(false)
+    const toast = useToast()
 
     const getAllMemberShips = async () => {
         const token = await AsyncStorage.getItem('@Token')
@@ -24,8 +28,20 @@ const BuyMemberShip = ({ navigation }) => {
             },
         }).
             then((response) => response.json()).
-            then((json) => setMemberShip(json?.data)).
-            catch(e => console.log('What Is Error In Get Api', e))
+            then((json) => {
+                if (json.success == true) {
+                    setIsLoading(true)
+                }
+                setMemberShip(json?.data)
+            }).
+            catch(e => {
+                toast.show(e.toString(), {
+                    type: 'danger',
+                    placement: 'top'
+                })
+                setIsLoading(false)
+                console.log('What Is Error In Get Api', e)
+            })
     }
 
     useEffect(() => {
@@ -70,12 +86,11 @@ const BuyMemberShip = ({ navigation }) => {
 
     //Render Function For Membership
     const renderMemberShip = ({ item, index }) => {
-        console.log('dsds',item);
         return (
             <TouchableOpacity
                 onPress={() => utils.navigateTo(navigation, item.text == 'Organize Private Group' || item.text == 'Join Private Group' ? constants.screens.privateGroupDetails : constants.screens.membership, item.text)}
                 style={[buyMemberShipStyle.touchable, { marginRight: index % 2 != 0 ? 0 : 30 }]}>
-                <Image style={{ alignSelf: 'center',height:widthPercentageToDP(22),width:widthPercentageToDP(22) }} source={{uri:item?.banner_image_url}} />
+                <Image style={{ alignSelf: 'center', height: widthPercentageToDP(22), width: widthPercentageToDP(22) }} source={{ uri: item?.banner_image_url }} />
                 <Text numberOfLines={2} style={buyMemberShipStyle.text}>{item?.title}</Text>
             </TouchableOpacity>
         )
@@ -92,16 +107,19 @@ const BuyMemberShip = ({ navigation }) => {
                 showBackArrow={false}
                 rightIcon={constants.icons.cart}
             />
-            <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 25 }}>
-                <FlatList
-                    data={memberShip?.length>0?memberShip:[]}
-                    numColumns={2}
-                    style={{ flexDirection: 'row', marginBottom: 25, alignSelf: 'center' }}
-                    renderItem={renderMemberShip}
-                    key={(item) => item.id}
-                    keyExtractor={item => item}
-                />
-            </ScrollView>
+            {isLoading == true
+                ? <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 25 }}>
+                    <FlatList
+                        data={memberShip?.length > 0 ? memberShip : []}
+                        numColumns={2}
+                        style={{ flexDirection: 'row', marginBottom: 25, alignSelf: 'center' }}
+                        renderItem={renderMemberShip}
+                        key={(item) => item.id}
+                        keyExtractor={item => item}
+                    />
+                </ScrollView>
+                : <Loader/>
+            }
         </View>
     )
 }

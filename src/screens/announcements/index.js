@@ -1,14 +1,17 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import React, { useEffect, useState } from "react"
-import { FlatList, SafeAreaView, StatusBar, Text, View } from "react-native"
+import { ActivityIndicator, FlatList, SafeAreaView, StatusBar, Text, View } from "react-native"
+import { useToast } from "react-native-toast-notifications"
 import { constants } from "../../common/constant"
 import { Header } from "../../components"
+import Loader from "../../components/loader"
 import announcementStyle from "./style"
 
 const Announcments = ({ navigation }) => {
 
     const [announcements, setAnnouncements] = useState()
-
+    const [isLoading, setIsLoading] = useState(false)
+    const toast = useToast()
     const getAllAnnouncements = async () => {
         const token = await AsyncStorage.getItem('@Token')
         //calling api for Announcements
@@ -21,8 +24,20 @@ const Announcments = ({ navigation }) => {
             },
         }).
             then((response) => response.json()).
-            then((json) => setAnnouncements(json.data)).
-            catch(e => console.log('What Is Error In Get Api', e))
+            then((json) => {
+                if (json.success == true) {
+                    setIsLoading(true)
+                }
+                setAnnouncements(json.data)
+            }).
+            catch(e =>{
+                toast.show(e.toString(), {
+                    type: 'danger',
+                    placement: 'top'
+                })
+                setIsLoading(false)
+                console.log('What Is Error In Get Api', e)
+            })
     }
 
     useEffect(() => {
@@ -55,14 +70,21 @@ const Announcments = ({ navigation }) => {
                 rightIcon={constants.icons.shapeBell}
                 onPressLeftIcon={() => navigation.goBack()}
             />
-            <FlatList
-                style={{ marginBottom: 20 }}
-                showsVerticalScrollIndicator={false}
-                data={announcements?.length > 0 ? announcements : []}
-                renderItem={renderAnnouncments}
-                key={(item) => item}
-                keyExtractor={item => item}
-            />
+            {
+                isLoading == true
+                && <FlatList
+                    style={{ marginBottom: 20 }}
+                    showsVerticalScrollIndicator={false}
+                    data={announcements?.length > 0 ? announcements : []}
+                    renderItem={renderAnnouncments}
+                    key={(item) => item}
+                    keyExtractor={item => item}
+                />
+            }
+            {
+                    isLoading == false
+                    && <Loader/>
+            }
         </View>
     )
 }

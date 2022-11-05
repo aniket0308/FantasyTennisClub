@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { utils } from '../../common';
 
 const initialState = {
-  
+    isLoading: false
 }
 
 export const authSlice = createSlice({
@@ -19,7 +19,7 @@ export const authSlice = createSlice({
                 referral: actions.payload.referral
             }
             //calling Api For Login
-            utils.callApi('api/register', registerObj, 'Registered')
+            utils.callApi('api/register', registerObj, 'Registered', actions.payload.toast, actions.payload.dispatch)
 
         },
         login: (state, actions) => {
@@ -28,16 +28,24 @@ export const authSlice = createSlice({
                 password: actions.payload.password,
             }
             //calling Api For Login
-            utils.callApi('api/login', loginObj, 'login')
+            utils.callApi('api/login', loginObj, 'login', actions?.payload?.toast, actions?.payload?.dispatch)
         },
-        logout: (state) => {
+        isLoaderVisible: (state, actions) => {
+            state.isLoading = true
+            return state
+        },
+        isLoaderNotVisible: (state, actions) => {
+            state.isLoading = false
+            return state
+        },
+        logout: (state, actions) => {
             //calling Api For Logout
-            utils.callApi('api/v1/logout', {}, 'logout')
+            utils.callApi('api/v1/logout', {}, 'logout', '', actions?.payload?.dispatch)
         }
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { login, logout, registration } = authSlice.actions
+export const { login, logout, registration, isLoaderVisible, isLoaderNotVisible } = authSlice.actions
 
 export default authSlice.reducer

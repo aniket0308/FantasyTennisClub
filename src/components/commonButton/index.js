@@ -4,11 +4,11 @@ import buttonStyle from "./style";
 
 
 //Common Button Component
-const Button = ({ btnStyle, txtStyle, onPress, titleText }) => {
+const Button = ({ btnStyle, txtStyle, onPress, titleText,disabled }) => {
     return (
         <TouchableOpacity
             style={[buttonStyle.buttonContainer, btnStyle]}
-            activeOpacity={1}
+            disabled={disabled}
             onPress={onPress} >
             <Text style={[buttonStyle.txtStyle, txtStyle]}>{titleText}</Text>
         </TouchableOpacity>

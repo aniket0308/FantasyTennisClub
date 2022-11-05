@@ -1,14 +1,17 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
-import { commonStyle } from "../../common/commonStyle";
+import { useToast } from "react-native-toast-notifications";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
+import Loader from "../../components/loader";
 import aboutUsStyle from "./style";
 
 const AboutUs = ({ navigation }) => {
 
-    const [aboutUs,setAboutUs]=useState()
+    const [aboutUs, setAboutUs] = useState()
+    const [isLoading, setIsLoading] = useState(false)
+    const toast = useToast()
 
     //get AboutUs From API
     const getAboutUsFromApi = async () => {
@@ -23,13 +26,25 @@ const AboutUs = ({ navigation }) => {
             },
         }).
             then((response) => response.json()).
-            then((json) => setAboutUs(json)).
-            catch(e => console.log('What Is Error In Get Api', e))
+            then((json) => {
+                if (json.success == true) {
+                    setIsLoading(true)
+                }
+                setAboutUs(json)
+            }).
+            catch(e => {
+                toast.show(e.toString(), {
+                    type: 'danger',
+                    placement: 'top'
+                })
+                setIsLoading(false)
+                console.log('What Is Error In Get Api', e)
+            })
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         getAboutUsFromApi()
-    },[])
+    }, [])
 
     return (
         <View style={aboutUsStyle.mainContainer}>
@@ -40,11 +55,12 @@ const AboutUs = ({ navigation }) => {
                 showBackArrow={true}
                 title={'About Fantasy Tennis Club'}
                 titleStyle={{ marginTop: 5, marginBottom: -3 }}
-                onPressLeftIcon={()=>navigation.goBack()}
+                onPressLeftIcon={() => navigation.goBack()}
             />
             <View style={aboutUsStyle.txtView}>
-            <ScrollView bounces={false} style={{flex:1}}>
-                {/* <Text style={aboutUsStyle.txt}>
+                {isLoading == true
+                    ? <ScrollView bounces={false} style={{ flex: 1 }}>
+                        {/* <Text style={aboutUsStyle.txt}>
                     Fantasy Tennis Club was founded in 2019 by real Tennis Players who enjoy and are passionate about the game of Tennis.
                 </Text>
                 <Text style={[aboutUsStyle.txt, { marginVertical: 20 }]}>
@@ -58,10 +74,12 @@ const AboutUs = ({ navigation }) => {
                         Our Mission:   Enhance the tennis experience of our members by becoming part of an interactive community.
                     </Text>
                 </View> */}
-                <Text style={aboutUsStyle.txt}>
-                    {aboutUs.data.content}
-                </Text>
-            </ScrollView>
+                        <Text style={aboutUsStyle.txt}>
+                            {aboutUs?.data?.content}
+                        </Text>
+                    </ScrollView>
+                    : <Loader />
+                }
             </View>
         </View>
     )

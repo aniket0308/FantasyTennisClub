@@ -2,17 +2,20 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { FlatList, Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
+import { useToast } from "react-native-toast-notifications";
 import { utils } from "../../common";
 import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
+import Loader from "../../components/loader";
 import dashboardStyle from "./style";
 
 //Dashboard Of Screen Or Say Home Screen
 const DashBoardHome = ({ navigation }) => {
 
     const [announcements, setAnnouncements] = useState()
-
+    const [isLoading, setIsLoading] = useState(false)
+    const toast = useToast()
     const getAllAnnouncements = async () => {
         const token = await AsyncStorage.getItem('@Token')
         //calling api for Announcements
@@ -25,8 +28,21 @@ const DashBoardHome = ({ navigation }) => {
             },
         }).
             then((response) => response.json()).
-            then((json) => setAnnouncements(json.data)).
-            catch(e => console.log('What Is Error In Get Api', e))
+            then((json) => {
+                if (json.success == true) {
+                    setIsLoading(true)
+                }
+                setAnnouncements(json.data)
+            }
+            ).
+            catch(e => {
+                toast.show(e.toString(), {
+                    type: 'danger',
+                    placement: 'top'
+                })
+                setIsLoading(false)
+                console.log('What Is Error In Get Api', e.toString())
+            })
     }
 
     useEffect(() => {
@@ -131,50 +147,57 @@ const DashBoardHome = ({ navigation }) => {
     }
 
     return (
-        <View style={dashboardStyle.maincontainer}>
-            <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />
-            <SafeAreaView />
-            <Header
-                title={'Dashboard'}
-                subTitle={'US OPEN'}
-                titleStyle={{ alignSelf: 'center', fontSize: 22 }}
-                subTitleStyle={{ alignSelf: 'center', color: constants.colors.darkGreen }}
-                rightIcon={constants.icons.shapeBell}
-                mainViewHeaderStyle={{ paddingBottom: 10, paddingTop: 10 }}
-                resizeMode='contain'
-                rightIconStyle={{ alignSelf: 'center' }}
-            />
+        <>
+            <View style={dashboardStyle.maincontainer}>
+                <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />
+                <SafeAreaView />
+                <Header
+                    title={'Dashboard'}
+                    subTitle={'US OPEN'}
+                    titleStyle={{ alignSelf: 'center', fontSize: 22 }}
+                    subTitleStyle={{ alignSelf: 'center', color: constants.colors.darkGreen }}
+                    rightIcon={constants.icons.shapeBell}
+                    mainViewHeaderStyle={{ paddingBottom: 10, paddingTop: 10 }}
+                    resizeMode='contain'
+                    rightIconStyle={{ alignSelf: 'center' }}
+                />
+                {isLoading == true
+                    && <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
+                        <View>
+                            <FlatList
+                                style={{ marginBottom: 25 }}
+                                scrollEnabled={false}
+                                data={tempData}
+                                numColumns={2}
+                                contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}
+                                renderItem={renderItem}
+                                key={(item) => item}
+                                keyExtractor={item => item}
+                            />
 
-            <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
-                <View>
-                    <FlatList
-                        style={{ marginBottom: 25 }}
-                        scrollEnabled={false}
-                        data={tempData}
-                        numColumns={2}
-                        contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}
-                        renderItem={renderItem}
-                        key={(item) => item}
-                        keyExtractor={item => item}
-                    />
-
-                    <View style={[commonStyle.row, { justifyContent: 'space-between', marginVertical: 20, alignItems: 'center' }]}>
-                        <Text style={dashboardStyle.txtGeneral}>General Anouncements:</Text>
-                        <Text onPress={() => utils.navigateTo(navigation, constants.screens.announcements)} style={[dashboardStyle.txtGeneral, { fontSize: 16 }]}>See All</Text>
-                    </View>
-                    <FlatList
-                    bounces={false}
-                        style={{ marginBottom: 20 }}
-                        showsVerticalScrollIndicator={false}
-                        scrollEnabled={true}
-                        data={announcements?.length > 0 ? announcements : []}
-                        renderItem={renderInsightData}
-                        key={(item) => item}
-                        keyExtractor={item => item}
-                    />
-                </View>
-            </ScrollView >
-        </View >
+                            <View style={[commonStyle.row, { justifyContent: 'space-between', marginVertical: 20, alignItems: 'center' }]}>
+                                <Text style={dashboardStyle.txtGeneral}>General Anouncements:</Text>
+                                <Text onPress={() => utils.navigateTo(navigation, constants.screens.announcements)} style={[dashboardStyle.txtGeneral, { fontSize: 16 }]}>See All</Text>
+                            </View>
+                            <FlatList
+                                bounces={false}
+                                style={{ marginBottom: 20 }}
+                                showsVerticalScrollIndicator={false}
+                                scrollEnabled={true}
+                                data={announcements?.length > 0 ? announcements : []}
+                                renderItem={renderInsightData}
+                                key={(item) => item}
+                                keyExtractor={item => item}
+                            />
+                        </View>
+                    </ScrollView >
+                }
+                {
+                    isLoading == false
+                    && <Loader/>
+                }
+            </View >
+        </>
     )
 }
 

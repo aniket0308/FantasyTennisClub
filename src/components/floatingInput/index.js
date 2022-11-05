@@ -8,7 +8,7 @@ import floatingInputStyles from "./style";
 const FloatingInput = ({ textInputStyle, isEditable, onInputPress, headerStyle, value, headerText,
     passwordInput = false, refs, textStyle, keyboardType, returnKeyType, multiline, numberOfLines,
     blurOnSubmit, isTextIncluded = false, labelTextIncluded, rightIcon, rightIconStyle, autoCapitalize,
-    secureTextEntry, hideIcon = false, onChangeText,onTxtPress,onHideShow,onSubmitRef
+    secureTextEntry, hideIcon = false, onChangeText,onTxtPress,onHideShow,onSubmitRef,textIsEditable
 }) => {
     const moveText = useRef(new Animated.Value(0)).current;
 
@@ -95,7 +95,7 @@ const FloatingInput = ({ textInputStyle, isEditable, onInputPress, headerStyle, 
                                     onFocus={onFocusHandler}
                                     onBlur={onBlurHandler}
                                     blurOnSubmit
-                                    editable={isEditable}
+                                    editable={textIsEditable}
                                     autoCapitalize={autoCapitalize}
                                     onSubmitEditing={onSubmitRef}
                                 />
@@ -126,6 +126,7 @@ const FloatingInput = ({ textInputStyle, isEditable, onInputPress, headerStyle, 
                                 blurOnSubmit
                                 autoCapitalize={autoCapitalize}
                                 onSubmitEditing={onSubmitRef}
+                                editable={textIsEditable}
                             />
                             {
                                 hideIcon == true &&
