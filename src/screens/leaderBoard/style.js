@@ -26,15 +26,16 @@ const leaderBoardStyle = StyleSheet.create({
         color: constants.colors.black,
         fontWeight: '600',
         marginBottom: 10,
-        fontFamily: constants.fonts.notoSansBold
+        fontFamily: constants.fonts.notoSansBold,
+        alignSelf:"center",
     },
     txtScore: {
-        textAlign: 'center',
         fontWeight: '400',
         marginBottom: 10,
         color: constants.colors.black,
         fontFamily: constants.fonts.notoSansRegular,
-        fontSize: 12
+        fontSize: 12,
+        alignSelf:"center"
     },
     mainViewScore: {
         flex: 1,
@@ -45,7 +46,7 @@ const leaderBoardStyle = StyleSheet.create({
         color: constants.colors.black,
         fontFamily: constants.fonts.notoSansRegular,
         fontSize: 12,
-        maxWidth:widthPercentageToDP(25)
+        maxWidth:widthPercentageToDP(25),
     }
 })
 

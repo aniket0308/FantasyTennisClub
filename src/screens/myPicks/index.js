@@ -2,7 +2,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { FlatList, SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
 import { useToast } from "react-native-toast-notifications";
-import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
 import Loader from "../../components/loader";
@@ -13,6 +12,11 @@ const MyPicks = ({ route, navigation }) => {
     const [myAllPicks, setMyAllPicks] = useState()
     const [isLoading, setIsLoading] = useState(false)
     const toast = useToast()
+    const particularDayPick = myAllPicks?.filter((i) => {
+        if (`day ${route.params}` == i.day) {
+            return i
+        }
+    })
 
     const getAllPickFromAPi = async () => {
         const token = await AsyncStorage.getItem('@Token')
@@ -51,28 +55,31 @@ const MyPicks = ({ route, navigation }) => {
             <>
                 <View style={[myPicksStyle.viewTitle, { marginTop: index != 0 ? 10 : 0 }]}>
                     {
-                        route.params == "All"
-                            ? <Text style={myPicksStyle.txtDay}>{item.day}</Text>
-                            : <Text style={myPicksStyle.txtDay}>Match {index + 1}</Text>
+                        route.params == "All" && <Text style={myPicksStyle.txtDay}>{item.day}</Text>
                     }
                 </View>
-                <View style={{ backgroundColor: constants.colors.white, padding: 10 }}>
-                    {route.params == 'All'
-                        ?
-                        item?.matches.map((item, index) => {
-                            return <Text style={myPicksStyle.txtMyPick}>My Pick:  {item.my_pick}</Text>
-                        })
-                        //  <>
-                        //     <Text style={[myPicksStyle.txtMyPick, { marginVertical: 10 }]}>My Pick:  William Barbara</Text>
-                        //     <Text style={myPicksStyle.txtMyPick}>My Pick:  William Barbara</Text>
-                        // </>
-                        : <>
-                            <Text style={[myPicksStyle.txtMyPick, { color: constants.colors.black, fontSize: 14 }]}>William Barbara v/s Thomas Sarah</Text>
-                            <Text style={[myPicksStyle.txtMyPick, { color: constants.colors.black, fontSize: 14 }]}>Winner:  Thomas Sarah</Text>
-                            <Text style={[myPicksStyle.txtMyPick, { marginTop: 10 }]}>My Pick:  William Barbara</Text>
-                        </>
-                    }
-                </View>
+                {
+                    item?.matches.map((matchItem, matchIndex) => {
+                        console.log('match Item', matchItem);
+                        return (
+                            route.params == 'All'
+                                ? <View style={{ backgroundColor: constants.colors.white, paddingHorizontal: 10, paddingTop: matchIndex == 0 ? 10 : 0, paddingBottom: 10 }}>
+                                    <Text style={myPicksStyle.txtMyPick}>My Pick:  {matchItem.my_pick}</Text>
+                                </View>
+                                : <>
+                                    <View style={[myPicksStyle.viewTitle, { marginTop: matchIndex != 0 ? 10 : 0 }]}>
+                                        <Text style={myPicksStyle.txtDay}>{matchItem && matchItem?.match}</Text>
+                                    </View>
+                                    <View style={{ backgroundColor: constants.colors.white, paddingHorizontal: 10, paddingTop: 10, paddingBottom: 10 }}>
+                                        <Text style={[myPicksStyle.txtMyPick, { color: constants.colors.black, fontSize: 14 }]}>{matchItem && matchItem?.players && matchItem?.players[0].player} v/s {matchItem && matchItem?.players && matchItem?.players[1]?.player}</Text>
+                                        <Text style={[myPicksStyle.txtMyPick, { color: constants.colors.black, fontSize: 14 }]}>Winner:  {matchItem && matchItem?.winner}</Text>
+                                        <Text style={[myPicksStyle.txtMyPick, { marginTop: 10 }]}>My Pick:  {matchItem && matchItem?.my_pick}</Text>
+                                    </View>
+                                </>
+                        )
+
+                    })
+                }
             </>
         )
     }
@@ -98,10 +105,10 @@ const MyPicks = ({ route, navigation }) => {
                     ? <FlatList
                         showsVerticalScrollIndicator={false}
                         style={{ marginBottom: 20 }}
-                        data={myAllPicks?.length > 0 ? myAllPicks : []}
+                        data={myAllPicks?.length > 0 && route?.params == 'All' ? myAllPicks : route?.params != 'All' && particularDayPick?.length > 0 ? particularDayPick : []}
                         renderItem={renderAllPickData}
                     />
-                    : <Loader/>
+                    : <Loader />
             }
 
         </View>

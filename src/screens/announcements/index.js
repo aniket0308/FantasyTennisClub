@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import React, { useEffect, useState } from "react"
-import { ActivityIndicator, FlatList, SafeAreaView, StatusBar, Text, View } from "react-native"
+import {FlatList, SafeAreaView, StatusBar, Text, View } from "react-native"
 import { useToast } from "react-native-toast-notifications"
 import { constants } from "../../common/constant"
 import { Header } from "../../components"
