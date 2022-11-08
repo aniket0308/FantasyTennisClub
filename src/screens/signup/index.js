@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, StatusBar, Dimensions, SafeAreaView } from 'react-native'
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { useToast } from "react-native-toast-notifications";
 import { useDispatch, useSelector } from "react-redux";
 import { utils } from "../../common";
 import { commonStyle } from "../../common/commonStyle";
@@ -22,7 +21,6 @@ const SignUp = ({ navigation }) => {
     const [mobileNumber, setMobileNumber] = useState('')
     const dispatch = useDispatch()
     const isLoading = useSelector((state) => state?.auth?.isLoading)
-    const toast = useToast()
 
     return (
         <>
@@ -95,7 +93,7 @@ const SignUp = ({ navigation }) => {
                     btnStyle={{ marginTop: 50 }}
                     onPress={() => {
                         dispatch(isLoaderVisible())
-                        dispatch(registration({ fullName, email, password, confirmPassword, mobileNumber, referral, toast, dispatch }))
+                        dispatch(registration({ fullName, email, password, confirmPassword, mobileNumber, referral, dispatch }))
                     }}
                 />
             </KeyboardAwareScrollView>

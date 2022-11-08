@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { FlatList, Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
-import { useToast } from "react-native-toast-notifications";
+import Snackbar from 'react-native-snackbar';
 import { utils } from "../../common";
 import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
@@ -15,7 +15,6 @@ const DashBoardHome = ({ navigation }) => {
 
     const [announcements, setAnnouncements] = useState()
     const [isLoading, setIsLoading] = useState(false)
-    const toast = useToast()
     const getAllAnnouncements = async () => {
         const token = await AsyncStorage.getItem('@Token')
         //calling api for Announcements
@@ -36,10 +35,16 @@ const DashBoardHome = ({ navigation }) => {
             }
             ).
             catch(e => {
-                toast.show(e.toString(), {
-                    type: 'danger',
-                    placement: 'top'
-                })
+                Snackbar.show({
+                    text: e.toString(),
+                    duration: 1000,
+                    backgroundColor:'red',
+                    // action: {
+                    //   text: 'UNDO',
+                    //   textColor: 'green',
+                    //   onPress: () => { /* Do something. */ },
+                    // },
+                  });
                 setIsLoading(false)
                 console.log('What Is Error In Get Api', e.toString())
             })
@@ -103,17 +108,22 @@ const DashBoardHome = ({ navigation }) => {
     const renderItem = ({ item, index }) => {
         return (
             <TouchableOpacity
-                onPress={() => utils.navigateTo(
-                    navigation,
-                    item.title == 'MY PICKS'
-                        ? constants.screens.selectionDays
-                        : item.icon
-                            ? constants.screens.joinWhatsApp
-                            : item.title == 'PRIZES'
-                                ? constants.screens.prizes
-                                : constants.screens.leaderBoard,
-                    item.title,
-                )}
+                onPress={() => {
+                    utils.navigateTo(
+                        navigation,
+                        item.title == 'MY PICKS'
+                            ? constants.screens.selectionDays
+                            : item.icon
+                                ? constants.screens.joinWhatsApp
+                                : item.title == 'PRIZES'
+                                    ? constants.screens.prizes
+                                    :item.title=='Leaderboard'
+                                    ?constants.screens.leaderBoard
+                                    :'Consolation', 
+                        item.title 
+                    )
+                }
+                }
                 style={[dashboardStyle.touchableView, {
                     marginTop: index != 0 || index != 1 ? 10 : 0,
                     marginLeft: index % 2 == 0 ? 0 : 25
@@ -157,6 +167,7 @@ const DashBoardHome = ({ navigation }) => {
                     titleStyle={{ alignSelf: 'center', fontSize: 22 }}
                     subTitleStyle={{ alignSelf: 'center', color: constants.colors.darkGreen }}
                     rightIcon={constants.icons.shapeBell}
+                    onPressRightIcon={()=>utils.navigateTo(navigation,constants.screens.notification)}
                     mainViewHeaderStyle={{ paddingBottom: 10, paddingTop: 10 }}
                     resizeMode='contain'
                     rightIconStyle={{ alignSelf: 'center' }}
@@ -194,7 +205,7 @@ const DashBoardHome = ({ navigation }) => {
                 }
                 {
                     isLoading == false
-                    && <Loader/>
+                    && <Loader />
                 }
             </View >
         </>

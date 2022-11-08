@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { FlatList, Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
-import { useToast } from "react-native-toast-notifications";
+import Snackbar from 'react-native-snackbar';
 import { utils } from "../../common";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
@@ -14,7 +14,6 @@ const BuyMemberShip = ({ navigation }) => {
 
     const [memberShip, setMemberShip] = useState()
     const [isLoading, setIsLoading] = useState(false)
-    const toast = useToast()
 
     const getAllMemberShips = async () => {
         const token = await AsyncStorage.getItem('@Token')
@@ -35,10 +34,16 @@ const BuyMemberShip = ({ navigation }) => {
                 setMemberShip(json?.data)
             }).
             catch(e => {
-                toast.show(e.toString(), {
-                    type: 'danger',
-                    placement: 'top'
-                })
+                Snackbar.show({
+                    text: e.toString(),
+                    duration: 1000,
+                    backgroundColor:'red',
+                    // action: {
+                    //   text: 'UNDO',
+                    //   textColor: 'green',
+                    //   onPress: () => { /* Do something. */ },
+                    // },
+                  });
                 setIsLoading(false)
                 console.log('What Is Error In Get Api', e)
             })

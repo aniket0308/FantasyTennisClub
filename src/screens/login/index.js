@@ -2,7 +2,6 @@ import React, { createRef, useEffect, useRef, useState } from "react";
 import { Text, Image, Dimensions, StatusBar, SafeAreaView, View } from 'react-native'
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import SplashScreen from 'react-native-splash-screen'
-import { useToast } from "react-native-toast-notifications";
 import { useDispatch, useSelector } from "react-redux";
 import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
@@ -17,7 +16,6 @@ const Login = ({ navigation }) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [isPasswordVisible, setIsPasswordVisible] = useState(true)
-    const toast = useToast()
     const dispatch = useDispatch()
     const isLoading = useSelector((state) => state?.auth?.isLoading)
 
@@ -68,7 +66,7 @@ const Login = ({ navigation }) => {
                         btnStyle={{ marginTop: 34 }}
                         onPress={() => {
                             dispatch(isLoaderVisible())
-                            dispatch(login({ email, password, toast, dispatch }))
+                            dispatch(login({ email, password, dispatch }))
                         }}
                     />
                     <SafeAreaView />

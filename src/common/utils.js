@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { URL } from "../configuration";
 import { isLoaderNotVisible } from "../redux/slice/auth";
+import Snackbar from 'react-native-snackbar';
 
 //Storing Data In Local Storage
 const storeData = async (payload) => {
@@ -21,7 +22,7 @@ export const navigateTo = (navigation, screen, passData) => {
 }
 
 //Calling API Function
-export const callApi = (path, payload, type, toast, dispatch) => {
+export const callApi = (path, payload, type, dispatch) => {
     const urlPath = `${URL}${path}`
     fetch(urlPath, {
         method: 'POST',
@@ -39,10 +40,16 @@ export const callApi = (path, payload, type, toast, dispatch) => {
                 dispatch(isLoaderNotVisible())
             }
             if (json.error == true) {
-                toast.show(json.message, {
-                    type: 'danger',
-                    placement: 'top'
-                })
+                Snackbar.show({
+                    text: json.message,
+                    duration: 1000,
+                    backgroundColor:'red',
+                    // action: {
+                    //   text: 'UNDO',
+                    //   textColor: 'green',
+                    //   onPress: () => { /* Do something. */ },
+                    // },
+                  });
             }
 
             if (type == 'login') {
@@ -64,10 +71,16 @@ export const callApi = (path, payload, type, toast, dispatch) => {
             }
             else {
                 if (json.error == false) {
-                    toast.show(json.message, {
-                        type: 'success',
-                        placement: 'top'
-                    })
+                    Snackbar.show({
+                        text: json.message,
+                        duration: 1000,
+                        backgroundColor:'green',
+                        // action: {
+                        //   text: 'UNDO',
+                        //   textColor: 'green',
+                        //   onPress: () => { /* Do something. */ },
+                        // },
+                      });
                 }
                 
                 if (json.error == true) {
@@ -78,10 +91,16 @@ export const callApi = (path, payload, type, toast, dispatch) => {
             }
         })
         .catch((error) => {
-            toast.show(json.message, {
-                type: 'danger',
-                placement: 'top'
-            })
+            Snackbar.show({
+                text: error.toString(),
+                duration: 1000,
+                backgroundColor:'red',
+                // action: {
+                //   text: 'UNDO',
+                //   textColor: 'green',
+                //   onPress: () => { /* Do something. */ },
+                // },
+              });
             console.log('Error Is', error)
         })
 }

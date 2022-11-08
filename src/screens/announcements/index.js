@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import React, { useEffect, useState } from "react"
 import {FlatList, SafeAreaView, StatusBar, Text, View } from "react-native"
-import { useToast } from "react-native-toast-notifications"
+import Snackbar from 'react-native-snackbar';
 import { constants } from "../../common/constant"
 import { Header } from "../../components"
 import Loader from "../../components/loader"
@@ -11,7 +11,6 @@ const Announcments = ({ navigation }) => {
 
     const [announcements, setAnnouncements] = useState()
     const [isLoading, setIsLoading] = useState(false)
-    const toast = useToast()
     const getAllAnnouncements = async () => {
         const token = await AsyncStorage.getItem('@Token')
         //calling api for Announcements
@@ -31,10 +30,16 @@ const Announcments = ({ navigation }) => {
                 setAnnouncements(json.data)
             }).
             catch(e =>{
-                toast.show(e.toString(), {
-                    type: 'danger',
-                    placement: 'top'
-                })
+                Snackbar.show({
+                    text: e.toString(),
+                    duration: 1000,
+                    backgroundColor:'red',
+                    // action: {
+                    //   text: 'UNDO',
+                    //   textColor: 'green',
+                    //   onPress: () => { /* Do something. */ },
+                    // },
+                  });
                 setIsLoading(false)
                 console.log('What Is Error In Get Api', e)
             })
@@ -68,6 +73,7 @@ const Announcments = ({ navigation }) => {
                 titleStyle={{ marginTop: 5, marginBottom: -10 }}
                 viewHeaderStyle={{ width: '100%' }}
                 rightIcon={constants.icons.shapeBell}
+                onPressRightIcon={()=>utils.navigateTo(navigation,constants.screens.notification)}
                 onPressLeftIcon={() => navigation.goBack()}
             />
             {

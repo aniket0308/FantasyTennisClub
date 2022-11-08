@@ -41,14 +41,6 @@ const App = () => {
   })
 
   return (
-    <ToastProvider
-    duration={800}
-      swipeEnabled={true}
-      textStyle={{ fontSize: 16, alignSelf: 'center' }}
-      animationType='slide-in'
-      style={{ alignSelf: 'flex-end', marginRight: 20, maxWidth: widthPercentageToDP(80) }}
-      offset={widthPercentageToDP(10)}
-      >
       <Provider store={store}>
         {
           isAuthentication == true
@@ -56,7 +48,6 @@ const App = () => {
             : <RootNavigator />
         }
       </Provider>
-     </ToastProvider>
   );
 }
 

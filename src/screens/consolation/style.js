@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { constants } from "../../common/constant";
 
-const leaderBoardStyle = StyleSheet.create({
+const consolationStyle = StyleSheet.create({
     mainContainer: {
         backgroundColor: constants.colors.backGroundLight,
     },
@@ -30,24 +30,26 @@ const leaderBoardStyle = StyleSheet.create({
         // alignSelf:"center",
     },
     txtScore: {
-        fontWeight: '400',
+        fontWeight: '600',
         marginBottom: 2,
         color: constants.colors.black,
         fontFamily: constants.fonts.notoSansRegular,
         fontSize: 12,
-        alignSelf:"flex-start"
+        maxWidth:widthPercentageToDP(25),
+        // alignSelf:"center"
     },
     mainViewScore: {
         flex: 1,
         backgroundColor: constants.colors.white
     },
     txtName: {
-        marginBottom: 10,
+        // marginBottom: 10,
         color: constants.colors.black,
         fontFamily: constants.fonts.notoSansRegular,
         fontSize: 12,
         maxWidth:widthPercentageToDP(25),
+        
     }
 })
 
-export default leaderBoardStyle
+export default consolationStyle

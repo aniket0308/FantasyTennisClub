@@ -4,7 +4,7 @@ import { widthPercentageToDP } from "react-native-responsive-screen"
 import { constants } from "../../common/constant"
 import searchStyle from "./style"
 
-const SearchBar=()=>{
+const SearchBar=({onChangeText,onSubmitEditing})=>{
 return(
     <View style={searchStyle.mainContainer}>
     <View style={{ flexDirection: 'row' }}>
@@ -16,6 +16,10 @@ return(
         <TextInput
             style={{ width: widthPercentageToDP(60), marginLeft: 10, fontSize: 16 }}
             placeholder="search"
+            onChangeText={onChangeText}
+            onSubmitEditing={onSubmitEditing}
+            autoCapitalize="none"
+            
         />
     </View>
     <Image

@@ -36,6 +36,7 @@ const SelectionDays = ({ route, navigation }) => {
                 titleStyle={{ fontSize: 22 }}
                 viewHeaderStyle={{ width: '100%' }}
                 rightIcon={constants.icons.shapeBell}
+                onPressRightIcon={()=>utils.navigateTo(navigation,constants.screens.notification)}
                 onPressLeftIcon={() => navigation.goBack()}
             />
             <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 25 }} bounces={false}>

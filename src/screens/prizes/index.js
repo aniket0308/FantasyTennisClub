@@ -15,6 +15,7 @@ const Prizes = ({ navigation }) => {
                 title={'EVENT DETAILS'}
                 titleStyle={{ marginTop: 5, marginBottom: -10 }}
                 rightIcon={constants.icons.shapeBell}
+                onPressRightIcon={()=>utils.navigateTo(navigation,constants.screens.notification)}
                 onPressLeftIcon={() => navigation.goBack()}
             />
             <View style={{ backgroundColor: constants.colors.white,flex:1,marginBottom:25 }}>

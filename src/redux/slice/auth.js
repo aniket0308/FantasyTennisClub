@@ -19,7 +19,7 @@ export const authSlice = createSlice({
                 referral: actions.payload.referral
             }
             //calling Api For Login
-            utils.callApi('api/register', registerObj, 'Registered', actions.payload.toast, actions.payload.dispatch)
+            utils.callApi('api/register', registerObj, 'Registered', actions.payload.dispatch)
 
         },
         login: (state, actions) => {
@@ -28,7 +28,7 @@ export const authSlice = createSlice({
                 password: actions.payload.password,
             }
             //calling Api For Login
-            utils.callApi('api/login', loginObj, 'login', actions?.payload?.toast, actions?.payload?.dispatch)
+            utils.callApi('api/login', loginObj, 'login', actions?.payload?.dispatch)
         },
         isLoaderVisible: (state, actions) => {
             state.isLoading = true
@@ -40,7 +40,7 @@ export const authSlice = createSlice({
         },
         logout: (state, actions) => {
             //calling Api For Logout
-            utils.callApi('api/v1/logout', {}, 'logout', '', actions?.payload?.dispatch)
+            utils.callApi('api/v1/logout', {}, 'logout', actions?.payload?.dispatch)
         }
     },
 })

@@ -15,6 +15,7 @@ const JoinWhatsApp = ({ navigation }) => {
                 title={'Join WhatsApp Group'}
                 titleStyle={{ marginTop: 5, marginBottom: -10 }}
                 rightIcon={constants.icons.shapeBell}
+                onPressRightIcon={()=>utils.navigateTo(navigation,constants.screens.notification)}
                 onPressLeftIcon={()=>navigation.goBack()}
             />
             <View style={[joinWhatsAppStyle.viewEtiquites, { backgroundColor: '#F5F8FA' }]}>

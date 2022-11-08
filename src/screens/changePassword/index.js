@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Image, SafeAreaView, StatusBar, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { widthPercentageToDP } from "react-native-responsive-screen";
-import { useToast } from "react-native-toast-notifications";
 import { useDispatch, useSelector } from "react-redux";
 import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
@@ -22,7 +21,6 @@ const ChangePassword = ({ route, navigation }) => {
     const [subject, setSubject] = useState('')
     const [text, setText] = useState('')
     const dispatch = useDispatch()
-    const toast = useToast()
     const isLoading = useSelector((state) => state?.auth?.isLoading)
 
     return (
@@ -125,7 +123,10 @@ const ChangePassword = ({ route, navigation }) => {
                         if (route.params.editProfile == 'editProfile') {
                             dispatch(isLoaderVisible())
                             dispatch(editProfile({ fullName, mobileNumber, navigation, toast, dispatch }))
-                        } else {
+                        }else if(route.params=='contactUs'){
+                            
+                        }
+                         else {
                             dispatch(isLoaderVisible())
                             dispatch(changePassword({ oldPassword, newPassword, confirmPassword, navigation, toast, dispatch }))
                         }

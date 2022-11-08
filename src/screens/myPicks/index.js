@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { FlatList, SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
-import { useToast } from "react-native-toast-notifications";
+import Snackbar from 'react-native-snackbar';
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
 import Loader from "../../components/loader";
@@ -11,7 +11,7 @@ const MyPicks = ({ route, navigation }) => {
 
     const [myAllPicks, setMyAllPicks] = useState()
     const [isLoading, setIsLoading] = useState(false)
-    const toast = useToast()
+    
     const particularDayPick = myAllPicks?.filter((i) => {
         if (`day ${route.params}` == i.day) {
             return i
@@ -37,10 +37,16 @@ const MyPicks = ({ route, navigation }) => {
                 setMyAllPicks(json.data.days)
             }).
             catch(e => {
-                toast.show(e.toString(), {
-                    type: 'danger',
-                    placement: 'top'
-                })
+                Snackbar.show({
+                    text: e.toString(),
+                    duration: 1000,
+                    backgroundColor:'red',
+                    // action: {
+                    //   text: 'UNDO',
+                    //   textColor: 'green',
+                    //   onPress: () => { /* Do something. */ },
+                    // },
+                  });
                 setIsLoading(false)
                 console.log('What Is Error In Get Api', e)
             })
@@ -94,6 +100,7 @@ const MyPicks = ({ route, navigation }) => {
                 titleStyle={{ alignSelf: 'center', fontSize: 22 }}
                 subTitleStyle={{ alignSelf: 'center', color: constants.colors.darkGreen }}
                 rightIcon={constants.icons.shapeBell}
+                onPressRightIcon={()=>utils.navigateTo(navigation,constants.screens.notification)}
                 mainViewHeaderStyle={{ paddingBottom: 10, paddingTop: 10 }}
                 resizeMode='stretch'
                 rightIconStyle={{ alignSelf: 'center' }}

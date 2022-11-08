@@ -26,6 +26,7 @@ import Notification from "../screens/notification"
 import navigationStyle from "./style"
 import BuyMemberShip from "../screens/buyMemberShip"
 import PrivateGroupDetails from "../screens/privateGroupDetails"
+import Consolation from "../screens/consolation"
 
 //Stacks Of Screen To Navigate
 const stack = createNativeStackNavigator()
@@ -41,6 +42,8 @@ const StackInstideDashBoard = () => {
             <stack.Screen options={{ headerShown: false }} name="MyPicks" component={MyPicks} />
             <stack.Screen options={{ headerShown: false }} name="JoinWhatsApp" component={JoinWhatsApp} />
             <stack.Screen options={{ headerShown: false }} name="Prizes" component={Prizes} />
+            <stack.Screen options={{ headerShown: false }} name="Consolation" component={Consolation} />
+            <stack.Screen options={{ headerShown: false }} name="Notification" component={Notification} />
         </stack.Navigator>
     )
 }
@@ -51,9 +54,21 @@ const StackInstideSelectionDay = () => {
         <stack.Navigator initialRouteName="SelectionDays">
             <stack.Screen options={{ headerShown: false }} name="SelectionDays" component={SelectionDays} /> 
             <stack.Screen options={{ headerShown: false }} name="DayPick" component={DayPick} />
+            <stack.Screen options={{ headerShown: false }} name="Notification" component={Notification} />
         </stack.Navigator>
     )
 }
+
+//Stack inside Leaderboard Tab
+const StackInstideLeaderboard = () => {
+    return (
+        <stack.Navigator initialRouteName="Leaderboard">
+            <stack.Screen options={{ headerShown: false }} name="Leaderboard" component={LeaderBoard} /> 
+            <stack.Screen options={{ headerShown: false }} name="Consolation" component={Consolation} />
+        </stack.Navigator>
+    )
+}
+
 
 //Stack Inside Account Tab
 const StackInsideAccount = () => {
@@ -66,6 +81,16 @@ const StackInsideAccount = () => {
             <stack.Screen options={{ headerShown: false }} name="BuyMemberShip" component={BuyMemberShip} />
             <stack.Screen options={{ headerShown: false }} name="Notification" component={Notification} />
             <stack.Screen options={{ headerShown: false }} name="PrivateGroupDetails" component={PrivateGroupDetails} />
+        </stack.Navigator>
+    )
+}
+
+//Stack Inside Rules
+const StackInsideRules=()=>{
+    return (
+        <stack.Navigator initialRouteName="Rules">
+            <stack.Screen options={{ headerShown: false }} name="Rules" component={Rules} /> 
+            <stack.Screen options={{ headerShown: false }} name="Notifications" component={Notification} />
         </stack.Navigator>
     )
 }
@@ -165,7 +190,7 @@ const BottomTab = ({ navigation }) => {
                         }
                     }}
                     name="LeaderBoard"
-                    component={LeaderBoard} />
+                    component={StackInstideLeaderboard} />
                 <bottomTab.Screen
                     options={{
                         headerShown: false, tabBarIcon: ({ focused }) => {
@@ -195,7 +220,7 @@ const BottomTab = ({ navigation }) => {
                         }
                     }}
                     name="Rules"
-                    component={Rules} />
+                    component={StackInsideRules} />
                 <bottomTab.Screen
                     options={{
                         headerShown: false, tabBarIcon: ({ focused }) => {

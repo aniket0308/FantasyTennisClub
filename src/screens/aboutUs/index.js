@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
-import { useToast } from "react-native-toast-notifications";
+import Snackbar from 'react-native-snackbar';
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
 import Loader from "../../components/loader";
@@ -11,7 +11,6 @@ const AboutUs = ({ navigation }) => {
 
     const [aboutUs, setAboutUs] = useState()
     const [isLoading, setIsLoading] = useState(false)
-    const toast = useToast()
 
     //get AboutUs From API
     const getAboutUsFromApi = async () => {
@@ -33,10 +32,16 @@ const AboutUs = ({ navigation }) => {
                 setAboutUs(json)
             }).
             catch(e => {
-                toast.show(e.toString(), {
-                    type: 'danger',
-                    placement: 'top'
-                })
+                Snackbar.show({
+                    text: e.toString(),
+                    duration: 1000,
+                    backgroundColor:'red',
+                    // action: {
+                    //   text: 'UNDO',
+                    //   textColor: 'green',
+                    //   onPress: () => { /* Do something. */ },
+                    // },
+                  });
                 setIsLoading(false)
                 console.log('What Is Error In Get Api', e)
             })
