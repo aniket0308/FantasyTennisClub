@@ -277,6 +277,7 @@ export const AuthNavigator = () => {
             <stack.Navigator initialRouteName="Home">
                 <stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
                 <stack.Screen options={{ headerShown: false }} name="Dashboard" component={BottomTab} />
+                <stack.Screen options={{ headerShown: false }} name="BuyMemberShip" component={BuyMemberShip} />
             </stack.Navigator>
         </NavigationContainer >
     )

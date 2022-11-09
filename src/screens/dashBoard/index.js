@@ -38,13 +38,13 @@ const DashBoardHome = ({ navigation }) => {
                 Snackbar.show({
                     text: e.toString(),
                     duration: 1000,
-                    backgroundColor:'red',
+                    backgroundColor: 'red',
                     // action: {
                     //   text: 'UNDO',
                     //   textColor: 'green',
                     //   onPress: () => { /* Do something. */ },
                     // },
-                  });
+                });
                 setIsLoading(false)
                 console.log('What Is Error In Get Api', e.toString())
             })
@@ -105,7 +105,7 @@ const DashBoardHome = ({ navigation }) => {
     ]
 
     //Rendering Data In Flatlist
-    const renderItem = ({ item, index }) => {
+    const renderItem = (item, index) => {
         return (
             <TouchableOpacity
                 onPress={() => {
@@ -117,10 +117,10 @@ const DashBoardHome = ({ navigation }) => {
                                 ? constants.screens.joinWhatsApp
                                 : item.title == 'PRIZES'
                                     ? constants.screens.prizes
-                                    :item.title=='Leaderboard'
-                                    ?constants.screens.leaderBoard
-                                    :'Consolation', 
-                        item.title 
+                                    : item.title == 'Leaderboard'
+                                        ? constants.screens.leaderBoard
+                                        : 'Consolation',
+                        item.title
                     )
                 }
                 }
@@ -143,7 +143,7 @@ const DashBoardHome = ({ navigation }) => {
     }
 
     //rendering Insights data in flatlist
-    const renderInsightData = ({ item, index }) => {
+    const renderInsightData = (item, index) => {
         return (
             <TouchableOpacity
                 onPress={() => utils.navigateTo(navigation, constants.screens.announcements)}
@@ -167,15 +167,15 @@ const DashBoardHome = ({ navigation }) => {
                     titleStyle={{ alignSelf: 'center', fontSize: 22 }}
                     subTitleStyle={{ alignSelf: 'center', color: constants.colors.darkGreen }}
                     rightIcon={constants.icons.shapeBell}
-                    onPressRightIcon={()=>utils.navigateTo(navigation,constants.screens.notification)}
+                    onPressRightIcon={() => utils.navigateTo(navigation, constants.screens.notification)}
                     mainViewHeaderStyle={{ paddingBottom: 10, paddingTop: 10 }}
                     resizeMode='contain'
                     rightIconStyle={{ alignSelf: 'center' }}
                 />
                 {isLoading == true
-                    && <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
+                    && <ScrollView showsVerticalScrollIndicator={false} bounces={true}>
                         <View>
-                            <FlatList
+                            {/* <FlatList
                                 style={{ marginBottom: 25 }}
                                 scrollEnabled={false}
                                 data={tempData}
@@ -184,13 +184,21 @@ const DashBoardHome = ({ navigation }) => {
                                 renderItem={renderItem}
                                 key={(item) => item}
                                 keyExtractor={item => item}
-                            />
-
+                            /> */}
+                            <View style={{ flexDirection: 'row',flexWrap:'wrap' }}>
+                                {
+                                    tempData.map((item, index) => {
+                                        return (
+                                            renderItem(item,index)
+                                        )
+                                    })
+                                }
+                            </View>
                             <View style={[commonStyle.row, { justifyContent: 'space-between', marginVertical: 20, alignItems: 'center' }]}>
                                 <Text style={dashboardStyle.txtGeneral}>General Anouncements:</Text>
                                 <Text onPress={() => utils.navigateTo(navigation, constants.screens.announcements)} style={[dashboardStyle.txtGeneral, { fontSize: 16 }]}>See All</Text>
                             </View>
-                            <FlatList
+                            {/* <FlatList
                                 bounces={false}
                                 style={{ marginBottom: 20 }}
                                 showsVerticalScrollIndicator={false}
@@ -199,7 +207,13 @@ const DashBoardHome = ({ navigation }) => {
                                 renderItem={renderInsightData}
                                 key={(item) => item}
                                 keyExtractor={item => item}
-                            />
+                            /> */}
+                            {
+                                announcements?.length > 0 &&
+                                announcements.map((i, index) => {
+                                    return renderInsightData(i, index)
+                                })
+                            }
                         </View>
                     </ScrollView >
                 }

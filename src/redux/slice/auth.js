@@ -26,6 +26,7 @@ export const authSlice = createSlice({
             const loginObj = {
                 email: actions.payload.email,
                 password: actions.payload.password,
+                deviceToken:actions.payload.deviceToken
             }
             //calling Api For Login
             utils.callApi('api/login', loginObj, 'login', actions?.payload?.dispatch)

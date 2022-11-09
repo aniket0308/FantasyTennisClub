@@ -9,7 +9,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react'
 import { widthPercentageToDP } from 'react-native-responsive-screen';
-import { ToastProvider } from 'react-native-toast-notifications';
 import { Provider } from 'react-redux';
 import { AuthNavigator, RootNavigator } from './navigation/navigation';
 import { store } from './redux/store';

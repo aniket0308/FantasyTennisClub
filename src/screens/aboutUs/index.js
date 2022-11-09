@@ -6,6 +6,7 @@ import { constants } from "../../common/constant";
 import { Header } from "../../components";
 import Loader from "../../components/loader";
 import aboutUsStyle from "./style";
+import RenderHtml from 'react-native-render-html';
 
 const AboutUs = ({ navigation }) => {
 
@@ -35,13 +36,13 @@ const AboutUs = ({ navigation }) => {
                 Snackbar.show({
                     text: e.toString(),
                     duration: 1000,
-                    backgroundColor:'red',
+                    backgroundColor: 'red',
                     // action: {
                     //   text: 'UNDO',
                     //   textColor: 'green',
                     //   onPress: () => { /* Do something. */ },
                     // },
-                  });
+                });
                 setIsLoading(false)
                 console.log('What Is Error In Get Api', e)
             })
@@ -79,9 +80,12 @@ const AboutUs = ({ navigation }) => {
                         Our Mission:   Enhance the tennis experience of our members by becoming part of an interactive community.
                     </Text>
                 </View> */}
-                        <Text style={aboutUsStyle.txt}>
+                        <RenderHtml
+                            source={{ html: `${aboutUs?.data?.content}` }}
+                        />
+                        {/* <Text style={aboutUsStyle.txt}>
                             {aboutUs?.data?.content}
-                        </Text>
+                        </Text> */}
                     </ScrollView>
                     : <Loader />
                 }

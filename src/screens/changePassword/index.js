@@ -8,7 +8,7 @@ import { constants } from "../../common/constant";
 import { Button, FloatingInput, Header } from "../../components";
 import Loader from "../../components/loader";
 import { isLoaderVisible } from "../../redux/slice/auth";
-import { changePassword, editProfile } from "../../redux/slice/profile";
+import { changePassword, editProfile, sendInquiry } from "../../redux/slice/profile";
 import changePasswordStyle from "./style";
 
 const ChangePassword = ({ route, navigation }) => {
@@ -122,13 +122,15 @@ const ChangePassword = ({ route, navigation }) => {
                     onPress={() => {
                         if (route.params.editProfile == 'editProfile') {
                             dispatch(isLoaderVisible())
-                            dispatch(editProfile({ fullName, mobileNumber, navigation, toast, dispatch }))
+                            dispatch(editProfile({ fullName, mobileNumber, navigation, dispatch }))
                         }else if(route.params=='contactUs'){
+                            dispatch(isLoaderVisible())
+                            dispatch(sendInquiry({ subject, text, dispatch }))
                             
                         }
                          else {
                             dispatch(isLoaderVisible())
-                            dispatch(changePassword({ oldPassword, newPassword, confirmPassword, navigation, toast, dispatch }))
+                            dispatch(changePassword({ oldPassword, newPassword, confirmPassword, navigation, dispatch }))
                         }
                     }}
                 />

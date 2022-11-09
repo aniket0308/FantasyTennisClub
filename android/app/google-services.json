@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "684462950609",
+    "project_id": "fantasy-tennis-club",
+    "storage_bucket": "fantasy-tennis-club.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:684462950609:android:4438b48b5660b0435dddf0",
+        "android_client_info": {
+          "package_name": "com.ftc.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "684462950609-0h126q615sg4rqdou8sp8s1b0f6rf590.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvDBtCBWZ8EJwxSW4NZ8cAM6EdY1yoGYo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "684462950609-0h126q615sg4rqdou8sp8s1b0f6rf590.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "684462950609-42ibbkm773hsr2s1gmqub7sjmaec15pk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ftc.ios"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

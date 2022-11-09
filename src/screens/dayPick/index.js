@@ -11,7 +11,7 @@ const DayPick = ({ route, navigation }) => {
     const [isSubmit, setIsSubmit] = useState(false)
 
     //rendering Selection DropDown Function
-    const renderSelectionDropdown = ({ item, index }) => {
+    const renderSelectionDropdown = (item, index) => {
         return (
             <>
                 <View style={dayPickStyle.txtViewSelectionStyle}>
@@ -81,12 +81,11 @@ const DayPick = ({ route, navigation }) => {
                                 labelStyle={dayPickStyle.labelStyle}
                                 titleStyle={dayPickStyle.titleStyle}
                             />
-                            <FlatList
-                                data={[1, 2, 3]}
-                                renderItem={renderSelectionDropdown}
-                                key={(item) => item}
-                                keyExtractor={item => item}
-                            />
+                            {
+                                [1, 2, 3].map((item, index) => {
+                                    return renderSelectionDropdown(item, index)
+                                })
+                            }
                         </View>
                         <Button
                             titleText={'Submit'}

@@ -37,13 +37,13 @@ const BuyMemberShip = ({ navigation }) => {
                 Snackbar.show({
                     text: e.toString(),
                     duration: 1000,
-                    backgroundColor:'red',
+                    backgroundColor: 'red',
                     // action: {
                     //   text: 'UNDO',
                     //   textColor: 'green',
                     //   onPress: () => { /* Do something. */ },
                     // },
-                  });
+                });
                 setIsLoading(false)
                 console.log('What Is Error In Get Api', e)
             })
@@ -90,7 +90,7 @@ const BuyMemberShip = ({ navigation }) => {
     ]
 
     //Render Function For Membership
-    const renderMemberShip = ({ item, index }) => {
+    const renderMemberShip = (item, index) => {
         return (
             <TouchableOpacity
                 onPress={() => utils.navigateTo(navigation, item.text == 'Organize Private Group' || item.text == 'Join Private Group' ? constants.screens.privateGroupDetails : constants.screens.membership, item.text)}
@@ -114,16 +114,24 @@ const BuyMemberShip = ({ navigation }) => {
             />
             {isLoading == true
                 ? <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 25 }}>
-                    <FlatList
+                    {/* <FlatList
                         data={memberShip?.length > 0 ? memberShip : []}
                         numColumns={2}
                         style={{ flexDirection: 'row', marginBottom: 25, alignSelf: 'center' }}
                         renderItem={renderMemberShip}
                         key={(item) => item.id}
                         keyExtractor={item => item}
-                    />
+                    /> */}
+                    <View style={{flexDirection:'row',flexWrap:'wrap',justifyContent:'space-between',marginHorizontal:10}}>
+                        {
+                            memberShip?.length > 0
+                            && memberShip.map((item, index) => {
+                                return renderMemberShip(item, index)
+                            })
+                        }
+                    </View>
                 </ScrollView>
-                : <Loader/>
+                : <Loader />
             }
         </View>
     )

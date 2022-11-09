@@ -23,6 +23,7 @@ export const navigateTo = (navigation, screen, passData) => {
 
 //Calling API Function
 export const callApi = (path, payload, type, dispatch) => {
+    console.log('payload .device token',payload);
     const urlPath = `${URL}${path}`
     fetch(urlPath, {
         method: 'POST',
@@ -67,6 +68,15 @@ export const callApi = (path, payload, type, dispatch) => {
             } else if (type == 'changePassword') {
                 if (json.error == false) {
                     payload.navigation.goBack()
+                }
+            }else if(type=='inquiry'){
+                if(json?.error==false){
+                    Snackbar.show({
+                        text: json.message,
+                        duration: 1000,
+                        backgroundColor:'green',
+                      });
+                      return true
                 }
             }
             else {

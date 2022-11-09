@@ -18,7 +18,7 @@ export const profileSlice = createSlice({
                 navigation: actions.payload.navigation
             }
             //calling Api For Update Profile
-            utils.callApi('api/v1/edit-profile', editProfileObj, 'editProfile', actions.payload.toast, actions.payload.dispatch)
+            utils.callApi('api/v1/edit-profile', editProfileObj, 'editProfile', actions.payload.dispatch)
         },
         isLoaderVisibleProfile: (state, actions) => {
             state.isLoading = true
@@ -37,12 +37,22 @@ export const profileSlice = createSlice({
                 token: await AsyncStorage.getItem('@Token'),
             }
             //calling Api For Update changePassword
-            utils.callApi('api/v1/change-password', changePasswordObj, 'changePassword', actions.payload.toast, actions.payload.dispatch)
+            utils.callApi('api/v1/change-password', changePasswordObj, 'changePassword', actions.payload.dispatch)
+        },
+        sendInquiry: async (state, actions) => {
+            const sendInquiryObj = {
+                subject:actions.payload.subject,
+                message:actions.payload.text,
+                navigation: actions.payload.navigation,
+                token: await AsyncStorage.getItem('@Token'),
+            }
+            //calling Api For sending Inquiry
+            utils.callApi('api/v1/inquiry', sendInquiryObj, 'inquiry', actions.payload.dispatch)
         }
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { editProfile, changePassword,isLoaderVisibleProfile,isLoaderNotVisibleProfile } = profileSlice.actions
+export const { editProfile, changePassword,isLoaderVisibleProfile,isLoaderNotVisibleProfile,sendInquiry } = profileSlice.actions
 
 export default profileSlice.reducer

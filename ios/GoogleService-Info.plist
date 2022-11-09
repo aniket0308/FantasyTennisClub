@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>684462950609-42ibbkm773hsr2s1gmqub7sjmaec15pk.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.684462950609-42ibbkm773hsr2s1gmqub7sjmaec15pk</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCjW60KSHYfQqQ4-7BnLUcxirp4PIgn6oo</string>
+	<key>GCM_SENDER_ID</key>
+	<string>684462950609</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.ftc.ios</string>
+	<key>PROJECT_ID</key>
+	<string>fantasy-tennis-club</string>
+	<key>STORAGE_BUCKET</key>
+	<string>fantasy-tennis-club.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:684462950609:ios:ff4c8918c7831b955dddf0</string>
+</dict>
+</plist>
