@@ -21,21 +21,21 @@ const Login = ({ navigation }) => {
     const isLoading = useSelector((state) => state?.auth?.isLoading)
 
     const firebaseConfig = {
-        
-        apiKey:Platform.OS=='android'?'AIzaSyAvDBtCBWZ8EJwxSW4NZ8cAM6EdY1yoGYo':'AIzaSyCjW60KSHYfQqQ4-7BnLUcxirp4PIgn6oo',
+
+        apiKey: Platform.OS == 'android' ? 'AIzaSyAvDBtCBWZ8EJwxSW4NZ8cAM6EdY1yoGYo' : 'AIzaSyCjW60KSHYfQqQ4-7BnLUcxirp4PIgn6oo',
         authDomain: '',
         databaseURL: '',
         projectId: 'fantasy-tennis-club',
         storageBucket: 'fantasy-tennis-club.appspot.com',
         messagingSenderId: '684462950609',
-        appId:Platform.OS=='android'?'1:684462950609:android:4438b48b5660b0435dddf0':"1:684462950609:ios:ff4c8918c7831b955dddf0"
+        appId: Platform.OS == 'android' ? '1:684462950609:android:4438b48b5660b0435dddf0' : "1:684462950609:ios:ff4c8918c7831b955dddf0"
     };
     const init = async () => {
         try {
             await firebase.initializeApp(firebaseConfig)
             console.log('Success Initialized');
         } catch (error) {
-            console.log('error in initilization',error);
+            console.log('error in initilization', error);
         }
     }
     useEffect(() => {
@@ -93,12 +93,12 @@ const Login = ({ navigation }) => {
                     disabled={isLoading}
                     titleText='Login'
                     btnStyle={{ marginTop: 34 }}
-                    onPress={async() => {
+                    onPress={async () => {
                         // init()
                         // const deviceToken=await getDeviceToken()
-                        const deviceToken=0
+                        const deviceToken = 0
                         dispatch(isLoaderVisible())
-                        dispatch(login({ email, password,deviceToken, dispatch }))
+                        dispatch(login({ email, password, deviceToken, dispatch }))
                     }}
                 />
                 <SafeAreaView />
