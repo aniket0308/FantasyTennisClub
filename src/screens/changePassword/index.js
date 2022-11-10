@@ -123,12 +123,15 @@ const ChangePassword = ({ route, navigation }) => {
                         if (route.params.editProfile == 'editProfile') {
                             dispatch(isLoaderVisible())
                             dispatch(editProfile({ fullName, mobileNumber, navigation, dispatch }))
-                        }else if(route.params=='contactUs'){
+                        } else if (route.params == 'contactUs') {
                             dispatch(isLoaderVisible())
                             dispatch(sendInquiry({ subject, text, dispatch }))
-                            
+                            setTimeout(() => {
+                                setText('')
+                                setSubject('')
+                            }, 1900)
                         }
-                         else {
+                        else {
                             dispatch(isLoaderVisible())
                             dispatch(changePassword({ oldPassword, newPassword, confirmPassword, navigation, dispatch }))
                         }

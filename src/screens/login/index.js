@@ -10,18 +10,19 @@ import Loader from "../../components/loader";
 import { isLoaderVisible, login } from "../../redux/slice/auth";
 import loginStyle from "./style";
 import messaging, { firebase } from '@react-native-firebase/messaging';
+console.log(firebase.app.length);
 
 //Login Screen
 const Login = ({ navigation }) => {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [deviceToken,setDeviceToken]=useState('')
     const [isPasswordVisible, setIsPasswordVisible] = useState(true)
     const dispatch = useDispatch()
     const isLoading = useSelector((state) => state?.auth?.isLoading)
 
     const firebaseConfig = {
-
         apiKey: Platform.OS == 'android' ? 'AIzaSyAvDBtCBWZ8EJwxSW4NZ8cAM6EdY1yoGYo' : 'AIzaSyCjW60KSHYfQqQ4-7BnLUcxirp4PIgn6oo',
         authDomain: '',
         databaseURL: '',
@@ -30,29 +31,31 @@ const Login = ({ navigation }) => {
         messagingSenderId: '684462950609',
         appId: Platform.OS == 'android' ? '1:684462950609:android:4438b48b5660b0435dddf0' : "1:684462950609:ios:ff4c8918c7831b955dddf0"
     };
-    const init = async () => {
-        try {
-            await firebase.initializeApp(firebaseConfig)
-            console.log('Success Initialized');
+
+    const requestUserPermission = async () => {
+        try {     
+            const token = await messaging().getToken()
+                if(token){
+                    setDeviceToken(token)
+                }
+                const authStatus = await messaging().requestPermission();
+                const enabled =
+                    authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+                    authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+    
+                if (enabled) {
+                    console.log('Authorization status:', authStatus);
+                }
         } catch (error) {
-            console.log('error in initilization', error);
+            console.log('WERROR',error);
         }
     }
     useEffect(() => {
-        // init()
+        requestUserPermission()
         setTimeout(() => {
             SplashScreen.hide();
         }, 1000)
     }, [])
-
-    const getDeviceToken = async () => {
-        try {
-            const token = await messaging().getToken()
-            return token
-        } catch (error) {
-            console.log('Error In Getting Device Token', error);
-        }
-    }
 
     return (
         <>
@@ -94,9 +97,6 @@ const Login = ({ navigation }) => {
                     titleText='Login'
                     btnStyle={{ marginTop: 34 }}
                     onPress={async () => {
-                        // init()
-                        // const deviceToken=await getDeviceToken()
-                        const deviceToken = 0
                         dispatch(isLoaderVisible())
                         dispatch(login({ email, password, deviceToken, dispatch }))
                     }}

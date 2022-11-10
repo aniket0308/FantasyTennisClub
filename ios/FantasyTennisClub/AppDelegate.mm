@@ -34,6 +34,7 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [FIRApp configure];
   RCTAppSetupPrepareApp(application);
 
   for (NSString* family in [UIFont familyNames])
@@ -70,7 +71,6 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
   [RNSplashScreen show];  // here
-  [FIRApp configure];
   return YES;
 }
 

@@ -27,6 +27,8 @@ import navigationStyle from "./style"
 import BuyMemberShip from "../screens/buyMemberShip"
 import PrivateGroupDetails from "../screens/privateGroupDetails"
 import Consolation from "../screens/consolation"
+import MyMembership from "../screens/myMembership"
+import GroupLeaderBoard from "../screens/groupLeaderBoard"
 
 //Stacks Of Screen To Navigate
 const stack = createNativeStackNavigator()
@@ -65,6 +67,7 @@ const StackInstideLeaderboard = () => {
         <stack.Navigator initialRouteName="Leaderboard">
             <stack.Screen options={{ headerShown: false }} name="Leaderboard" component={LeaderBoard} /> 
             <stack.Screen options={{ headerShown: false }} name="Consolation" component={Consolation} />
+            <stack.Screen options={{ headerShown: false }} name="GroupLeaderBoard" component={GroupLeaderBoard} />
         </stack.Navigator>
     )
 }
@@ -78,7 +81,7 @@ const StackInsideAccount = () => {
             <stack.Screen options={{ headerShown: false }} name="ChangePassword" component={ChangePassword} />
             <stack.Screen options={{ headerShown: false }} name="AboutUs" component={AboutUs} />
             <stack.Screen options={{ headerShown: false }} name="MemberShip" component={MemberShip} />
-            <stack.Screen options={{ headerShown: false }} name="BuyMemberShip" component={BuyMemberShip} />
+            <stack.Screen options={{ headerShown: false }} name="MyMembership" component={MyMembership} />
             <stack.Screen options={{ headerShown: false }} name="Notification" component={Notification} />
             <stack.Screen options={{ headerShown: false }} name="PrivateGroupDetails" component={PrivateGroupDetails} />
         </stack.Navigator>

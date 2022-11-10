@@ -95,8 +95,9 @@ const BuyMemberShip = ({ navigation }) => {
             <TouchableOpacity
                 onPress={() => utils.navigateTo(navigation, item.text == 'Organize Private Group' || item.text == 'Join Private Group' ? constants.screens.privateGroupDetails : constants.screens.membership, item.text)}
                 style={[buyMemberShipStyle.touchable, { marginRight: index % 2 != 0 ? 0 : 30 }]}>
-                <Image style={{ alignSelf: 'center', height: widthPercentageToDP(22), width: widthPercentageToDP(22) }} source={{ uri: item?.banner_image_url }} />
-                <Text numberOfLines={2} style={buyMemberShipStyle.text}>{item?.title}</Text>
+                <Image style={{ alignSelf: 'center', height: widthPercentageToDP(18), width: widthPercentageToDP(18) }} source={{ uri: item?.banner_image_url }} />
+                <Text numberOfLines={2} style={buyMemberShipStyle.text}>{item?.tournament?item?.tournament:item.title}</Text>
+                <Text numberOfLines={2} style={[buyMemberShipStyle.text,{marginTop:-10}]}>{item?.price && `$${item?.price}`}</Text>
             </TouchableOpacity>
         )
     }
@@ -122,7 +123,7 @@ const BuyMemberShip = ({ navigation }) => {
                         key={(item) => item.id}
                         keyExtractor={item => item}
                     /> */}
-                    <View style={{flexDirection:'row',flexWrap:'wrap',justifyContent:'space-between',marginHorizontal:10}}>
+                    <View style={{flexDirection:'row',flexWrap:'wrap',justifyContent:'space-between',marginHorizontal:widthPercentageToDP(3)}}>
                         {
                             memberShip?.length > 0
                             && memberShip.map((item, index) => {

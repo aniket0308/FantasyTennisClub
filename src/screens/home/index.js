@@ -66,7 +66,7 @@ const Home = ({ navigation }) => {
                 <Image source={constants.icons.downArrow} resizeMode='contain' />
                 <TouchableOpacity
                     disabled={isLoading == false ? true : false}
-                    onPress={() => { utils.navigateTo(navigation,isMembership==false?'Dashboard':constants.screens.buyMemberShip) }}
+                    onPress={() => { utils.navigateTo(navigation,isMembership==true?'Dashboard':constants.screens.buyMemberShip) }}
                     activeOpacity={1}
                     style={homeStyle.tennisBall}>
                     <Image resizeMode="contain" style={{ height: widthPercentageToDP(15), width: widthPercentageToDP(15) }} source={constants.icons.tennisBall} />

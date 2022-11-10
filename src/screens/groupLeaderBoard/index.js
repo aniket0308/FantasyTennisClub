@@ -6,19 +6,19 @@ import Snackbar from 'react-native-snackbar';
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
 import Loader from "../../components/loader";
-import leaderBoardStyle from "./style";
+import groupLeaderBoardStyle from "./style";
 import { utils } from "../../common";
 import SearchBar from "../../components/searchBar";
 
-//Leaderboard Screen
-const LeaderBoard = ({ route, navigation }) => {
+//GroupLeaderBoard Screen
+const GroupLeaderBoard = ({ route, navigation }) => {
     const [leaderBoardTournament, setLeaderBordTournament] = useState()
     const [isLoading, setIsLoading] = useState(false)
     const [searchResult,setSearchResult]=useState('')
 
     const getTournamentLeaderBoard = async () => {
         const token = await AsyncStorage.getItem('@Token')
-        fetch('https://fantasytennisclub.com/admin/api/v1/tournaments/1/leaderboard', {
+        fetch('https://fantasytennisclub.com/admin/api/v1/tournaments/1/group/leaderboard', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -63,7 +63,7 @@ const LeaderBoard = ({ route, navigation }) => {
                         return (
                             <View style={{ flexDirection: 'column' }}>
                                 <Text
-                                    style={[leaderBoardStyle.txtTitle,
+                                    style={[groupLeaderBoardStyle.txtTitle,
                                     {
                                         marginRight:20,
                                     }]}
@@ -74,7 +74,7 @@ const LeaderBoard = ({ route, navigation }) => {
                                             if(dataItem.member.toLowerCase().includes(searchResult)){
                                                 return(
                                                     <Text
-                                                    style={[leaderBoardStyle.txtScore,{marginLeft:headerItem=='Contact'?0:10}]}>
+                                                    style={[groupLeaderBoardStyle.txtScore,{marginLeft:headerItem=='Contact'?0:10}]}>
                                                     {
                                                         headerIndex == 0
                                                             ? dataItem.member
@@ -88,7 +88,7 @@ const LeaderBoard = ({ route, navigation }) => {
                                         }else{
                                             return (
                                                 <Text
-                                                    style={[leaderBoardStyle.txtScore,{marginLeft:headerItem=='Contact'?0:10}]}>
+                                                    style={[groupLeaderBoardStyle.txtScore,{marginLeft:headerItem=='Contact'?0:10}]}>
                                                     {
                                                         headerIndex == 0
                                                             ? dataItem.member
@@ -111,23 +111,21 @@ const LeaderBoard = ({ route, navigation }) => {
 
     return (
         <>
-            <View style={leaderBoardStyle.mainContainer}>
+            <View style={groupLeaderBoardStyle.mainContainer}>
                 <SafeAreaView />
                 <Header
                     showBackArrow={true}
+                    viewHeaderStyle={{width:"78%"}}
                     onPressLeftIcon={() => navigation.goBack()}
-                    title={'Leaderboard'}
-                    subTitle={'View Horizontal'}
-                    titleStyle={{ alignSelf: 'center', fontSize: 22, }}
+                    title={'Group Leaderboard'}
+                    titleStyle={{ marginTop: 5 }}
                     subTitleStyle={{ alignSelf: 'center', color: constants.colors.darkGreen }}
-                    rightIcon={constants.icons.participant}
                     mainViewHeaderStyle={{ paddingBottom: 10, paddingTop: 10 }}
                     resizeMode='stretch'
-                    onPressRightIcon={()=>utils.navigateTo(navigation,'GroupLeaderBoard')}
                     rightIconStyle={{ height: widthPercentageToDP(10), width: widthPercentageToDP(15), alignSelf: 'center' }}
                 />
             </View>
-            <View style={leaderBoardStyle.mainViewScore}>
+            <View style={groupLeaderBoardStyle.mainViewScore}>
                 <SearchBar
                 onChangeText={(searchResult)=>setSearchResult(searchResult)}
                 />
@@ -145,12 +143,12 @@ const LeaderBoard = ({ route, navigation }) => {
                     />
                     : <Loader />
                 }
-                <View style={leaderBoardStyle.ViewConsolation}>
-                    <Text onPress={() => utils.navigateTo(navigation,'Consolation','Consolation')} style={leaderBoardStyle.consolation}>Consolation</Text>
+                <View style={groupLeaderBoardStyle.ViewConsolation}>
+                    <Text onPress={() => utils.navigateTo(navigation,'Consolation','Consolation')} style={groupLeaderBoardStyle.consolation}>Consolation</Text>
                 </View>
             </View>
         </>
     )
 }
 
-export default LeaderBoard
+export default GroupLeaderBoard

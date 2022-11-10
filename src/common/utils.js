@@ -23,7 +23,6 @@ export const navigateTo = (navigation, screen, passData) => {
 
 //Calling API Function
 export const callApi = (path, payload, type, dispatch) => {
-    console.log('payload .device token',payload);
     const urlPath = `${URL}${path}`
     fetch(urlPath, {
         method: 'POST',
