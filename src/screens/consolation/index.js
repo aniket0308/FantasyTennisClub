@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { FlatList, Image, Platform, SafeAreaView, Text, TextInput, View } from "react-native";
+import { Alert, FlatList, Image, Platform, SafeAreaView, Text, TextInput, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
@@ -20,7 +20,7 @@ const Consolation = ({ route, navigation }) => {
         fetch(
             route.params == 'Season Ranking'
                 ? 'https://fantasytennisclub.com/admin/api/v1/season-leaderboard'
-                : 'https://fantasytennisclub.com/admin/api/v1/tournaments/1/leaderboard', {
+                : 'https://fantasytennisclub.com/admin/api/v1/tournaments/1/consolation-leaderboard', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -32,7 +32,36 @@ const Consolation = ({ route, navigation }) => {
             then((json) => {
                 if (json.success == true) {
                     setIsLoading(true)
+                }else{
+                    Snackbar.show({
+                        text: json?.message,
+                        duration: 1000,
+                        backgroundColor:'red',
+                        // action: {
+                        //   text: 'UNDO',
+                        //   textColor: 'green',
+                        //   onPress: () => { /* Do something. */ },
+                        // },
+                      });
+                    setIsLoading(false)
                 }
+
+                if(json.data==null){
+                    setIsLoading(false)
+                    Alert.alert(
+                        "Fantacy Cricket",
+                        json?.message,
+                        [
+                          {
+                            text: "Cancel",
+                            onPress: () => navigation.goBack(),
+                            style: "cancel"
+                          },
+                          { text: "OK", onPress: () => navigation.goBack() }
+                        ]
+                      );
+                }
+
                 setLeaderBordTournament(json)
             }).
             catch(e => {
