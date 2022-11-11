@@ -23,6 +23,7 @@ export const navigateTo = (navigation, screen, passData) => {
 
 //Calling API Function
 export const callApi = (path, payload, type, dispatch) => {
+    console.log('What Is Device Token',payload);
     const urlPath = `${URL}${path}`
     fetch(urlPath, {
         method: 'POST',
@@ -53,6 +54,7 @@ export const callApi = (path, payload, type, dispatch) => {
             }
 
             if (type == 'login') {
+                console.log('Login Response',json);
                 if (json.data != null) {
                     storeData(json.data)
                 }

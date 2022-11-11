@@ -8,6 +8,7 @@ import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
 import Loader from "../../components/loader";
+import PushNotificationService from "../../pushNotification/pushNotification";
 import dashboardStyle from "./style";
 
 //Dashboard Of Screen Or Say Home Screen
@@ -15,6 +16,7 @@ const DashBoardHome = ({ navigation }) => {
 
     const [announcements, setAnnouncements] = useState()
     const [isLoading, setIsLoading] = useState(false)
+    let notification=new PushNotificationService()
     const getAllAnnouncements = async () => {
         const token = await AsyncStorage.getItem('@Token')
         //calling api for Announcements
@@ -109,6 +111,7 @@ const DashBoardHome = ({ navigation }) => {
         return (
             <TouchableOpacity
                 onPress={() => {
+                    notification.localNotification()
                     utils.navigateTo(
                         navigation,
                         item.title == 'MY PICKS'
@@ -126,7 +129,7 @@ const DashBoardHome = ({ navigation }) => {
                 }
                 style={[dashboardStyle.touchableView, {
                     marginTop: index != 0 || index != 1 ? 10 : 0,
-                    marginLeft: index % 2 == 0 ? 0 : 25
+                    // marginLeft: index % 2 == 0 ? 0 : 25,
                 }]}
             >
                 {
@@ -185,7 +188,7 @@ const DashBoardHome = ({ navigation }) => {
                                 key={(item) => item}
                                 keyExtractor={item => item}
                             /> */}
-                            <View style={{ flexDirection: 'row',flexWrap:'wrap' }}>
+                            <View style={{ flexDirection: 'row',flexWrap:'wrap',justifyContent:'space-around' }}>
                                 {
                                     tempData.map((item, index) => {
                                         return (

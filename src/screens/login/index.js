@@ -21,7 +21,6 @@ const Login = ({ navigation }) => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(true)
     const dispatch = useDispatch()
     const isLoading = useSelector((state) => state?.auth?.isLoading)
-    
     const requestUserPermission = async () => {
         try {     
             const token = await messaging().getToken()
@@ -87,7 +86,6 @@ const Login = ({ navigation }) => {
                     titleText='Login'
                     btnStyle={{ marginTop: 34 }}
                     onPress={async () => {
-                        alert(deviceToken)
                         dispatch(isLoaderVisible())
                         dispatch(login({ email, password, deviceToken, dispatch }))
                     }}

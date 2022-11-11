@@ -260,6 +260,9 @@ android {
 }
 
 dependencies {
+    implementation 'com.google.firebase:firebase-analytics:17.3.0'
+    implementation project(':react-native-push-notification')
+    implementation 'com.android.support:multidex:2.0.1'
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
@@ -287,6 +290,12 @@ implementation project(':react-native-splash-screen')
     } else {
         implementation jscFlavor
     }
+
+    android {
+    defaultConfig {
+        multiDexEnabled true
+    }
+ }
 }
 
 if (isNewArchitectureEnabled()) {

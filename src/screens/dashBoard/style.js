@@ -24,7 +24,7 @@ const dashboardStyle = StyleSheet.create({
     touchableView: {
         justifyContent: 'center',
         borderWidth: 2,
-        width: widthPercentageToDP(44),
+        width:'48%',
         backgroundColor: constants.colors.white,
         paddingVertical: 8,
         borderRadius: 6,
