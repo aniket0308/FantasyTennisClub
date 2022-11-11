@@ -12,6 +12,7 @@ import { widthPercentageToDP } from 'react-native-responsive-screen';
 import { Provider } from 'react-redux';
 import { AuthNavigator, RootNavigator } from './navigation/navigation';
 import { store } from './redux/store';
+import messaging from '@react-native-firebase/messaging';
 
 const App = () => {
 
@@ -38,6 +39,14 @@ const App = () => {
   useEffect(() => {
     getData()
   })
+
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+
+    return unsubscribe;
+  }, []);
 
   return (
       <Provider store={store}>

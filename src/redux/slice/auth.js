@@ -23,10 +23,11 @@ export const authSlice = createSlice({
 
         },
         login: (state, actions) => {
+            console.log('What Is Device Token',actions.payload.deviceToken);
             const loginObj = {
                 email: actions.payload.email,
                 password: actions.payload.password,
-                deviceToken:actions.payload.deviceToken
+                device_token:actions.payload.deviceToken
             }
             //calling Api For Login
             utils.callApi('api/login', loginObj, 'login', actions?.payload?.dispatch)

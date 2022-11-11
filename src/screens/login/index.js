@@ -21,17 +21,7 @@ const Login = ({ navigation }) => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(true)
     const dispatch = useDispatch()
     const isLoading = useSelector((state) => state?.auth?.isLoading)
-
-    const firebaseConfig = {
-        apiKey: Platform.OS == 'android' ? 'AIzaSyAvDBtCBWZ8EJwxSW4NZ8cAM6EdY1yoGYo' : 'AIzaSyCjW60KSHYfQqQ4-7BnLUcxirp4PIgn6oo',
-        authDomain: '',
-        databaseURL: '',
-        projectId: 'fantasy-tennis-club',
-        storageBucket: 'fantasy-tennis-club.appspot.com',
-        messagingSenderId: '684462950609',
-        appId: Platform.OS == 'android' ? '1:684462950609:android:4438b48b5660b0435dddf0' : "1:684462950609:ios:ff4c8918c7831b955dddf0"
-    };
-
+    
     const requestUserPermission = async () => {
         try {     
             const token = await messaging().getToken()
@@ -97,6 +87,7 @@ const Login = ({ navigation }) => {
                     titleText='Login'
                     btnStyle={{ marginTop: 34 }}
                     onPress={async () => {
+                        alert(deviceToken)
                         dispatch(isLoaderVisible())
                         dispatch(login({ email, password, deviceToken, dispatch }))
                     }}

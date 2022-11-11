@@ -49,14 +49,9 @@ const Consolation = ({ route, navigation }) => {
                 if(json.data==null){
                     setIsLoading(false)
                     Alert.alert(
-                        "Fantacy Cricket",
+                        "Fantasy Tennis Club",
                         json?.message,
                         [
-                          {
-                            text: "Cancel",
-                            onPress: () => navigation.goBack(),
-                            style: "cancel"
-                          },
                           { text: "OK", onPress: () => navigation.goBack() }
                         ]
                       );
