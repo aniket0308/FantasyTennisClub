@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StatusBar, Dimensions, SafeAreaView } from 'react-native'
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +9,7 @@ import { Button, FloatingInput, Header } from "../../components";
 import Loader from "../../components/loader";
 import { isLoaderVisible, registration } from "../../redux/slice/auth";
 import signUpStyle from "./style";
+import messaging, { firebase } from '@react-native-firebase/messaging';
 
 //SignUp (Registration) Screen
 const SignUp = ({ navigation }) => {
@@ -19,8 +20,32 @@ const SignUp = ({ navigation }) => {
     const [confirmPassword, setConfirmPassword] = useState('')
     const [referral, setReferral] = useState('')
     const [mobileNumber, setMobileNumber] = useState('')
+    const [deviceToken, setDeviceToken] = useState('')
     const dispatch = useDispatch()
     const isLoading = useSelector((state) => state?.auth?.isLoading)
+
+    const requestUserPermission = async () => {
+        try {
+            const token = await messaging().getToken()
+            if (token) {
+                setDeviceToken(token)
+            }
+            const authStatus = await messaging().requestPermission();
+            const enabled =
+                authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+                authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+            if (enabled) {
+                console.log('Authorization status:', authStatus);
+            }
+        } catch (error) {
+            console.log('WERROR', error);
+        }
+    }
+
+    useEffect(() => {
+        requestUserPermission()
+    }, [])
 
     return (
         <>
@@ -93,7 +118,7 @@ const SignUp = ({ navigation }) => {
                     btnStyle={{ marginTop: 50 }}
                     onPress={() => {
                         dispatch(isLoaderVisible())
-                        dispatch(registration({ fullName, email, password, confirmPassword, mobileNumber, referral, dispatch }))
+                        dispatch(registration({ fullName, email, password, confirmPassword, mobileNumber, referral, deviceToken, navigation, dispatch }))
                     }}
                 />
             </KeyboardAwareScrollView>

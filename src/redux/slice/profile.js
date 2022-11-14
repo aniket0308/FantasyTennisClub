@@ -34,6 +34,7 @@ export const profileSlice = createSlice({
                 new_password: actions.payload.newPassword,
                 confirm_new_password: actions.payload.confirmPassword,
                 navigation: actions.payload.navigation,
+                clearData:actions.payload.clearData,
                 token: await AsyncStorage.getItem('@Token'),
             }
             //calling Api For Update changePassword
@@ -44,6 +45,7 @@ export const profileSlice = createSlice({
                 subject:actions.payload.subject,
                 message:actions.payload.text,
                 navigation: actions.payload.navigation,
+                clearAllData:actions.payload.clearAllData,
                 token: await AsyncStorage.getItem('@Token'),
             }
             //calling Api For sending Inquiry

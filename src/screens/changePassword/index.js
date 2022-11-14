@@ -23,6 +23,11 @@ const ChangePassword = ({ route, navigation }) => {
     const dispatch = useDispatch()
     const isLoading = useSelector((state) => state?.auth?.isLoading)
 
+    const clearAllData = () => {
+        setText('')
+        setSubject('')
+    }
+
     return (
         <View style={changePasswordStyle.mainContainer}>
             <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />
@@ -41,11 +46,7 @@ const ChangePassword = ({ route, navigation }) => {
                 bounces={false}
                 style={[commonStyle.container, { backgroundColor: constants.colors.backGroundLight }]} >
                 {route.params != 'contactUs'
-                    && <Image
-                        style={{ alignSelf: 'center', marginTop: 10, height: widthPercentageToDP(40), width: widthPercentageToDP(40) }}
-                        source={constants.icons.profileImage}
-                        resizeMode='contain'
-                    />}
+                    &&<></>}
                 {route.params == 'changePassword'
                     ? <>
                         <FloatingInput
@@ -125,15 +126,11 @@ const ChangePassword = ({ route, navigation }) => {
                             dispatch(editProfile({ fullName, mobileNumber, navigation, dispatch }))
                         } else if (route.params == 'contactUs') {
                             dispatch(isLoaderVisible())
-                            dispatch(sendInquiry({ subject, text, dispatch }))
-                            setTimeout(() => {
-                                setText('')
-                                setSubject('')
-                            }, 1900)
+                            dispatch(sendInquiry({ subject, text, clearAllData, dispatch }))
                         }
                         else {
                             dispatch(isLoaderVisible())
-                            dispatch(changePassword({ oldPassword, newPassword, confirmPassword, navigation, dispatch }))
+                            dispatch(changePassword({ oldPassword, newPassword, confirmPassword, navigation, clearAllData, dispatch }))
                         }
                     }}
                 />

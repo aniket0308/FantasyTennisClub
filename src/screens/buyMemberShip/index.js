@@ -14,7 +14,7 @@ const BuyMemberShip = ({ navigation }) => {
 
     const [memberShip, setMemberShip] = useState()
     const [isLoading, setIsLoading] = useState(false)
-
+    
     const getAllMemberShips = async () => {
         const token = await AsyncStorage.getItem('@Token')
         //calling api for Membership
@@ -27,7 +27,7 @@ const BuyMemberShip = ({ navigation }) => {
             },
         }).
             then((response) => response.json()).
-            then((json) => {
+            then((json) => {;
                 if (json.success == true) {
                     setIsLoading(true)
                 }
@@ -93,11 +93,13 @@ const BuyMemberShip = ({ navigation }) => {
     const renderMemberShip = (item, index) => {
         return (
             <TouchableOpacity
-                onPress={() => utils.navigateTo(navigation, item.text == 'Organize Private Group' || item.text == 'Join Private Group' ? constants.screens.privateGroupDetails : constants.screens.membership, item.text)}
+                onPress={() => utils.navigateTo(navigation, item.title == 'Organize Private Group' || item.title == 'Join Private Group' ? constants.screens.privateGroupDetails : constants.screens.membership, item)}
                 style={[buyMemberShipStyle.touchable, { marginRight: index % 2 != 0 ? 0 : 30 }]}>
                 <Image style={{ alignSelf: 'center', height: widthPercentageToDP(18), width: widthPercentageToDP(18) }} source={{ uri: item?.banner_image_url }} />
+                <View style={{justifyContent:'flex-end'}}>
                 <Text numberOfLines={2} style={buyMemberShipStyle.text}>{item?.tournament?item?.tournament:item.title}</Text>
                 <Text numberOfLines={2} style={[buyMemberShipStyle.text,{marginTop:-10}]}>{item?.price && `$${item?.price}`}</Text>
+                </View>
             </TouchableOpacity>
         )
     }

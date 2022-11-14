@@ -16,7 +16,8 @@ const DashBoardHome = ({ navigation }) => {
 
     const [announcements, setAnnouncements] = useState()
     const [isLoading, setIsLoading] = useState(false)
-    let notification=new PushNotificationService()
+    const [days, setDays] = useState()
+    let notification = new PushNotificationService()
     const getAllAnnouncements = async () => {
         const token = await AsyncStorage.getItem('@Token')
         //calling api for Announcements
@@ -52,7 +53,41 @@ const DashBoardHome = ({ navigation }) => {
             })
     }
 
+    const getDays = async () => {
+        const token = await AsyncStorage.getItem('@Token')
+        fetch('https://fantasytennisclub.com/admin/api/v1/member-dashboard', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${token}`
+            },
+        }).
+            then((response) => response.json()).
+            then((json) => {
+                if (json.success == true) {
+                    setIsLoading(true)
+                }
+                setDays(json)
+            }).
+            catch(e => {
+                Snackbar.show({
+                    text: e.toString(),
+                    duration: 1000,
+                    backgroundColor: 'red',
+                    // action: {
+                    //   text: 'UNDO',
+                    //   textColor: 'green',
+                    //   onPress: () => { /* Do something. */ },
+                    // },
+                });
+                setIsLoading(false)
+                console.log('What Is Error In Get Api', e)
+            })
+    }
+
     useEffect(() => {
+        getDays()
         getAllAnnouncements()
     }, [])
 
@@ -166,7 +201,7 @@ const DashBoardHome = ({ navigation }) => {
                 <SafeAreaView />
                 <Header
                     title={'Dashboard'}
-                    subTitle={'US OPEN'}
+                    subTitle={days?.data?.title}
                     titleStyle={{ alignSelf: 'center', fontSize: 22 }}
                     subTitleStyle={{ alignSelf: 'center', color: constants.colors.darkGreen }}
                     rightIcon={constants.icons.shapeBell}
@@ -188,11 +223,11 @@ const DashBoardHome = ({ navigation }) => {
                                 key={(item) => item}
                                 keyExtractor={item => item}
                             /> */}
-                            <View style={{ flexDirection: 'row',flexWrap:'wrap',justifyContent:'space-around' }}>
+                            <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-around' }}>
                                 {
                                     tempData.map((item, index) => {
                                         return (
-                                            renderItem(item,index)
+                                            renderItem(item, index)
                                         )
                                     })
                                 }

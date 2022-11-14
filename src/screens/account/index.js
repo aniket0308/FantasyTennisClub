@@ -60,12 +60,9 @@ const Account = ({ navigation }) => {
                 showsVerticalScrollIndicator={false}
                 style={{ paddingBottom: 30 }}
             >
-                <View style={commonStyle.row}>
-                    <Image
-                        style={{ alignSelf: 'center', marginTop: 10, height: widthPercentageToDP(35), width: widthPercentageToDP(35) }}
-                        source={constants.icons.profileImage}
-                        resizeMode='contain'
-                    />
+                <View style={[commonStyle.row,{justifyContent:'space-between'}]}>
+                    <View>
+                    </View>
                     <View style={[commonStyle.column, { marginLeft: 10, marginTop: 10 }]}>
                         <Text style={accountStyle.txtName}>{name != '' ? name : 'Joanna Oleaga'}</Text>
                         <View style={[commonStyle.row, { marginVertical: 10 }]}>

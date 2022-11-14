@@ -2,14 +2,25 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { URL } from "../configuration";
 import { isLoaderNotVisible } from "../redux/slice/auth";
 import Snackbar from 'react-native-snackbar';
+import { utils } from ".";
+import { constants } from "./constant";
+import { isLoaderNotVisibleProfile } from "../redux/slice/profile";
 
 //Storing Data In Local Storage
-const storeData = async (payload) => {
+const storeData = async (payload, isLogin) => {
     try {
-        await AsyncStorage.setItem('@Token', payload.token),
+        if (isLogin == true) {
+            await AsyncStorage.mergeItem('@Token', payload.token),
+                await AsyncStorage.mergeItem('@Name', payload.name),
+                await AsyncStorage.mergeItem('@Email', payload.email),
+                await AsyncStorage.mergeItem('@MobileNumber', payload.mobile_number)
+        } else {
+
             await AsyncStorage.setItem('@Name', payload.name),
-            await AsyncStorage.setItem('@Email', payload.email),
-            await AsyncStorage.setItem('@MobileNumber', payload.mobile_number)
+                await AsyncStorage.setItem('@Token', payload.token),
+                await AsyncStorage.setItem('@Email', payload.email),
+                await AsyncStorage.setItem('@MobileNumber', payload.mobile_number)
+        }
     } catch (e) {
         console.log('Error In Saving Data To Local Storage', e);
     }
@@ -23,7 +34,7 @@ export const navigateTo = (navigation, screen, passData) => {
 
 //Calling API Function
 export const callApi = (path, payload, type, dispatch) => {
-    console.log('What Is Device Token',payload);
+    console.log('What Is Device Token', payload);
     const urlPath = `${URL}${path}`
     fetch(urlPath, {
         method: 'POST',
@@ -36,30 +47,41 @@ export const callApi = (path, payload, type, dispatch) => {
     })
         .then((res) => res.json())
         .then(async (json) => {
-            console.log('what is dispatch',dispatch);
+            console.log('what is dispatch', dispatch);
             if (dispatch != undefined) {
                 dispatch(isLoaderNotVisible())
+                dispatch(isLoaderNotVisibleProfile())
             }
             if (json.error == true) {
                 Snackbar.show({
                     text: json.message,
                     duration: 1000,
-                    backgroundColor:'red',
+                    backgroundColor: 'red',
                     // action: {
                     //   text: 'UNDO',
                     //   textColor: 'green',
                     //   onPress: () => { /* Do something. */ },
                     // },
-                  });
+                });
             }
 
+            console.log('Register Response', type);
             if (type == 'login') {
-                console.log('Login Response',json);
-                if (json.data != null) {
-                    storeData(json.data)
+                if (json.success == true) {
+                    storeData(json.data, true)
                 }
             } else if (type == 'logout') {
                 AsyncStorage.clear()
+            } else if (type == 'Registered') {
+                console.log('Register Response', json, ' .      ', payload.navigation);
+                if (json.data != null) {
+                    storeData(json.data)
+                    if (json.error == false) {
+                        payload.navigation.navigate(constants.screens.buyMemberShip)
+                    }
+                }
+
+
             } else if (type == 'editProfile') {
                 if (json.error == false) {
                     await AsyncStorage.setItem('@Name', payload?.name)
@@ -70,48 +92,53 @@ export const callApi = (path, payload, type, dispatch) => {
                 if (json.error == false) {
                     payload.navigation.goBack()
                 }
-            }else if(type=='inquiry'){
-                if(json?.error==false){
+            } else if (type == 'inquiry') {
+                if (json?.error == false) {
                     Snackbar.show({
                         text: json.message,
                         duration: 1000,
-                        backgroundColor:'green',
-                      });
-                      return true
+                        backgroundColor: 'green',
+                    });
+                    return true
                 }
             }
             else {
                 if (json.error == false) {
+                    if (payload.clearAllData != undefined) {
+                        payload.clearAllData()
+                    }
                     Snackbar.show({
                         text: json.message,
                         duration: 1000,
-                        backgroundColor:'green',
+                        backgroundColor: 'green',
                         // action: {
                         //   text: 'UNDO',
                         //   textColor: 'green',
                         //   onPress: () => { /* Do something. */ },
                         // },
-                      });
+                    });
+
                 }
-                
+
                 if (json.error == true) {
                     if (type !== 'login') {
                         // alert(`${type} SuccessFully`)
                     }
                 }
             }
+            return json
         })
         .catch((error) => {
             Snackbar.show({
                 text: error.toString(),
                 duration: 1000,
-                backgroundColor:'red',
+                backgroundColor: 'red',
                 // action: {
                 //   text: 'UNDO',
                 //   textColor: 'green',
                 //   onPress: () => { /* Do something. */ },
                 // },
-              });
+            });
             console.log('Error Is', error)
         })
 }
@@ -125,9 +152,9 @@ export const callApiGet = async (path, token) => {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                "Authorization":`Bearer ${token}`
+                "Authorization": `Bearer ${token}`
             },
-        }).then((response)=>response.json()).then((json)=>json)
+        }).then((response) => response.json()).then((json) => json)
     } catch (error) {
         console.log('What Is Error', error);
     }

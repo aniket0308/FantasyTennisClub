@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createSlice } from '@reduxjs/toolkit'
 import { utils } from '../../common';
 
@@ -16,14 +17,16 @@ export const authSlice = createSlice({
                 mobile_number: actions.payload.mobileNumber,
                 password: actions.payload.password,
                 confirm_password: actions.payload.confirmPassword,
-                referral: actions.payload.referral
+                referral: actions.payload.referral,
+                navigation: actions.payload.navigation,
+                device_token: actions.payload.deviceToken,
             }
             //calling Api For Login
             utils.callApi('api/register', registerObj, 'Registered', actions.payload.dispatch)
 
         },
         login: (state, actions) => {
-            console.log('What Is Device Token',actions.payload.deviceToken);
+            console.log('What Is Device Token', actions.payload.deviceToken);
             const loginObj = {
                 email: actions.payload.email,
                 password: actions.payload.password,
@@ -32,8 +35,32 @@ export const authSlice = createSlice({
             //calling Api For Login
             utils.callApi('api/login', loginObj, 'login', actions?.payload?.dispatch)
         },
+        joinPrivateGroup: async (state, actions) => {
+            const privateGroupObj = {
+                group_name: actions.payload.groupFullName,
+                clearAllData:actions.payload.clearAllData,
+                token: await AsyncStorage.getItem('@Token'),
+            }
+            //calling Api For Joining Private Group
+            utils.callApi('api/v1/private-group/join-private-group', privateGroupObj, 'privateGroup', actions.payload.dispatch)
+        },
+        oganizePrivateGroup: async (state, actions) => {
+            const organizePrivateGroupObj = {
+                admin_name: actions.payload.fullName,
+                admin_email: actions.payload.groupEmail,
+                admin_mobile_number: actions.payload.groupContact,
+                tournament_id: actions.payload.groupEvents,
+                number_of_participants: actions.payload.groupParticipant,
+                clearAllData:actions.payload.clearAllData,
+                token: await AsyncStorage.getItem('@Token'),
+            }
+            //calling Api For Organise Private Group
+            utils.callApi('api/v1/private-group/create', organizePrivateGroupObj, 'organizePrivateGroup', actions.payload.dispatch)
+        },
         isLoaderVisible: (state, actions) => {
+            console.log('state.isLoading', state.isLoading);
             state.isLoading = true
+            console.log('state.isLoading', state.isLoading);
             return state
         },
         isLoaderNotVisible: (state, actions) => {
@@ -48,6 +75,6 @@ export const authSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { login, logout, registration, isLoaderVisible, isLoaderNotVisible } = authSlice.actions
+export const { login, logout, registration, joinPrivateGroup, oganizePrivateGroup, isLoaderVisible, isLoaderNotVisible } = authSlice.actions
 
 export default authSlice.reducer

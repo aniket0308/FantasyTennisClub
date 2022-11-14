@@ -10,13 +10,14 @@ const buyMemberShipStyle = StyleSheet.create({
     },
     touchable: {
         backgroundColor: constants.colors.white,
-        padding: 20,
+        padding: 0,
         marginTop: 20,
         borderColor: constants.colors.darkBlue,
         borderWidth: 2,
         borderRadius: 6,
-        height: widthPercentageToDP(40),
-        width: widthPercentageToDP(40),
+        height: widthPercentageToDP(41),
+        width: widthPercentageToDP(41),
+        justifyContent:'center',
     },
     text: {
         alignSelf: 'center',
@@ -25,7 +26,8 @@ const buyMemberShipStyle = StyleSheet.create({
         fontSize: 14,
         fontFamily: constants.fonts.nuntinoRegular,
         fontWeight: '600',
-        color: constants.colors.darkBlue
+        color: constants.colors.darkBlue,
+        width:'100%'
     },
 })
 

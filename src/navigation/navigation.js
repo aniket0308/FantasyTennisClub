@@ -268,6 +268,7 @@ export const RootNavigator = () => {
                 <stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
                 <stack.Screen options={{ headerShown: false }} name="SignUp" component={SignUp} />
                 <stack.Screen options={{ headerShown: false }} name="ForgotPassword" component={ForgotPassword} />
+                <stack.Screen options={{ headerShown: false }} name="BuyMemberShip" component={BuyMemberShip} />
             </stack.Navigator>
         </NavigationContainer>
     )
@@ -276,11 +277,29 @@ export const RootNavigator = () => {
 //Navigation After Authentication Or Say Login
 export const AuthNavigator = () => {
     return (
-        <NavigationContainer>
-            <stack.Navigator initialRouteName="Home">
+        <NavigationContainer initialRouteName='BuyMemberShip'>
+            <stack.Navigator>
                 <stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
                 <stack.Screen options={{ headerShown: false }} name="Dashboard" component={BottomTab} />
                 <stack.Screen options={{ headerShown: false }} name="BuyMemberShip" component={BuyMemberShip} />
+                <stack.Screen options={{ headerShown: false }} name="PrivateGroupDetails" component={PrivateGroupDetails} />
+                <stack.Screen options={{ headerShown: false }} name="MemberShip" component={MemberShip} />
+            </stack.Navigator>
+        </NavigationContainer >
+    )
+}
+
+//Navigation After Authentication Or Say Login
+export const AuthNavigators = () => {
+    return (
+        <NavigationContainer initialRouteName='BuyMemberShip'>
+            <stack.Navigator>
+                <stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
+                <stack.Screen options={{ headerShown: false }} name="Dashboard" component={BottomTab} />
+                 <stack.Screen options={{ headerShown: false }} name="BuyMemberShip" component={BuyMemberShip} /> 
+                 <stack.Screen options={{ headerShown: false }} name="MyMembership" component={MyMembership} /> 
+                <stack.Screen options={{ headerShown: false }} name="PrivateGroupDetails" component={PrivateGroupDetails} />
+                <stack.Screen options={{ headerShown: false }} name="MemberShip" component={MemberShip} /> 
             </stack.Navigator>
         </NavigationContainer >
     )
