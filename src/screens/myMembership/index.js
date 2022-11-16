@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { Image, SafeAreaView, ScrollView, Text, View } from "react-native";
+import { Image, SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import Snackbar from "react-native-snackbar";
 import { utils } from "../../common";
@@ -19,7 +19,7 @@ const MyMembership = ({ navigation }) => {
     const getAllMemberShips = async () => {
         const token = await AsyncStorage.getItem('@Token')
         //calling api for Membership
-        fetch('https://fantasytennisclub.com/admin/api/v1/membership/all', {
+        fetch('https://fantasytennisclub.com/admin/api/v1/user/my-membership', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -57,6 +57,7 @@ const MyMembership = ({ navigation }) => {
 
     return (
         <View style={myMembershipStyle.mainContainer}>
+            <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />
             <SafeAreaView />
             <Header
                 viewHeaderStyle={{ width: '78%' }}
@@ -74,12 +75,13 @@ const MyMembership = ({ navigation }) => {
                     </View>
                     {memberShip?.length > 0 &&
                         memberShip.map((item, index) => {
+                            console.log('item',item);
                             return (
                                 item.title != 'Join Private Group' && item.title != 'Organize Private Group'
                                 && < CardWithImage
                                     containerStyle={{ backgroundColor: constants.colors.white, marginBottom: 15 }}
-                                    labelTitle={'No'}
-                                    label={item?.title}
+                                    labelTitle={item.is_member}
+                                    label={item?.tournament}
                                     labelStyle={myMembershipStyle.labelStyle}
                                     titleStyle={membershipStyle.titleStyle}
                                 />

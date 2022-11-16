@@ -109,7 +109,7 @@ const BuyMemberShip = ({ navigation }) => {
             <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />
             <SafeAreaView style={{ backgroundColor: constants.colors.backGroundLight }} />
             <Header
-                title='Become a Member'
+                title='Buy Membership'
                 subTitle='Complete your details below'
                 mainViewHeaderStyle={{ paddingHorizontal: 20 }}
                 showBackArrow={false}

@@ -17,26 +17,27 @@ const Login = ({ navigation }) => {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [deviceToken,setDeviceToken]=useState('')
+    const [deviceToken, setDeviceToken] = useState('')
     const [isPasswordVisible, setIsPasswordVisible] = useState(true)
+    const platform = Platform.OS == 'android' ? 'android' : 'ios'
     const dispatch = useDispatch()
     const isLoading = useSelector((state) => state?.auth?.isLoading)
     const requestUserPermission = async () => {
-        try {     
+        try {
             const token = await messaging().getToken()
-                if(token){
-                    setDeviceToken(token)
-                }
-                const authStatus = await messaging().requestPermission();
-                const enabled =
-                    authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-                    authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-    
-                if (enabled) {
-                    console.log('Authorization status:', authStatus);
-                }
+            if (token) {
+                setDeviceToken(token)
+            }
+            const authStatus = await messaging().requestPermission();
+            const enabled =
+                authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+                authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+            if (enabled) {
+                console.log('Authorization status:', authStatus);
+            }
         } catch (error) {
-            console.log('WERROR',error);
+            console.log('WERROR', error);
         }
     }
     useEffect(() => {
@@ -87,7 +88,7 @@ const Login = ({ navigation }) => {
                     btnStyle={{ marginTop: 34 }}
                     onPress={async () => {
                         dispatch(isLoaderVisible())
-                        dispatch(login({ email, password, deviceToken, dispatch }))
+                        dispatch(login({ email, password, deviceToken, platform, dispatch }))
                     }}
                 />
                 <SafeAreaView />

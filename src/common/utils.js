@@ -48,7 +48,7 @@ export const callApi = (path, payload, type, dispatch) => {
     })
         .then((res) => res.json())
         .then(async (json) => {
-            console.log('what is dispatch', dispatch);
+            console.log('what is dispatch', json);
             if (dispatch != undefined) {
                 dispatch(isLoaderNotVisible())
                 dispatch(isLoaderNotVisibleProfile())
@@ -104,14 +104,20 @@ export const callApi = (path, payload, type, dispatch) => {
             } else if (type == 'sendOtp') {
                 if (json.error == false) {
                     if (payload?.navigation != undefined) {
-                        utils.navigateTo(payload.navigation,'OtpVerification', {email:payload.email})
+                        utils.navigateTo(payload.navigation, 'OtpVerification', { email: payload.email })
                     }
                 }
             }
             else if (type == 'VerifyOtp') {
                 if (json.error == false) {
                     if (payload?.navigation != undefined) {
-                        utils.navigateTo(payload.navigation, constants.screens.changePassword)
+                        utils.navigateTo(payload.navigation, constants.screens.changePassword, 'forgotPassword')
+                    }
+                }
+            } else if (type == 'resetPassword') {
+                if (json.error == false) {
+                    if (payload?.navigation != undefined) {
+                        utils.navigateTo(payload.navigation, constants.screens.login)
                     }
                 }
             }

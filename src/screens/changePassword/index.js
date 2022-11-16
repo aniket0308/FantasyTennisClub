@@ -8,7 +8,7 @@ import { constants } from "../../common/constant";
 import { Button, FloatingInput, Header } from "../../components";
 import Loader from "../../components/loader";
 import { isLoaderVisible } from "../../redux/slice/auth";
-import { changePassword, editProfile, sendInquiry } from "../../redux/slice/profile";
+import { changePassword, editProfile, resetPassword, sendInquiry } from "../../redux/slice/profile";
 import forgotPasswordStyle from "../forgetPassword/style";
 import changePasswordStyle from "./style";
 
@@ -21,6 +21,7 @@ const ChangePassword = ({ route, navigation }) => {
     const [mobileNumber, setMobileNumber] = useState(route?.params?.mobileNumber)
     const [subject, setSubject] = useState('')
     const [text, setText] = useState('')
+    const [email, setEmail] = useState('')
     const dispatch = useDispatch()
     const isLoading = useSelector((state) => state?.auth?.isLoading)
 
@@ -34,9 +35,9 @@ const ChangePassword = ({ route, navigation }) => {
             <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />
             <SafeAreaView />
             <Header
-                viewHeaderStyle={{ width: route?.params?.editProfile == 'editProfile' ? '65%' : route?.params == 'contactUs' ? '65%' : '78%' }}
+                viewHeaderStyle={{ width: route?.params?.editProfile == 'editProfile' ? '65%' : route?.params == 'contactUs' ? '65%' :route?.params=='Change Password'?'78%':'75%' }}
                 showBackArrow={true}
-                title={route?.params?.editProfile == 'editProfile' ? 'Edit Profile' : route?.params == 'contactUs' ? 'Contact Us' : 'Change Password'}
+                title={route?.params?.editProfile == 'editProfile' ? 'Edit Profile' : route?.params == 'contactUs' ? 'Contact Us' :route?.params=='Change Password'?'Change Password':'Reset Password'}
                 titleStyle={{ marginTop: 5, marginBottom: -3 }}
                 onPressLeftIcon={() => navigation.goBack()}
             />
@@ -81,40 +82,72 @@ const ChangePassword = ({ route, navigation }) => {
                             secureTextEntry={true}
                         />
                     </>
-                    : route?.params == 'contactUs'
+                    : route?.params == 'forgotPassword'
                         ? <>
-                            <FloatingInput
-                                textInputStyle={{ marginTop: 30, flexGrow: 3 }}
-                                headerText={'Subject'}
-                                onChangeText={(subject) => { setSubject(subject) }}
-                                value={subject}
-                            />
-                            <FloatingInput
-                                textInputStyle={{ marginTop: 30, height: 200 }}
-                                numberOfLines={3}
-                                multiline={true}
-                                headerText={'Text'}
-                                onChangeText={(text) => { setText(text) }}
-                                value={text}
-                            />
-                        </>
-                        : <>
+                            <Image style={forgotPasswordStyle.imgLogo} source={constants.icons.logo} />
                             <FloatingInput
                                 textIsEditable={!isLoading}
+                                headerText={'Email'}
                                 textInputStyle={{ marginTop: 30 }}
-                                headerText={'Full Name'}
-                                onChangeText={(nameTxt) => { setFullName(nameTxt) }}
-                                value={fullName}
+                                onChangeText={(email) => { setEmail(email) }}
+                                value={email}
+                                autoCapitalize='none'
                             />
                             <FloatingInput
                                 textIsEditable={!isLoading}
-                                headerText={'Mobile Number'}
+                                headerText={'New Password'}
                                 textInputStyle={{ marginTop: 15 }}
-                                onChangeText={(mobileTxt) => { setMobileNumber(mobileTxt) }}
-                                value={mobileNumber}
-                                keyboardType='phone-pad'
+                                onChangeText={(passwordTxt) => { setNewPassword(passwordTxt) }}
+                                value={newPassword}
+                                autoCapitalize='none'
+                                passwordInput={true}
+                                secureTextEntry={true}
+                            />
+                            <FloatingInput
+                                textIsEditable={!isLoading}
+                                headerText={'Confirm Password'}
+                                textInputStyle={{ marginTop: 15 }}
+                                onChangeText={(passwordTxt) => { setConfirmPassword(passwordTxt) }}
+                                value={confirmPassword}
+                                autoCapitalize='none'
+                                passwordInput={true}
+                                secureTextEntry={true}
                             />
                         </>
+                        : route?.params == 'contactUs'
+                            ? <>
+                                <FloatingInput
+                                    textInputStyle={{ marginTop: 30, flexGrow: 3 }}
+                                    headerText={'Subject'}
+                                    onChangeText={(subject) => { setSubject(subject) }}
+                                    value={subject}
+                                />
+                                <FloatingInput
+                                    textInputStyle={{ marginTop: 30, height: 200 }}
+                                    numberOfLines={3}
+                                    multiline={true}
+                                    headerText={'Text'}
+                                    onChangeText={(text) => { setText(text) }}
+                                    value={text}
+                                />
+                            </>
+                            : <>
+                                <FloatingInput
+                                    textIsEditable={!isLoading}
+                                    textInputStyle={{ marginTop: 30 }}
+                                    headerText={'Full Name'}
+                                    onChangeText={(nameTxt) => { setFullName(nameTxt) }}
+                                    value={fullName}
+                                />
+                                <FloatingInput
+                                    textIsEditable={!isLoading}
+                                    headerText={'Mobile Number'}
+                                    textInputStyle={{ marginTop: 15 }}
+                                    onChangeText={(mobileTxt) => { setMobileNumber(mobileTxt) }}
+                                    value={mobileNumber}
+                                    keyboardType='phone-pad'
+                                />
+                            </>
                 }
                 {isLoading == true && <Loader />}
                 <Button
@@ -128,6 +161,9 @@ const ChangePassword = ({ route, navigation }) => {
                         } else if (route?.params == 'contactUs') {
                             dispatch(isLoaderVisible())
                             dispatch(sendInquiry({ subject, text, dispatch, clearAllData }))
+                        } else if (route?.params == 'forgotPassword') {
+                            dispatch(isLoaderVisible())
+                            dispatch(resetPassword({ email, newPassword, confirmPassword, navigation, dispatch }))
                         }
                         else {
                             dispatch(isLoaderVisible())

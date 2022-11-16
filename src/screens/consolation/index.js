@@ -20,7 +20,9 @@ const Consolation = ({ route, navigation }) => {
         fetch(
             route.params == 'Season Ranking'
                 ? 'https://fantasytennisclub.com/admin/api/v1/season-leaderboard'
-                : 'https://fantasytennisclub.com/admin/api/v1/tournaments/1/consolation-leaderboard', {
+                : route.params == 'Consolation'
+                    ? 'https://fantasytennisclub.com/admin/api/v1/tournaments/1/group/consolation-leaderboard'
+                    : 'https://fantasytennisclub.com/admin/api/v1/tournaments/1/consolation-leaderboard', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -32,44 +34,33 @@ const Consolation = ({ route, navigation }) => {
             then((json) => {
                 if (json.success == true) {
                     setIsLoading(true)
-                }else{
-                    Snackbar.show({
-                        text: json?.message,
-                        duration: 1000,
-                        backgroundColor:'red',
-                        // action: {
-                        //   text: 'UNDO',
-                        //   textColor: 'green',
-                        //   onPress: () => { /* Do something. */ },
-                        // },
-                      });
+                } else {
                     setIsLoading(false)
                 }
 
-                if(json.data==null){
+                if (json.data == null) {
                     setIsLoading(false)
                     Alert.alert(
                         "Fantasy Tennis Club",
                         json?.message,
                         [
-                          { text: "OK", onPress: () => navigation.goBack() }
+                            { text: "OK", onPress: () => navigation.goBack() }
                         ]
-                      );
+                    );
                 }
-
                 setLeaderBordTournament(json)
             }).
             catch(e => {
                 Snackbar.show({
                     text: e.toString(),
                     duration: 1000,
-                    backgroundColor:'red',
+                    backgroundColor: 'red',
                     // action: {
                     //   text: 'UNDO',
                     //   textColor: 'green',
                     //   onPress: () => { /* Do something. */ },
                     // },
-                  });
+                });
                 setIsLoading(false)
                 console.log('What Is Error In Get Api', e)
             })

@@ -34,11 +34,19 @@ export const profileSlice = createSlice({
                 new_password: actions.payload.newPassword,
                 confirm_new_password: actions.payload.confirmPassword,
                 navigation: actions.payload.navigation,
-                clearData:actions.payload.clearData,
+                clearData: actions.payload.clearData,
                 token: await AsyncStorage.getItem('@Token'),
             }
             //calling Api For Update changePassword
             utils.callApi('api/v1/change-password', changePasswordObj, 'changePassword', actions.payload.dispatch)
+        },
+        resetPassword: async (state, actions) => {
+            const resetPasswordObj = {
+                navigation: actions.payload.navigation,
+                // token: await AsyncStorage.getItem('@Token'),
+            }
+            //calling Api For Reset Password
+            utils.callApi(`api/reset-password?email=${actions.payload.email}&new_password=${actions.payload.newPassword}&confirm_new_password=${actions.payload.confirmPassword}`, resetPasswordObj, 'resetPassword', actions.payload.dispatch)
         },
         sendInquiry: async (state, actions) => {
             const sendInquiryObj = {
@@ -55,6 +63,6 @@ export const profileSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { editProfile, changePassword,isLoaderVisibleProfile,isLoaderNotVisibleProfile,sendInquiry } = profileSlice.actions
+export const { editProfile, changePassword, isLoaderVisibleProfile, isLoaderNotVisibleProfile, sendInquiry,resetPassword } = profileSlice.actions
 
 export default profileSlice.reducer

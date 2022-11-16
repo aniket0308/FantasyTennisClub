@@ -1,11 +1,56 @@
-import React from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
+import Loader from "../../components/loader";
 import SearchBar from "../../components/searchBar";
 import prizeStyle from "./style";
 
 const Prizes = ({ navigation }) => {
+
+    const [isLoading,setIsLoading]=useState(false)
+    const [participant,setParticipants]=useState()
+
+    const getAllTournamentParticipants=async()=>{
+        const token = await AsyncStorage.getItem('@Token')
+        //calling api for Getting Participants
+        fetch('https://fantasytennisclub.com/admin/api/v1/tournaments/1/participations', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${token}`
+            },
+        }).
+            then((response) => response.json()).
+            then((json) => {
+                if (json.success == true) {
+                    setIsLoading(true)
+                }
+                setParticipants(json.data)
+            }
+            ).
+            catch(e => {
+                Snackbar.show({
+                    text: e.toString(),
+                    duration: 1000,
+                    backgroundColor: 'red',
+                    // action: {
+                    //   text: 'UNDO',
+                    //   textColor: 'green',
+                    //   onPress: () => { /* Do something. */ },
+                    // },
+                });
+                setIsLoading(false)
+                console.log('What Is Error In Get Api', e.toString())
+            })
+    }
+
+    useEffect(()=>{
+        getAllTournamentParticipants()
+    },[])
+
     return (
         <View style={prizeStyle.mainContiner}>
             <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />
@@ -23,9 +68,12 @@ const Prizes = ({ navigation }) => {
                 <Text style={prizeStyle.txtMemberParticipate}>Members Participating</Text>
                 <SearchBar />
                 <View style={{ marginTop: 10, marginLeft: 10 }}>
-                    <Text style={prizeStyle.txtName}>Guillermo Cosson</Text>
-                    <Text style={[prizeStyle.txtName, { marginVertical: 5 }]}>Joanna Oleaga</Text>
-                    <Text style={prizeStyle.txtName}>Joanna Oleaga</Text>
+                    {
+                        participant?.length>0
+                        &&participant.map((item)=>{
+                            return <Text style={prizeStyle.txtName}>{item?.name}</Text>
+                        })
+                    }
                 </View>
                 <Text style={[prizeStyle.txtMemberParticipate, { marginVertical: 10 }]}>Prize Breakdown</Text>
                 <View style={{ marginHorizontal: 10 }}>
@@ -59,6 +107,7 @@ const Prizes = ({ navigation }) => {
                 </View>
             </ScrollView>
             </View>
+            {isLoading==false&&<Loader/>}
         </View>
     )
 }

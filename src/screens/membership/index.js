@@ -16,7 +16,7 @@ const MemberShip = ({ route,navigation }) => {
                 showBackArrow={true}
                 title={'Membership Cart'}
                 titleStyle={{ marginTop: 5, marginBottom: -10 }}
-                onPressLeftIcon={()=>navigation.goBack()}
+                onPressLeftIcon={() => navigation.goBack()}
             />
             <ScrollView
                 bounces={false}
@@ -33,10 +33,30 @@ const MemberShip = ({ route,navigation }) => {
                 </View>
                 <View style={membershipStyle.border} />
                 <View style={[commonStyle.row, { justifyContent: 'space-between', marginRight: 10 }]}>
-                    <Text style={[membershipStyle.txtDate, { fontSize: 15, color: constants.colors.black }]}>{route?.params?.tournament} x 1</Text>
+                    <Text style={[membershipStyle.txtDate, { fontSize: 15, color: constants.colors.black }]}>{route?.params?.title} x 1</Text>
                     <Text style={[membershipStyle.txtDate, { fontSize: 15, color: constants.colors.black }]}>${route?.params?.price}</Text>
                 </View>
-                <Text style={membershipStyle.txtDate}>2023 Season</Text>
+                <Text style={[membershipStyle.txtDate, { marginBottom: 16 }]}>2023 Season</Text>
+                {
+                    route?.params?.tournaments?.length > 0
+                    && route?.params?.tournaments.map((item) => {
+                        return (
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 10 }}>
+                                <Text style={[membershipStyle.txtDate, { fontSize: 13, color: constants.colors.black }]}>{item?.title}</Text>
+                                <Text style={[membershipStyle.txtDate, { fontSize: 13, color: constants.colors.black }]}>${item?.price}</Text>
+                            </View>
+                        )
+                    })
+
+                }
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 10 }}>
+                    <Text style={[membershipStyle.txtDate, { fontSize: 13, color: constants.colors.black }]}>Tournament Total</Text>
+                    <Text style={[membershipStyle.txtDate, { fontSize: 13, color: constants.colors.black }]}>${route?.params?.tournament_total}</Text>
+                </View>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 10 }}>
+                    <Text style={[membershipStyle.txtDate, { fontSize: 13, color: 'red' }]}>Season Discount</Text>
+                    <Text style={[membershipStyle.txtDate, { fontSize: 13, color: 'red' }]}>${route?.params?.season_discount}</Text>
+                </View>
                 <View style={membershipStyle.border} />
                 <View style={[commonStyle.row, { justifyContent: 'space-between', marginRight: 10 }]}>
                     <Text style={[membershipStyle.txtDate, { fontSize: 18, color: constants.colors.black, fontWeight: '700' }]}>Total</Text>
@@ -44,7 +64,7 @@ const MemberShip = ({ route,navigation }) => {
                 </View>
                 <Button
                     titleText={'Place Order'}
-                    btnStyle={{ marginTop: 100 }}
+                    btnStyle={{ marginTop: 50 ,width:'100%'}}
                 />
             </ScrollView>
         </View>

@@ -61,13 +61,11 @@ const Account = ({ navigation }) => {
                 style={{ paddingBottom: 30 }}
             >
                 <View style={[commonStyle.row,{justifyContent:'space-between'}]}>
-                    <View>
-                    </View>
                     <View style={[commonStyle.column, { marginLeft: 10, marginTop: 10 }]}>
                         <Text style={accountStyle.txtName}>{name != '' ? name : 'Joanna Oleaga'}</Text>
                         <View style={[commonStyle.row, { marginVertical: 10 }]}>
                             <Image resizeMode='contain' style={accountStyle.img} source={constants.icons.mail} />
-                            <Text numberOfLines={1} style={accountStyle.txtSmallName}>{email != '' ? email : "joaoleaga@gmail.com"}</Text>
+                            <Text numberOfLines={1} style={accountStyle.txtSmallName}>{email != '' ? email : ""}</Text>
                         </View>
                         <View style={[commonStyle.row, { marginTop: -5 }]}>
                             <Image resizeMode='contain' style={accountStyle.img} source={constants.icons.call} />

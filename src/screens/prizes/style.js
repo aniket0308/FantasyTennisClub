@@ -15,6 +15,7 @@ const prizeStyle=StyleSheet.create({
         alignSelf:'center'
     },
     txtName:{
+        marginTop:5,
         fontSize:12,
         fontFamily:constants.fonts.notoSansRegular,
         color:constants.colors.black,

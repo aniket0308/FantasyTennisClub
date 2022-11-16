@@ -169,7 +169,7 @@ const DashBoardHome = ({ navigation }) => {
             >
                 {
                     item.score
-                    && <Text style={dashboardStyle.txtScore}>{item.score}</Text>
+                    && <Text style={dashboardStyle.txtScore}>{days?.data[item?.title == 'Leaderboard'?'leaderboard':item?.title == 'consolation'?'consolation':'season_ranking']}</Text>
                 }
                 {
                     item.icon

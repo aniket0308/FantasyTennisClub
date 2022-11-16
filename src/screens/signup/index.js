@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StatusBar, Dimensions, SafeAreaView } from 'react-native'
+import { View, Text, StatusBar, Dimensions, SafeAreaView, Platform } from 'react-native'
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useDispatch, useSelector } from "react-redux";
 import { utils } from "../../common";
@@ -22,6 +22,7 @@ const SignUp = ({ navigation }) => {
     const [mobileNumber, setMobileNumber] = useState('')
     const [deviceToken, setDeviceToken] = useState('')
     const dispatch = useDispatch()
+    const platform = Platform.OS == 'android' ? 'android' : 'ios'
     const isLoading = useSelector((state) => state?.auth?.isLoading)
 
     const requestUserPermission = async () => {
@@ -118,7 +119,7 @@ const SignUp = ({ navigation }) => {
                     btnStyle={{ marginTop: 50 }}
                     onPress={() => {
                         dispatch(isLoaderVisible())
-                        dispatch(registration({ fullName, email, password, confirmPassword, mobileNumber, referral, deviceToken, navigation, dispatch }))
+                        dispatch(registration({ fullName, email, password, confirmPassword, mobileNumber, referral, deviceToken, navigation, platform, dispatch }))
                     }}
                 />
             </KeyboardAwareScrollView>

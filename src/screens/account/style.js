@@ -28,7 +28,6 @@ const accountStyle = StyleSheet.create({
         color: constants.colors.grey,
         fontWeight: '400',
         fontFamily: constants.fonts.nuntinoRegular,
-        width:widthPercentageToDP(45)
 
     },
     touchableEditPro: {

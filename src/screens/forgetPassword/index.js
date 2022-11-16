@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import { View, Text, StatusBar, SafeAreaView, Dimensions, Image } from 'react-native'
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { widthPercentageToDP } from "react-native-responsive-screen";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { utils } from "../../common";
 import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
 import { Button, FloatingInput, Header } from "../../components";
-import { sendOtp } from "../../redux/slice/auth";
+import Loader from "../../components/loader";
+import { isLoaderVisible, sendOtp } from "../../redux/slice/auth";
 import forgotPasswordStyle from "./style";
 
 //Forgot Password Screen
@@ -15,6 +16,7 @@ const ForgotPassword = ({ navigation }) => {
 
     const [email,setEmail]=useState('')
     const dispatch=useDispatch()
+    const isLoading=useSelector(state=>state.auth.isLoading)
 
     return (
         <>
@@ -42,13 +44,16 @@ const ForgotPassword = ({ navigation }) => {
                     autoCapitalize='none'
                 />
                 <Button
+                disabled={isLoading}
                 onPress={()=>{
+                    dispatch(isLoaderVisible())
                     dispatch(sendOtp({email,navigation,dispatch}))
                 }}
                 titleText='Reset Password'
                 btnStyle={{marginTop:100}}
                 />
             </KeyboardAwareScrollView>
+            {isLoading==true&&<Loader/>}
         </>
     )
 }
