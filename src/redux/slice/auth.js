@@ -30,7 +30,7 @@ export const authSlice = createSlice({
             const loginObj = {
                 email: actions.payload.email,
                 password: actions.payload.password,
-                device_token:actions.payload.deviceToken
+                device_token: actions.payload.deviceToken
             }
             //calling Api For Login
             utils.callApi('api/login', loginObj, 'login', actions?.payload?.dispatch)
@@ -38,7 +38,7 @@ export const authSlice = createSlice({
         joinPrivateGroup: async (state, actions) => {
             const privateGroupObj = {
                 group_name: actions.payload.groupFullName,
-                clearAllData:actions.payload.clearAllData,
+                clearAllData: actions.payload.clearAllData,
                 token: await AsyncStorage.getItem('@Token'),
             }
             //calling Api For Joining Private Group
@@ -51,7 +51,7 @@ export const authSlice = createSlice({
                 admin_mobile_number: actions.payload.groupContact,
                 tournament_id: actions.payload.groupEvents,
                 number_of_participants: actions.payload.groupParticipant,
-                clearAllData:actions.payload.clearAllData,
+                clearAllData: actions.payload.clearAllData,
                 token: await AsyncStorage.getItem('@Token'),
             }
             //calling Api For Organise Private Group
@@ -70,11 +70,19 @@ export const authSlice = createSlice({
         logout: (state, actions) => {
             //calling Api For Logout
             utils.callApi('api/v1/logout', {}, 'logout', actions?.payload?.dispatch)
-        }
+        },
+        sendOtp: (state, actions) => {
+            //calling Api For sending Otp
+            utils.callApi('api/send-otp', { email: actions.payload.email,navigation:actions.payload.navigation }, 'sendOtp', actions?.payload?.dispatch)
+        },
+        verifyOtp: (state, actions) => {
+            //calling Api For Verifiying Otp
+            utils.callApi('api/verify-otp', {email:actions.payload.email , otp: actions.payload.otp,navigation:actions.payload.navigation }, 'VerifyOtp', actions?.payload?.dispatch)
+        },
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { login, logout, registration, joinPrivateGroup, oganizePrivateGroup, isLoaderVisible, isLoaderNotVisible } = authSlice.actions
+export const { login, logout, registration, joinPrivateGroup, oganizePrivateGroup, isLoaderVisible, isLoaderNotVisible, sendOtp,verifyOtp} = authSlice.actions
 
 export default authSlice.reducer

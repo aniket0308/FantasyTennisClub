@@ -146,7 +146,7 @@ const DashBoardHome = ({ navigation }) => {
         return (
             <TouchableOpacity
                 onPress={() => {
-                    notification.localNotification()
+                    // notification.localNotification()
                     utils.navigateTo(
                         navigation,
                         item.title == 'MY PICKS'

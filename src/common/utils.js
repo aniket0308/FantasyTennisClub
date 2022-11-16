@@ -15,11 +15,12 @@ const storeData = async (payload, isLogin) => {
                 await AsyncStorage.mergeItem('@Email', payload.email),
                 await AsyncStorage.mergeItem('@MobileNumber', payload.mobile_number)
         } else {
-
             await AsyncStorage.setItem('@Name', payload.name),
                 await AsyncStorage.setItem('@Token', payload.token),
                 await AsyncStorage.setItem('@Email', payload.email),
                 await AsyncStorage.setItem('@MobileNumber', payload.mobile_number)
+            await AsyncStorage.setItem('@RegisterFirstTIme', 'true')
+
         }
     } catch (e) {
         console.log('Error In Saving Data To Local Storage', e);
@@ -73,12 +74,8 @@ export const callApi = (path, payload, type, dispatch) => {
             } else if (type == 'logout') {
                 AsyncStorage.clear()
             } else if (type == 'Registered') {
-                console.log('Register Response', json, ' .      ', payload.navigation);
                 if (json.data != null) {
-                    storeData(json.data)
-                    if (json.error == false) {
-                        payload.navigation.navigate(constants.screens.buyMemberShip)
-                    }
+                    storeData(json.data, false)
                 }
 
 
@@ -94,12 +91,28 @@ export const callApi = (path, payload, type, dispatch) => {
                 }
             } else if (type == 'inquiry') {
                 if (json?.error == false) {
+                    if (payload?.clearAllData != undefined) {
+                        payload.clearAllData()
+                    }
+
                     Snackbar.show({
                         text: json.message,
                         duration: 1000,
                         backgroundColor: 'green',
                     });
-                    return true
+                }
+            } else if (type == 'sendOtp') {
+                if (json.error == false) {
+                    if (payload?.navigation != undefined) {
+                        utils.navigateTo(payload.navigation,'OtpVerification', {email:payload.email})
+                    }
+                }
+            }
+            else if (type == 'VerifyOtp') {
+                if (json.error == false) {
+                    if (payload?.navigation != undefined) {
+                        utils.navigateTo(payload.navigation, constants.screens.changePassword)
+                    }
                 }
             }
             else {
@@ -122,7 +135,6 @@ export const callApi = (path, payload, type, dispatch) => {
 
                 if (json.error == true) {
                     if (type !== 'login') {
-                        // alert(`${type} SuccessFully`)
                     }
                 }
             }

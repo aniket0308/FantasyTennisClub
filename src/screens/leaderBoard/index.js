@@ -74,7 +74,7 @@ const LeaderBoard = ({ route, navigation }) => {
                                             if(dataItem.member.toLowerCase().includes(searchResult)){
                                                 return(
                                                     <Text
-                                                    style={[leaderBoardStyle.txtScore,{marginLeft:headerItem=='Contact'?0:10}]}>
+                                                    style={[leaderBoardStyle.txtScore,{marginLeft:headerItem=='Contact'?0:10,fontWeight:dataItem?.highlight==true?'900':null}]}>
                                                     {
                                                         headerIndex == 0
                                                             ? dataItem.member
@@ -88,7 +88,7 @@ const LeaderBoard = ({ route, navigation }) => {
                                         }else{
                                             return (
                                                 <Text
-                                                    style={[leaderBoardStyle.txtScore,{marginLeft:headerItem=='Contact'?0:10}]}>
+                                                    style={[leaderBoardStyle.txtScore,{marginLeft:headerItem=='Contact'?0:10,fontWeight:dataItem?.highlight==true?'900':null}]}>
                                                     {
                                                         headerIndex == 0
                                                             ? dataItem.member

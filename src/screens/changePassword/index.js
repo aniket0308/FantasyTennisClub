@@ -9,6 +9,7 @@ import { Button, FloatingInput, Header } from "../../components";
 import Loader from "../../components/loader";
 import { isLoaderVisible } from "../../redux/slice/auth";
 import { changePassword, editProfile, sendInquiry } from "../../redux/slice/profile";
+import forgotPasswordStyle from "../forgetPassword/style";
 import changePasswordStyle from "./style";
 
 const ChangePassword = ({ route, navigation }) => {
@@ -16,8 +17,8 @@ const ChangePassword = ({ route, navigation }) => {
     const [oldPassword, setOldPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-    const [fullName, setFullName] = useState(route.params.name)
-    const [mobileNumber, setMobileNumber] = useState(route.params.mobileNumber)
+    const [fullName, setFullName] = useState(route?.params?.name)
+    const [mobileNumber, setMobileNumber] = useState(route?.params?.mobileNumber)
     const [subject, setSubject] = useState('')
     const [text, setText] = useState('')
     const dispatch = useDispatch()
@@ -33,22 +34,22 @@ const ChangePassword = ({ route, navigation }) => {
             <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />
             <SafeAreaView />
             <Header
-                viewHeaderStyle={{ width: route.params.editProfile == 'editProfile' ? '65%' : route.params == 'contactUs' ? '65%' : '78%' }}
+                viewHeaderStyle={{ width: route?.params?.editProfile == 'editProfile' ? '65%' : route?.params == 'contactUs' ? '65%' : '78%' }}
                 showBackArrow={true}
-                title={route.params.editProfile == 'editProfile' ? 'Edit Profile' : route.params == 'contactUs' ? 'Contact Us' : 'Change Password'}
+                title={route?.params?.editProfile == 'editProfile' ? 'Edit Profile' : route?.params == 'contactUs' ? 'Contact Us' : 'Change Password'}
                 titleStyle={{ marginTop: 5, marginBottom: -3 }}
                 onPressLeftIcon={() => navigation.goBack()}
             />
-
             <KeyboardAwareScrollView
                 scrollEnabled={true}
                 showsVerticalScrollIndicator={false}
                 bounces={false}
                 style={[commonStyle.container, { backgroundColor: constants.colors.backGroundLight }]} >
-                {route.params != 'contactUs'
-                    &&<></>}
-                {route.params == 'changePassword'
+                {route?.params != 'contactUs'
+                    && <></>}
+                {route?.params == 'changePassword'
                     ? <>
+                        <Image style={forgotPasswordStyle.imgLogo} source={constants.icons.logo} />
                         <FloatingInput
                             textIsEditable={!isLoading}
                             headerText={'Old Password'}
@@ -80,7 +81,7 @@ const ChangePassword = ({ route, navigation }) => {
                             secureTextEntry={true}
                         />
                     </>
-                    : route.params == 'contactUs'
+                    : route?.params == 'contactUs'
                         ? <>
                             <FloatingInput
                                 textInputStyle={{ marginTop: 30, flexGrow: 3 }}
@@ -118,15 +119,15 @@ const ChangePassword = ({ route, navigation }) => {
                 {isLoading == true && <Loader />}
                 <Button
                     disabled={isLoading == true ? true : false}
-                    titleText={route.params.editProfile == 'editProfile' ? 'Update' : route.params == 'contactUs' ? 'Send' : 'Update Password'}
+                    titleText={route?.params?.editProfile == 'editProfile' ? 'Update' : route?.params == 'contactUs' ? 'Send' : 'Update Password'}
                     btnStyle={{ marginTop: 30 }}
                     onPress={() => {
-                        if (route.params.editProfile == 'editProfile') {
+                        if (route?.params?.editProfile == 'editProfile') {
                             dispatch(isLoaderVisible())
                             dispatch(editProfile({ fullName, mobileNumber, navigation, dispatch }))
-                        } else if (route.params == 'contactUs') {
+                        } else if (route?.params == 'contactUs') {
                             dispatch(isLoaderVisible())
-                            dispatch(sendInquiry({ subject, text, clearAllData, dispatch }))
+                            dispatch(sendInquiry({ subject, text, dispatch, clearAllData }))
                         }
                         else {
                             dispatch(isLoaderVisible())

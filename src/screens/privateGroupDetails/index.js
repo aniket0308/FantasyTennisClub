@@ -26,17 +26,16 @@ const PrivateGroupDetails = ({ route, navigation }) => {
     const [loggedInUserName, setLoggedInUserName] = useState('')
     const [membership, setMemberShip] = useState()
     const [tournamentId, setTournamentId] = useState()
-    const [json,setJson]=useState()
 
     const isLoading = useSelector(state => state?.profile?.isLoading)
     const dispatch = useDispatch()
 
-    const getDetails=async()=>{
-        const name=await AsyncStorage.getItem('@Name')
+    const getDetails = async () => {
+        const name = await AsyncStorage.getItem('@Name')
         setFullName(name)
-        const email=await AsyncStorage.getItem('@Email')
+        const email = await AsyncStorage.getItem('@Email')
         setGroupEmail(email)
-        const mobileNumber=await AsyncStorage.getItem('@MobileNumber')
+        const mobileNumber = await AsyncStorage.getItem('@MobileNumber')
         setGroupContact(mobileNumber)
     }
 
@@ -86,7 +85,7 @@ const PrivateGroupDetails = ({ route, navigation }) => {
         getDetails()
     }, [])
 
-    const clearAllData=()=>{
+    const clearAllData = () => {
         setFullName('')
         setGroupEmail('')
         setGroupContact('')
@@ -156,15 +155,15 @@ const PrivateGroupDetails = ({ route, navigation }) => {
                         }}
                         defaultButtonText='Events'
                         buttonTextStyle={privateGroupDetailsStyle.selectionButtonTxtStyle}
-                        rowTextStyle={{ textAlign: 'left', marginLeft: 20, alignSelf: 'center',color:'black' }}
+                        rowTextStyle={{ textAlign: 'left', marginLeft: 20, alignSelf: 'center', color: 'black' }}
                         dropdownStyle={privateGroupDetailsStyle.dropDownStyle}
                         buttonTextAfterSelection={(selectedItem, index) => {
                             setGroupEvents(selectedItem?.tournament_id)
                             // text represented after item is selected
                             // if data array is an array of objects then return selectedItem.property to render after item is selected
-                            if(groupEvents==''){
+                            if (groupEvents == '') {
                                 return membership[0]?.tournament
-                            }else{
+                            } else {
                                 return selectedItem?.tournament
                             }
                         }}
@@ -188,10 +187,10 @@ const PrivateGroupDetails = ({ route, navigation }) => {
                 onPress={() => {
                     if (route.params?.title != 'Organize Private Group') {
                         dispatch(isLoaderVisibleProfile())
-                        dispatch(joinPrivateGroup({ groupFullName, dispatch,clearAllData }))
+                        dispatch(joinPrivateGroup({ groupFullName, dispatch, clearAllData }))
                     } else {
                         dispatch(isLoaderVisibleProfile())
-                        dispatch(oganizePrivateGroup({ fullName, groupEmail, groupContact, groupEvents, groupParticipant, dispatch,clearAllData }))
+                        dispatch(oganizePrivateGroup({ fullName, groupEmail, groupContact, groupEvents, groupParticipant, dispatch, clearAllData }))
                     }
 
                 }}

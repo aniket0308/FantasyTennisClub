@@ -15,8 +15,8 @@ const buyMemberShipStyle = StyleSheet.create({
         borderColor: constants.colors.darkBlue,
         borderWidth: 2,
         borderRadius: 6,
-        height: widthPercentageToDP(41),
-        width: widthPercentageToDP(41),
+        height: widthPercentageToDP(40),
+        width: widthPercentageToDP(40),
         justifyContent:'center',
     },
     text: {

@@ -10,11 +10,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react'
 import { widthPercentageToDP } from 'react-native-responsive-screen';
 import { Provider } from 'react-redux';
-import { AuthNavigator, AuthNavigators, RootNavigator } from './navigation/navigation';
+import { AuthNavigator, AuthNavigators, RegisterFirstTime, RootNavigator } from './navigation/navigation';
 import { store } from './redux/store';
 import messaging from '@react-native-firebase/messaging';
 import PushNotificationService from './pushNotification/pushNotification';
 import Snackbar from 'react-native-snackbar';
+import Auth from './redux/slice/auth';
 
 const App = () => {
 
@@ -22,16 +23,24 @@ const App = () => {
   const [isAuthentication, setIsAuthentication] = useState(true)
   const [, setRender] = useState()
   const [isMembership, setIsMembership] = useState()
-  const [isLoading,setIsLoading]=useState(false)
+  const [firstTime, setFirstTime] = useState()
+  const [isLoading, setIsLoading] = useState(false)
 
   const getData = async () => {
     try {
       const value = await AsyncStorage.getItem('@Token')
-      if (value !== null) {
+      const isRegisteredFirstTime = await AsyncStorage.getItem('@RegisterFirstTIme')
+      if (value !== null || isRegisteredFirstTime != null) {
         // value previously stored
         setIsAuthentication(true)
+        setFirstTime(isRegisteredFirstTime)
         setRender({})
-      } else {
+      } else if (value !== null && isRegisteredFirstTime == null) {
+        setIsAuthentication(true)
+        setFirstTime(isRegisteredFirstTime)
+        setRender({})
+      }
+      else {
         setIsAuthentication(false)
         setRender({})
       }
@@ -40,7 +49,7 @@ const App = () => {
       console.log('Error In Getting Item:', e);
     }
   }
-  
+
   const checkMemberShip = async () => {
     const token = await AsyncStorage.getItem('@Token')
     //calling api for Checking Membership
@@ -53,11 +62,16 @@ const App = () => {
       },
     }).
       then((response) => response.json()).
-      then((json) => {
-        if (json.success == true) {
+      then(async (json) => {
+        console.log('what is json', json);
+        if (json?.success == true) {
           setIsLoading(true)
+          await AsyncStorage.removeItem('@RegisterFirstTIme')
+          setIsMembership(json?.data?.is_member)
+          setRender({})
+        } else {
+          setIsAuthentication()
         }
-        setIsMembership(json?.data?.is_member)
       }).
       catch(e => {
         Snackbar.show({
@@ -76,10 +90,12 @@ const App = () => {
   }
 
   useEffect(() => {
-    // checkMemberShip()
-    // if (isAuthentication == true && isMembership==true) {
-    // }
+    checkMemberShip()
   }, [])
+
+  useEffect(() => {
+    checkMemberShip()
+  }, [isMembership])
 
   useEffect(() => {
     getData()
@@ -100,12 +116,11 @@ const App = () => {
   return (
     <Provider store={store}>
       {
-        isAuthentication == true && isMembership==true
-          ? <AuthNavigator />
-          //For Checking Condition Keep Revert Condition
-          : isAuthentication == true && isMembership == true
-            ? <AuthNavigators />
-            : <RootNavigator />
+        isAuthentication == true && firstTime=='true'
+          ? <RegisterFirstTime />
+          :isAuthentication == true && firstTime==null
+          ?<AuthNavigator/>
+          :isAuthentication==false&& <RootNavigator />
       }
     </Provider>
   );
