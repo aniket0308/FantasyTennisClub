@@ -50,7 +50,7 @@ const OtpVerification = ({ navigation, route }) => {
                         dispatch(isLoaderVisible())
                         dispatch(verifyOtp({ otp: otp, email: route?.params?.email, navigation, dispatch }))
                     }}
-                    titleText='Update Password'
+                    titleText='Verify'
                     btnStyle={{ marginTop: 100 }}
                 />
             </KeyboardAwareScrollView>

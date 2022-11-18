@@ -124,7 +124,9 @@ const LeaderBoard = ({ route, navigation }) => {
                     mainViewHeaderStyle={{ paddingBottom: 10, paddingTop: 10 }}
                     resizeMode='stretch'
                     onPressRightIcon={()=>utils.navigateTo(navigation,'GroupLeaderBoard')}
-                    rightIconStyle={{ height: widthPercentageToDP(10), width: widthPercentageToDP(15), alignSelf: 'center' }}
+                    rightIconStyle={{tintColor:'#23587B', height: widthPercentageToDP(7), width: widthPercentageToDP(7), alignSelf: 'center' }}
+                    rightIconTitle='Private group'
+                    rightIconTitleStyle={{color:'#23587B',fontFamily:constants.fonts.nuntinoRegular,fontSize:10,fontWeight:'600'}}
                 />
             </View>
             <View style={leaderBoardStyle.mainViewScore}>

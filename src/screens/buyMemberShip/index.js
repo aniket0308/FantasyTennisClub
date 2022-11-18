@@ -97,7 +97,7 @@ const BuyMemberShip = ({ navigation }) => {
                 style={[buyMemberShipStyle.touchable, { marginRight: index % 2 != 0 ? 0 : 30 }]}>
                 <Image style={{ alignSelf: 'center', height: widthPercentageToDP(18), width: widthPercentageToDP(18) }} source={{ uri: item?.banner_image_url }} />
                 <View style={{justifyContent:'flex-end'}}>
-                <Text numberOfLines={2} style={buyMemberShipStyle.text}>{item?.tournament?item?.tournament:item.title}</Text>
+                <Text numberOfLines={1} style={buyMemberShipStyle.text}>{item?.tournament?item?.tournament:item.title}</Text>
                 <Text numberOfLines={2} style={[buyMemberShipStyle.text,{marginTop:-10}]}>{item?.price && `$${item?.price}`}</Text>
                 </View>
             </TouchableOpacity>
@@ -110,7 +110,7 @@ const BuyMemberShip = ({ navigation }) => {
             <SafeAreaView style={{ backgroundColor: constants.colors.backGroundLight }} />
             <Header
                 title='Buy Membership'
-                subTitle='Complete your details below'
+                subTitle='Select from below'
                 mainViewHeaderStyle={{ paddingHorizontal: 20 }}
                 showBackArrow={false}
                 rightIcon={constants.icons.cart}

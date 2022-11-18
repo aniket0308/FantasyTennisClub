@@ -60,7 +60,7 @@ const Account = ({ navigation }) => {
                 showsVerticalScrollIndicator={false}
                 style={{ paddingBottom: 30 }}
             >
-                <View style={[commonStyle.row,{justifyContent:'space-between'}]}>
+                <View style={[commonStyle.row, { justifyContent: 'space-between' }]}>
                     <View style={[commonStyle.column, { marginLeft: 10, marginTop: 10 }]}>
                         <Text style={accountStyle.txtName}>{name != '' ? name : 'Joanna Oleaga'}</Text>
                         <View style={[commonStyle.row, { marginVertical: 10 }]}>
@@ -72,7 +72,7 @@ const Account = ({ navigation }) => {
                             <Text style={accountStyle.txtSmallName}>+{mobileNumber != '' ? mobileNumber : '17133608496'}</Text>
                         </View>
                         <TouchableOpacity
-                            onPress={() => utils.navigateTo(navigation, constants.screens.changePassword, { editProfile: 'editProfile', name, mobileNumber })}
+                            onPress={() => utils.navigateTo(navigation, constants.screens.changePassword, { editProfile: 'editProfile', name, mobileNumber, email })}
                             style={accountStyle.touchableEditPro}>
                             <Text style={{ alignSelf: 'center', color: constants.colors.white }} >Edit profile</Text>
                         </TouchableOpacity>
@@ -90,7 +90,7 @@ const Account = ({ navigation }) => {
                                             : item == 'About us'
                                                 ? utils.navigateTo(navigation, constants.screens.aboutUs)
                                                 : item == 'My Memberships'
-                                                    ? utils.navigateTo(navigation, 'MyMembership')
+                                                    ? utils.navigateTo(navigation, 'MyMembership',false)
                                                     : item == 'Notifications'
                                                         ? utils.navigateTo(navigation, constants.screens.notification)
                                                         : item == 'Contact us'

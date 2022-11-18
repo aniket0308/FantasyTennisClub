@@ -30,7 +30,7 @@ const consolationStyle = StyleSheet.create({
         // alignSelf:"center",
     },
     txtScore: {
-        fontWeight: '600',
+        // fontWeight: '600',
         marginBottom: 2,
         color: constants.colors.black,
         fontFamily: constants.fonts.notoSansRegular,

@@ -5,7 +5,7 @@ import { constants } from "../../common/constant";
 import headerStyle from "./style";
 
 const Header = ({ title, subTitle, showBackArrow, titleStyle, onPressLeftIcon, subTitleStyle, rightIcon, viewHeaderStyle, rightIconStyle,
-    mainViewHeaderStyle, resizeMode, onPressRightIcon
+    mainViewHeaderStyle, resizeMode, onPressRightIcon,rightIconTitle,rightIconTitleStyle
 }) => {
     return (
         <View style={[headerStyle.headerView, mainViewHeaderStyle]}>
@@ -28,6 +28,10 @@ const Header = ({ title, subTitle, showBackArrow, titleStyle, onPressLeftIcon, s
                                 style={[headerStyle.imgBack, { tintColor: constants.colors.black }, rightIconStyle]}
                                 source={rightIcon}
                                 resizeMode='contain' />
+                            {
+                                rightIconTitle
+                                && <Text style={rightIconTitleStyle}>{rightIconTitle}</Text>
+                            }
                         </TouchableOpacity>
                     }
                 </View>

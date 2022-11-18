@@ -154,14 +154,16 @@ const Consolation = ({ route, navigation }) => {
                 <Header
                     showBackArrow={true}
                     onPressLeftIcon={() => navigation.goBack()}
-                    title={route?.params == undefined ? 'a' : route?.params}
-                    subTitle={'View Horizontal'}
-                    titleStyle={{ alignSelf: 'center', fontSize: 22, }}
+                    title={route?.params == undefined ? '' : route?.params}
+                    subTitle={route?.params=='Season Ranking'? '':'View Horizontal'}
+                    titleStyle={{ alignSelf: 'center', fontSize: 22,marginTop:8 }}
                     subTitleStyle={{ alignSelf: 'center', color: constants.colors.darkGreen }}
                     rightIcon={constants.icons.participant}
                     mainViewHeaderStyle={{ paddingBottom: 10, paddingTop: 10 }}
                     resizeMode='stretch'
-                    rightIconStyle={{ height: widthPercentageToDP(10), width: widthPercentageToDP(15), alignSelf: 'center' }}
+                    rightIconStyle={{tintColor:'#23587B', height: widthPercentageToDP(7), width: widthPercentageToDP(7), alignSelf: 'center' }}
+                    rightIconTitle='Private group'
+                    rightIconTitleStyle={{color:'#23587B',fontFamily:constants.fonts.nuntinoRegular,fontSize:10,fontWeight:'600'}}
                 />
             </View>
             <View style={consolationStyle.mainViewScore}>

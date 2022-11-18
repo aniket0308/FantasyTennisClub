@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP } from "react-native-responsive-screen";
 import { constants } from "../../common/constant";
 
 const membershipStyle = StyleSheet.create({
@@ -31,10 +32,24 @@ const membershipStyle = StyleSheet.create({
     },
     border: {
         borderBottomColor: constants.colors.labelColor,
-        borderBottomWidth: 1, 
+        borderBottomWidth: 1,
         marginTop: 50,
-        marginBottom:20,
+        marginBottom: 20,
         marginHorizontal: 10
+    },
+    addButtonView: {
+        backgroundColor: constants.colors.darkGreen,
+        height: widthPercentageToDP(10),
+        width: widthPercentageToDP(10),
+        alignSelf: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 20
+    },
+    plusIcon: {
+        color: 'white',
+        fontSize: 25,
+        fontWeight: 'bold'
     }
 })
 

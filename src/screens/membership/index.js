@@ -1,23 +1,29 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
+import { SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { widthPercentageToDP } from "react-native-responsive-screen";
 import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
 import { Button, Header } from "../../components";
 import membershipStyle from "./style";
 
-const MemberShip = ({ route,navigation }) => {
+const MemberShip = ({ route, navigation }) => {
 
     return (
         <View style={membershipStyle.mainContainer}>
             <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />
             <SafeAreaView />
-            <Header
-                viewHeaderStyle={{ width: '75%' }}
-                showBackArrow={true}
-                title={'Membership Cart'}
-                titleStyle={{ marginTop: 5, marginBottom: -10 }}
-                onPressLeftIcon={() => navigation.goBack()}
-            />
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Header
+                    viewHeaderStyle={{ width: widthPercentageToDP(70) }}
+                    showBackArrow={true}
+                    title={'Membership Cart'}
+                    titleStyle={{ marginTop: 5, marginBottom: -10 }}
+                    onPressLeftIcon={() => navigation.goBack()}
+                />
+                <TouchableOpacity style={membershipStyle.addButtonView}>
+                    <Text style={membershipStyle.plusIcon}>+</Text>
+                </TouchableOpacity>
+            </View>
             <ScrollView
                 bounces={false}
                 showsVerticalScrollIndicator={false}
@@ -49,14 +55,20 @@ const MemberShip = ({ route,navigation }) => {
                     })
 
                 }
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 10 }}>
-                    <Text style={[membershipStyle.txtDate, { fontSize: 13, color: constants.colors.black }]}>Tournament Total</Text>
-                    <Text style={[membershipStyle.txtDate, { fontSize: 13, color: constants.colors.black }]}>${route?.params?.tournament_total}</Text>
-                </View>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 10 }}>
-                    <Text style={[membershipStyle.txtDate, { fontSize: 13, color: 'red' }]}>Season Discount</Text>
-                    <Text style={[membershipStyle.txtDate, { fontSize: 13, color: 'red' }]}>${route?.params?.season_discount}</Text>
-                </View>
+                {
+                    route?.params?.tournament_total &&
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 10 }}>
+                        <Text style={[membershipStyle.txtDate, { fontSize: 13, color: constants.colors.black }]}>Tournament Total</Text>
+                        <Text style={[membershipStyle.txtDate, { fontSize: 13, color: constants.colors.black }]}>${route?.params?.tournament_total}</Text>
+                    </View>
+                }
+                {
+                    route?.params?.season_discount
+                    && <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 10 }}>
+                        <Text style={[membershipStyle.txtDate, { fontSize: 13, color: 'red' }]}>Season Discount</Text>
+                        <Text style={[membershipStyle.txtDate, { fontSize: 13, color: 'red' }]}>${route?.params?.season_discount}</Text>
+                    </View>
+                }
                 <View style={membershipStyle.border} />
                 <View style={[commonStyle.row, { justifyContent: 'space-between', marginRight: 10 }]}>
                     <Text style={[membershipStyle.txtDate, { fontSize: 18, color: constants.colors.black, fontWeight: '700' }]}>Total</Text>
@@ -64,7 +76,7 @@ const MemberShip = ({ route,navigation }) => {
                 </View>
                 <Button
                     titleText={'Place Order'}
-                    btnStyle={{ marginTop: 50 ,width:'100%'}}
+                    btnStyle={{ marginTop: 50, width: '100%' }}
                 />
             </ScrollView>
         </View>

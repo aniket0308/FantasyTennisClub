@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, StatusBar, Text, View } from "react-native";
+import { Linking, SafeAreaView, StatusBar, Text, View } from "react-native";
 import RenderHTML from "react-native-render-html";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import Snackbar from "react-native-snackbar";
@@ -14,6 +14,40 @@ const JoinWhatsApp = ({ navigation }) => {
 
     const [isLoading, setIsLoading] = useState(false)
     const [etiquete, setEtiquete] = useState({})
+    const [joinWhatsApp,setJoinWhatsApp]=useState('')
+
+    const joinWhatsAppGroup = async () => {
+        const token = await AsyncStorage.getItem('@Token')
+        fetch('https://fantasytennisclub.com/admin/api/v1/member-dashboard', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${token}`
+            },
+        }).
+            then((response) => response.json()).
+            then((json) => {
+                if (json.success == true) {
+                    setIsLoading(true)
+                }
+                setJoinWhatsApp(json?.data?.whatsapp_group_link)
+            }).
+            catch(e => {
+                Snackbar.show({
+                    text: e.toString(),
+                    duration: 1000,
+                    backgroundColor: 'red',
+                    // action: {
+                    //   text: 'UNDO',
+                    //   textColor: 'green',
+                    //   onPress: () => { /* Do something. */ },
+                    // },
+                });
+                setIsLoading(false)
+                console.log('What Is Error In Get Api', e)
+            })
+    }
 
     const getEtiquete = async () => {
         const token = await AsyncStorage.getItem('@Token')
@@ -50,6 +84,7 @@ const JoinWhatsApp = ({ navigation }) => {
 
     useEffect(() => {
         getEtiquete()
+        joinWhatsAppGroup()
     }, [])
 
     return (
@@ -72,14 +107,13 @@ const JoinWhatsApp = ({ navigation }) => {
                             <RenderHTML
                             source={{ html:`${etiquete?.data&&etiquete?.data?.content}`}}
                             />
-                            {/* <Text
-                                style={[joinWhatsAppStyle.txtText, { textAlign: 'auto' }]} >
-                                    {etiquete}
-                            </Text> */}
                         </View>
                         <View style={joinWhatsAppStyle.viewAgreeEtiquites}>
                             <Text style={joinWhatsAppStyle.txtAgree}>I agree to the etiquete</Text>
                             <Button
+                            onPress={async()=>{
+                                await Linking.openURL(joinWhatsApp);
+                            }}
                                 titleText={'Join Group'}
                                 btnStyle={{ width: '90%', marginVertical: 10 }}
                             />

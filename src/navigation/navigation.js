@@ -55,7 +55,7 @@ const StackInstideDashBoard = () => {
 const StackInstideSelectionDay = () => {
     return (
         <stack.Navigator initialRouteName="SelectionDays">
-            <stack.Screen options={{ headerShown: false }} name="SelectionDays" component={SelectionDays} /> 
+            <stack.Screen options={{ headerShown: false }} name="SelectionDays" component={SelectionDays} />
             <stack.Screen options={{ headerShown: false }} name="DayPick" component={DayPick} />
             <stack.Screen options={{ headerShown: false }} name="Notification" component={Notification} />
         </stack.Navigator>
@@ -66,7 +66,7 @@ const StackInstideSelectionDay = () => {
 const StackInstideLeaderboard = () => {
     return (
         <stack.Navigator initialRouteName="Leaderboard">
-            <stack.Screen options={{ headerShown: false }} name="Leaderboard" component={LeaderBoard} /> 
+            <stack.Screen options={{ headerShown: false }} name="Leaderboard" component={LeaderBoard} />
             <stack.Screen options={{ headerShown: false }} name="Consolation" component={Consolation} />
             <stack.Screen options={{ headerShown: false }} name="GroupLeaderBoard" component={GroupLeaderBoard} />
         </stack.Navigator>
@@ -78,7 +78,7 @@ const StackInstideLeaderboard = () => {
 const StackInsideAccount = () => {
     return (
         <stack.Navigator initialRouteName="Account">
-            <stack.Screen options={{ headerShown: false }} name="Account" component={Account} /> 
+            <stack.Screen options={{ headerShown: false }} name="Account" component={Account} />
             <stack.Screen options={{ headerShown: false }} name="ChangePassword" component={ChangePassword} />
             <stack.Screen options={{ headerShown: false }} name="AboutUs" component={AboutUs} />
             <stack.Screen options={{ headerShown: false }} name="MemberShip" component={MemberShip} />
@@ -90,10 +90,10 @@ const StackInsideAccount = () => {
 }
 
 //Stack Inside Rules
-const StackInsideRules=()=>{
+const StackInsideRules = () => {
     return (
         <stack.Navigator initialRouteName="Rules">
-            <stack.Screen options={{ headerShown: false }} name="Rules" component={Rules} /> 
+            <stack.Screen options={{ headerShown: false }} name="Rules" component={Rules} />
             <stack.Screen options={{ headerShown: false }} name="Notifications" component={Notification} />
         </stack.Navigator>
     )
@@ -117,11 +117,12 @@ const BottomTab = ({ navigation }) => {
                                         style={{
                                             tintColor: focused ? constants.colors.darkGreen : constants.colors.bottomTabLight,
                                             alignSelf: 'center',
-                                            height:widthPercentageToDP(7),
-                                            width:widthPercentageToDP(7)
+                                            height: widthPercentageToDP(7),
+                                            width: widthPercentageToDP(7)
                                         }}
                                     />
                                     <Text
+                                        numberOfLines={1}
                                         style={{
                                             fontSize: 10,
                                             color: focused ? constants.colors.darkGreen : constants.colors.bottomTabLight,
@@ -147,11 +148,12 @@ const BottomTab = ({ navigation }) => {
                                         style={{
                                             tintColor: focused ? constants.colors.darkGreen : constants.colors.bottomTabLight,
                                             alignSelf: 'center',
-                                            height:widthPercentageToDP(7),
-                                            width:widthPercentageToDP(7)
+                                            height: widthPercentageToDP(7),
+                                            width: widthPercentageToDP(7)
                                         }}
                                     />
                                     <Text
+                                        numberOfLines={1}
                                         style={{
                                             fontSize: 10,
                                             color: focused ? constants.colors.darkGreen : constants.colors.bottomTabLight,
@@ -181,6 +183,7 @@ const BottomTab = ({ navigation }) => {
                                         </View>
                                     </View>
                                     <Text
+                                        numberOfLines={1}
                                         style={{
                                             fontSize: 10,
                                             color: focused ? constants.colors.darkGreen : constants.colors.bottomTabLight,
@@ -205,12 +208,13 @@ const BottomTab = ({ navigation }) => {
                                         style={{
                                             tintColor: focused ? constants.colors.darkGreen : constants.colors.bottomTabLight,
                                             alignSelf: 'center',
-                                            height:widthPercentageToDP(7),
-                                            width:widthPercentageToDP(7)
+                                            height: widthPercentageToDP(7),
+                                            width: widthPercentageToDP(7)
                                         }}
                                         resizeMode='contain'
                                     />
                                     <Text
+                                        numberOfLines={1}
                                         style={{
                                             fontSize: 10,
                                             color: focused ? constants.colors.darkGreen : constants.colors.bottomTabLight,
@@ -235,13 +239,14 @@ const BottomTab = ({ navigation }) => {
                                         style={{
                                             tintColor: focused ? constants.colors.darkGreen : constants.colors.bottomTabLight,
                                             alignSelf: 'center',
-                                            height:widthPercentageToDP(7),
-                                            width:widthPercentageToDP(7)
-                                            
+                                            height: widthPercentageToDP(7),
+                                            width: widthPercentageToDP(7)
+
                                         }}
                                         resizeMode='contain'
                                     />
                                     <Text
+                                        numberOfLines={1}
                                         style={{
                                             fontSize: 10,
                                             color: focused ? constants.colors.darkGreen : constants.colors.bottomTabLight,
@@ -300,10 +305,10 @@ export const RegisterFirstTime = () => {
             <stack.Navigator initialRouteName='BuyMemberShip'>
                 {/* <stack.Screen options={{ headerShown: false }} name="Home" component={Home} /> */}
                 <stack.Screen options={{ headerShown: false }} name="Dashboard" component={BottomTab} />
-                 <stack.Screen options={{ headerShown: false }} name="BuyMemberShip" component={BuyMemberShip} /> 
-                 <stack.Screen options={{ headerShown: false }} name="MyMembership" component={MyMembership} /> 
+                <stack.Screen options={{ headerShown: false }} name="BuyMemberShip" component={BuyMemberShip} />
+                <stack.Screen options={{ headerShown: false }} name="MyMembership" component={MyMembership} />
                 <stack.Screen options={{ headerShown: false }} name="PrivateGroupDetails" component={PrivateGroupDetails} />
-                <stack.Screen options={{ headerShown: false }} name="MemberShip" component={MemberShip} /> 
+                <stack.Screen options={{ headerShown: false }} name="MemberShip" component={MemberShip} />
             </stack.Navigator>
         </NavigationContainer >
     )

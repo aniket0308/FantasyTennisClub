@@ -67,7 +67,7 @@ const FloatingInput = ({ textInputStyle, isEditable, onInputPress, headerStyle, 
                 disabled={isEditable}
                 onPress={onInputPress}
                 style={[floatingInputStyles.viewContainer, textInputStyle]}>
-                <Animated.View style={[floatingInputStyles.animatedStyle, animStyle]}>
+                <Animated.View style={[floatingInputStyles.animatedStyle,{top:value==''?5:1} ,animStyle,]}>
                     <Text
                         style={{
                             ...floatingInputStyles.headertxt,

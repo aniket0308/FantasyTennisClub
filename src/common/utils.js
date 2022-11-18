@@ -5,6 +5,7 @@ import Snackbar from 'react-native-snackbar';
 import { utils } from ".";
 import { constants } from "./constant";
 import { isLoaderNotVisibleProfile } from "../redux/slice/profile";
+import { Alert } from "react-native";
 
 //Storing Data In Local Storage
 const storeData = async (payload, isLogin) => {
@@ -83,6 +84,7 @@ export const callApi = (path, payload, type, dispatch) => {
                 if (json.error == false) {
                     await AsyncStorage.setItem('@Name', payload?.name)
                     await AsyncStorage.setItem('@MobileNumber', payload?.mobile_number)
+                    await AsyncStorage.setItem('@Email', payload?.email)
                     payload.navigation.goBack()
                 }
             } else if (type == 'changePassword') {
@@ -111,7 +113,7 @@ export const callApi = (path, payload, type, dispatch) => {
             else if (type == 'VerifyOtp') {
                 if (json.error == false) {
                     if (payload?.navigation != undefined) {
-                        utils.navigateTo(payload.navigation, constants.screens.changePassword, 'forgotPassword')
+                        utils.navigateTo(payload.navigation, constants.screens.changePassword, {email: payload.email,name:'forgotPassword'})
                     }
                 }
             } else if (type == 'resetPassword') {
@@ -119,6 +121,10 @@ export const callApi = (path, payload, type, dispatch) => {
                     if (payload?.navigation != undefined) {
                         utils.navigateTo(payload.navigation, constants.screens.login)
                     }
+                }
+            }else if(type == 'organizePrivateGroup' || type == 'privateGroup' || 'savePick'){
+                if (json.error == false) {
+                    Alert.alert(json?.message)
                 }
             }
             else {

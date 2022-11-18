@@ -21,7 +21,7 @@ const ChangePassword = ({ route, navigation }) => {
     const [mobileNumber, setMobileNumber] = useState(route?.params?.mobileNumber)
     const [subject, setSubject] = useState('')
     const [text, setText] = useState('')
-    const [email, setEmail] = useState('')
+    const [email, setEmail] = useState(route?.params?.email)
     const dispatch = useDispatch()
     const isLoading = useSelector((state) => state?.auth?.isLoading)
 
@@ -35,9 +35,9 @@ const ChangePassword = ({ route, navigation }) => {
             <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />
             <SafeAreaView />
             <Header
-                viewHeaderStyle={{ width: route?.params?.editProfile == 'editProfile' ? '65%' : route?.params == 'contactUs' ? '65%' :route?.params=='Change Password'?'78%':'75%' }}
+                viewHeaderStyle={{ width: route?.params?.editProfile == 'editProfile' ? '65%' : route?.params == 'contactUs' ? '65%' : route?.params == 'changePassword' ? '78%' : '75%' }}
                 showBackArrow={true}
-                title={route?.params?.editProfile == 'editProfile' ? 'Edit Profile' : route?.params == 'contactUs' ? 'Contact Us' :route?.params=='Change Password'?'Change Password':'Reset Password'}
+                title={route?.params?.editProfile == 'editProfile' ? 'Edit Profile' : route?.params == 'contactUs' ? 'Contact Us' : route?.params == 'changePassword' ? 'Change Password' : 'Reset Password'}
                 titleStyle={{ marginTop: 5, marginBottom: -3 }}
                 onPressLeftIcon={() => navigation.goBack()}
             />
@@ -82,17 +82,9 @@ const ChangePassword = ({ route, navigation }) => {
                             secureTextEntry={true}
                         />
                     </>
-                    : route?.params == 'forgotPassword'
+                    : route?.params?.name == 'forgotPassword'
                         ? <>
                             <Image style={forgotPasswordStyle.imgLogo} source={constants.icons.logo} />
-                            <FloatingInput
-                                textIsEditable={!isLoading}
-                                headerText={'Email'}
-                                textInputStyle={{ marginTop: 30 }}
-                                onChangeText={(email) => { setEmail(email) }}
-                                value={email}
-                                autoCapitalize='none'
-                            />
                             <FloatingInput
                                 textIsEditable={!isLoading}
                                 headerText={'New Password'}
@@ -132,12 +124,19 @@ const ChangePassword = ({ route, navigation }) => {
                                 />
                             </>
                             : <>
+                                <Image style={forgotPasswordStyle.imgLogo} source={constants.icons.logo} />
                                 <FloatingInput
                                     textIsEditable={!isLoading}
-                                    textInputStyle={{ marginTop: 30 }}
                                     headerText={'Full Name'}
                                     onChangeText={(nameTxt) => { setFullName(nameTxt) }}
                                     value={fullName}
+                                />
+                                <FloatingInput
+                                    textIsEditable={!isLoading}
+                                    textInputStyle={{ marginTop: 15 }}
+                                    headerText={'E-Mail'}
+                                    onChangeText={(emailTxt) => { setEmail(emailTxt) }}
+                                    value={email}
                                 />
                                 <FloatingInput
                                     textIsEditable={!isLoading}
@@ -157,13 +156,13 @@ const ChangePassword = ({ route, navigation }) => {
                     onPress={() => {
                         if (route?.params?.editProfile == 'editProfile') {
                             dispatch(isLoaderVisible())
-                            dispatch(editProfile({ fullName, mobileNumber, navigation, dispatch }))
+                            dispatch(editProfile({ fullName, mobileNumber,email, navigation, dispatch }))
                         } else if (route?.params == 'contactUs') {
                             dispatch(isLoaderVisible())
                             dispatch(sendInquiry({ subject, text, dispatch, clearAllData }))
-                        } else if (route?.params == 'forgotPassword') {
+                        } else if (route?.params?.name == 'forgotPassword') {
                             dispatch(isLoaderVisible())
-                            dispatch(resetPassword({ email, newPassword, confirmPassword, navigation, dispatch }))
+                            dispatch(resetPassword({ email: route?.params?.email, newPassword, confirmPassword, navigation, dispatch }))
                         }
                         else {
                             dispatch(isLoaderVisible())

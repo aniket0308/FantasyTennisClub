@@ -20,7 +20,6 @@ const floatingInputStyles = StyleSheet.create({
         marginBottom:20
     },
     animatedStyle: {
-        top: 5,
         left: 14,
         position: 'absolute',
     },

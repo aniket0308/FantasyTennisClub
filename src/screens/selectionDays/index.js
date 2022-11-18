@@ -16,8 +16,6 @@ const SelectionDays = ({ route, navigation }) => {
     const [days, setDays] = useState()
     const [isLoading, setIsLoading] = useState(false)
 
-    console.log('asasasas', days?.data?.days);
-
     const tempArr = [
         { day: 14, icon: constants.icons.winnerCup }, { day: 1 }, { day: 2 }, { day: 3 }, { day: 4 }, { day: 5 }, { day: 6 }, { day: 7 }, { day: 8 }, { day: 9 }, { day: 10 },
         { day: 11 }, { day: 12 }, { day: 13 }
@@ -79,8 +77,8 @@ const SelectionDays = ({ route, navigation }) => {
             <SafeAreaView />
             <Header
                 showBackArrow={true}
-                title={'My Picks'}
-                titleStyle={{ fontSize: 22 }}
+                title={myPicks=='MY PICKS'?'My Picks':'Selection Days'}
+                titleStyle={{ fontSize: 22,marginTop:10 }}
                 viewHeaderStyle={{ width: '100%' }}
                 rightIcon={constants.icons.shapeBell}
                 onPressRightIcon={() => utils.navigateTo(navigation, constants.screens.notification)}

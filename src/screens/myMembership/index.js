@@ -8,10 +8,11 @@ import { constants } from "../../common/constant";
 import { Button, Header } from "../../components";
 import CardWithImage from "../../components/cardWithImage";
 import Loader from "../../components/loader";
+import forgotPasswordStyle from "../forgetPassword/style";
 import membershipStyle from "../membership/style";
 import myMembershipStyle from "./style";
 
-const MyMembership = ({ navigation }) => {
+const MyMembership = ({ navigation, route }) => {
 
     const [memberShip, setMemberShip] = useState()
     const [isLoading, setIsLoading] = useState(false)
@@ -69,13 +70,17 @@ const MyMembership = ({ navigation }) => {
             />
             <ScrollView showsVerticalScrollIndicator={false} bounces={false} style={{ marginBottom: 20 }}>
                 <View style={{ marginHorizontal: 15, marginTop: 20 }}>
-                    <View style={{ backgroundColor: constants.colors.lightestBlue, padding: 15, borderRadius: 6, marginBottom: 20 }}>
-                        <Text style={{ alignSelf: 'center', textAlign: 'center', fontFamily: constants.fonts.notoSansRegular, color: 'green', fontWeight: '600', fontSize: 16 }}>Your current membership does not have access to current event</Text>
-                        <Text style={{ alignSelf: 'center', fontFamily: constants.fonts.notoSansRegular, color: 'grey', fontWeight: '400', fontSize: 12, marginTop: 10 }}>•	Access to the Platform will be granted during the dates when your membership is active</Text>
-                    </View>
+                    {
+                    route?.params==false
+                            ? <Image style={forgotPasswordStyle.imgLogo} source={constants.icons.logo} />
+                            : <View style={{ backgroundColor: constants.colors.lightestBlue, padding: 15, borderRadius: 6, marginBottom: 20 }}>
+                                <Text style={{ alignSelf: 'center', textAlign: 'center', fontFamily: constants.fonts.notoSansRegular, color: 'green', fontWeight: '600', fontSize: 16 }}>Your current membership does not have access to current event</Text>
+                                <Text style={{ alignSelf: 'center', fontFamily: constants.fonts.notoSansRegular, color: 'grey', fontWeight: '400', fontSize: 12, marginTop: 10 }}>•	Access to the Platform will be granted during the dates when your membership is active</Text>
+                            </View>
+                    }
                     {memberShip?.length > 0 &&
                         memberShip.map((item, index) => {
-                            console.log('item',item);
+                            console.log('item', item);
                             return (
                                 item.title != 'Join Private Group' && item.title != 'Organize Private Group'
                                 && < CardWithImage
@@ -88,8 +93,8 @@ const MyMembership = ({ navigation }) => {
                             )
                         })
                     }
-                    {
-                        isLoading == true
+                    {route?.params!==false
+                        // && isLoading == false
                         && <Button
                             titleText={'Update Membership'}
                             btnStyle={{ width: '100%' }}

@@ -69,7 +69,7 @@ const Login = ({ navigation }) => {
                 <FloatingInput
                     textIsEditable={!isLoading}
                     // refs={passwordRef}
-                    headerText={'password'}
+                    headerText={'Password'}
                     textInputStyle={{ marginTop: 15 }}
                     secureTextEntry={isPasswordVisible}
                     passwordInput={true}

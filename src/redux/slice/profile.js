@@ -14,6 +14,7 @@ export const profileSlice = createSlice({
             const editProfileObj = {
                 name: actions.payload.fullName,
                 mobile_number: actions.payload.mobileNumber,
+                email: actions.payload.email,
                 token: await AsyncStorage.getItem('@Token'),
                 navigation: actions.payload.navigation
             }

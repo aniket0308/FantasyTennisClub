@@ -197,14 +197,14 @@ const PrivateGroupDetails = ({ route, navigation }) => {
                 titleText={route.params?.title != 'Organize Private Group' ? 'Join Group' : 'Submit'}
                 btnStyle={{ width: '90%', marginBottom: 15, marginTop: 30 }}
             />
-            {
+            {/* {
                 route.params?.title == 'Organize Private Group'
                     ? <Text style={[privateGroupDetailsStyle.txt, { textAlign: 'center', width: "70%" }]}>Request Sent! once confirmed,You will be contacted by one of our tennis
                         experts within 24 hours</Text>
                     : <Text style={[privateGroupDetailsStyle.txt, { textAlign: 'center', width: "70%" }]}>Request Sent! once confirmed,You will be added to the private group
                         (allow 24 hours processing timing)</Text>
 
-            }
+            } */}
             {isLoading == true && <Loader />}
         </View>
     )
