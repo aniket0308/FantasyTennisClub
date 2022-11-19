@@ -1,4 +1,5 @@
 import { StyleSheet, Dimensions } from 'react-native'
+import { widthPercentageToDP } from 'react-native-responsive-screen'
 import { constants } from '../../common/constant'
 
 const loginStyle = StyleSheet.create({
@@ -6,8 +7,8 @@ const loginStyle = StyleSheet.create({
         backgroundColor: constants.colors.backGroundLight,
     },
     imgLogo: {
-        height: 180,
-        width: 180,
+        height:widthPercentageToDP(70),
+        width: widthPercentageToDP(70),
         alignSelf: 'center',
         marginBottom: 20
     },

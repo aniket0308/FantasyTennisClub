@@ -54,7 +54,7 @@ const Login = ({ navigation }) => {
                 scrollEnabled={false}
                 contentContainerStyle={{ justifyContent: 'center', height: Dimensions.get('screen').height }}
                 style={[commonStyle.container, loginStyle.container]} >
-                <Image style={loginStyle.imgLogo} source={constants.icons.logo} />
+                <Image style={loginStyle.imgLogo} resizeMode='contain' source={constants.icons.logo} />
                 <FloatingInput
                     textIsEditable={!isLoading}
                     // refs={emailRef}
