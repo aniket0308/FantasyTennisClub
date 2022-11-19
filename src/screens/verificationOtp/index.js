@@ -29,9 +29,9 @@ const OtpVerification = ({ navigation, route }) => {
                 contentContainerStyle={{ height: Dimensions.get('screen').height }}
                 style={[commonStyle.container, forgotPasswordStyle.container]} >
                 <Header
-                    title='Verify OTP'
+                    title='Enter Temporary Code'
                     titleStyle={{ fontSize: 25, marginTop: 10 }}
-                    mainViewHeaderStyle={{ width: widthPercentageToDP(65) }}
+                    mainViewHeaderStyle={{ width: widthPercentageToDP(85) }}
                     showBackArrow={true}
                     onPressLeftIcon={() => navigation.goBack()}
                 />
