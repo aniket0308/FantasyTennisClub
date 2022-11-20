@@ -2,11 +2,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { FlatList, Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
+import Snackbar from "react-native-snackbar";
 import { useDispatch } from "react-redux";
 import { constants } from "../../common/constant";
 import { Button } from "../../components";
 import CardWithImage from "../../components/cardWithImage";
 import Loader from "../../components/loader";
+import RefreshControlPull from "../../components/refreshComponent";
 import { savePicks } from "../../redux/slice/auth";
 import dayPickStyle from "./style";
 
@@ -15,13 +17,24 @@ const DayPick = ({ route, navigation }) => {
     const [isSubmit, setIsSubmit] = useState(false)
     const [matches, setMatches] = useState()
     const [isLoading, setIsLoading] = useState(false)
-    const [match1, setMatch1] = useState()
-    const [match2, setMatch2] = useState()
-    const [match3, setMatch3] = useState()
-    const dispatch=useDispatch()
+    const [match, setMatch] = useState()
+    const [selectedPlayer, setSelectedPlayer] = useState([])
+    const [refresh,setRefresh]=useState(false)
+    const [tempArr, setTempArr] = useState([])
+    const [objects, setObjects] = useState({})
+    const dispatch = useDispatch()
     const particularDay = matches?.find(item => 'day ' + route?.params == item?.tournament_day)
-    console.log('Matches===>', match1,' .    ',match2,' .     ',match3);
-
+    console.log('What is particular day', particularDay);
+    // let a=[0,1,2,3].
+    if (objects != undefined) {
+        Object.keys(objects).forEach(key => {
+            if (objects[key] === undefined) {
+                delete objects[key];
+            }
+        });
+    }
+    console.log('OBJECYSSSSS,ob', objects);
+    console.log('OBJECYSSSSS,ob', selectedPlayer);
     //get Particular Day Match
     const getAllMatchesOfParticulatDay = async () => {
         const token = await AsyncStorage.getItem('@Token')
@@ -38,6 +51,7 @@ const DayPick = ({ route, navigation }) => {
             then((response) => response.json()).
             then((json) => {
                 if (json.success == true) {
+                    setRefresh(false)
                     setIsLoading(true)
                 }
                 setMatches(json?.data?.days)
@@ -53,14 +67,14 @@ const DayPick = ({ route, navigation }) => {
                     //   onPress: () => { /* Do something. */ },
                     // },
                 });
-                setIsLoading(false)
+                setRefresh(false)
                 console.log('What Is Error In Get Api', e)
             })
     }
 
     useEffect(() => {
         getAllMatchesOfParticulatDay()
-    }, [])
+    }, [isSubmit])
 
     //rendering Selection DropDown Function
     const renderSelectionDropdown = (item, index) => {
@@ -73,16 +87,19 @@ const DayPick = ({ route, navigation }) => {
                     buttonStyle={dayPickStyle.selectionButtonStyle}
                     data={[item?.players[0]?.player, item?.players[1]?.player]}
                     onSelect={(selectedItem, selectedindex) => {
-                        if (index == 0) {
-                            const match=item?.players.find(i=>i?.player==selectedItem&&i)
-                            setMatch1(match)
-                        } else if (index == 1) {
-                            const match=item?.players.find(i=>i?.player==selectedItem&&i)
-                            setMatch2(match)
-                        } else {
-                            const match=item?.players.find(i=>i?.player==selectedItem&&i)
-                            setMatch3(match)
+                        const matchId = item?.players.find(i => i?.player == selectedItem && i)
+                        const obj = {
+                            'id': matchId?.id,
+                            'tournament_day_match_id': matchId?.tournament_day_match_id
                         }
+                        tempArr[index] = obj
+                        selectedPlayer[index] = selectedItem
+                        selectedPlayer.push(selectedPlayer)
+                        tempArr.push(tempArr)
+                        setMatch(tempArr)
+                        var object = match?.reduce(
+                            (obj, item) => Object.assign(obj, { [item.tournament_day_match_id]: item.id }), {});
+                        setObjects(object)
                     }}
                     defaultButtonText='Drop Down with picks'
                     buttonTextStyle={dayPickStyle.selectionButtonTxtStyle}
@@ -107,14 +124,23 @@ const DayPick = ({ route, navigation }) => {
         <View style={dayPickStyle.mainContainer}>
             <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />
             <SafeAreaView />
-            <TouchableOpacity onPress={() => navigation.goBack()} style={{ padding: 5, marginTop: 10, marginLeft: -5 }}>
+            <TouchableOpacity onPress={() => isSubmit == true ? setIsSubmit(false) : navigation.goBack()} style={{ padding: 5, marginTop: 10, marginLeft: -5 }}>
                 <Image style={{ height: 20, width: 20, tintColor: constants.colors.darkGreen }} source={constants.icons.backArrow} />
             </TouchableOpacity>
             <Text style={dayPickStyle.txtDay}>Day {route.params <= 9 ? `0${route.params}` : route.params}</Text>
             <Text style={dayPickStyle.txtSubmit}>{isSubmit == false ? 'Submit your picks below' : '‌‌Your Picks have been entered successfully!'}</Text>
             <ScrollView
+            refreshControl={
+                <RefreshControlPull
+                refreshing={refresh}
+                onRefresh={()=>{
+                    setRefresh(true)
+                    getAllMatchesOfParticulatDay()
+                }}
+                />
+            }
                 scrollEnabled={isSubmit == true ? false : true}
-                bounces={false}
+                bounces={true}
                 style={{ marginBottom: 25 }}
                 contentContainerStyle={{ justifyContent: 'center', flex: isSubmit == false ? 0 : 1 }}
                 showsVerticalScrollIndicator={false} >
@@ -146,36 +172,25 @@ const DayPick = ({ route, navigation }) => {
                                 titleText={'Submit'}
                                 btnStyle={{ width: '100%' }}
                                 onPress={() => {
-                                    // console.log(particularDay?.matches[0]);
-                                    dispatch(savePicks({match1,match2,match3}))
-                                    // setIsSubmit(true)
+                                    setIsLoading(false)
+                                    dispatch(savePicks({ matches: objects, submit: () => setIsSubmit(true), isLoading: () => setIsLoading(true) }))
                                 }}
                             />}
                     </>
                     : <>
-                        <View style={{ marginVertical: 30, justifyContent: 'center', }}>
-                            <CardWithImage
-                                containerStyle={{ backgroundColor: constants.colors.labelColor }}
-                                labelTitle={'User Selection'}
-                                label={'Day 01 Match 1'}
-                                labelStyle={dayPickStyle.labelStyle}
-                                titleStyle={dayPickStyle.titleStyle}
-                            />
-                            <CardWithImage
-                                containerStyle={{ backgroundColor: constants.colors.labelColor, marginVertical: 12 }}
-                                labelTitle={'User Selection'}
-                                label={'Day 01 Match 1'}
-                                labelStyle={dayPickStyle.labelStyle}
-                                titleStyle={dayPickStyle.titleStyle}
-                            />
-                            <CardWithImage
-                                containerStyle={{ backgroundColor: constants.colors.labelColor }}
-                                labelTitle={'User Selection'}
-                                label={'Day 01 Match 1'}
-                                labelStyle={dayPickStyle.labelStyle}
-                                titleStyle={dayPickStyle.titleStyle}
-                            />
-                        </View>
+                        {
+                            particularDay?.matches.map((item, index) => {
+                                return (
+                                    <CardWithImage
+                                        containerStyle={{ backgroundColor: constants.colors.labelColor, marginBottom: 10 }}
+                                        labelTitle={`${selectedPlayer[index]}`}
+                                        label={`${item?.title ? item?.title : item?.match_title}`}
+                                        labelStyle={dayPickStyle.labelStyle}
+                                        titleStyle={dayPickStyle.titleStyle}
+                                    />
+                                )
+                            })
+                        }
                     </>
                 }
             </ScrollView >

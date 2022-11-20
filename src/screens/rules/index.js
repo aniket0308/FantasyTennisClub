@@ -8,7 +8,7 @@ import Loader from "../../components/loader";
 import rulesStyle from "./style";
 import Snackbar from 'react-native-snackbar';
 import RenderHtml from 'react-native-render-html';
-import { widthPercentageToDP } from "react-native-responsive-screen";
+import RefreshControlPull from "../../components/refreshComponent";
 
 //Rules Screen
 const Rules = ({ navigation }) => {
@@ -17,6 +17,7 @@ const Rules = ({ navigation }) => {
     const [faq, setFaq] = useState([])
     const [rulesLoading, setRulesLoading] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [refresh, setRefresh] = useState(false)
 
     //Function For Getting Rules From Api
     const getRulesFromApi = async () => {
@@ -32,6 +33,7 @@ const Rules = ({ navigation }) => {
             then((response) => response.json()).
             then((json) => {
                 if (json.success == true) {
+                    setRefresh(false)
                     setRulesLoading(true)
                 }
                 setRules(json)
@@ -47,7 +49,7 @@ const Rules = ({ navigation }) => {
                     //   onPress: () => { /* Do something. */ },
                     // },
                   });
-                setRulesLoading(false)
+                  setRefresh(false)
                 console.log('What Is Error In Get Api', e)
             })
     }
@@ -67,6 +69,7 @@ const Rules = ({ navigation }) => {
             then((response) => response.json()).
             then((json) => {
                 if (json.success == true) {
+                    setRefresh(false)
                     setIsLoading(true)
                 }
                 setFaq(json)
@@ -82,7 +85,7 @@ const Rules = ({ navigation }) => {
                     //   onPress: () => { /* Do something. */ },
                     // },
                   });
-                setIsLoading(false)
+                  setRefresh(false)
                 console.log('What Is Error In Get Api', e)
             })
     }
@@ -132,7 +135,18 @@ const Rules = ({ navigation }) => {
                 onPressLeftIcon={() => navigation.goBack()}
             />
             {isLoading == true && rulesLoading == true
-                ? <ScrollView style={{ marginBottom: 25 }}>
+                ? <ScrollView
+                refreshControl={
+                    <RefreshControlPull
+                    refreshing={refresh}
+                    onRefresh={()=>{
+                        setRefresh(true)
+                        getFaqFromApi()
+                        getRulesFromApi()
+                    }}
+                    />
+                }
+                style={{ marginBottom: 25 }}>
                     {
                         rules?.length != 0
                         && <RenderRules />

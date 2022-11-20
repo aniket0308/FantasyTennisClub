@@ -39,14 +39,14 @@ const bottomTab = createBottomTabNavigator()
 const StackInstideDashBoard = () => {
     return (
         <stack.Navigator initialRouteName="DashBoard">
-            <stack.Screen options={{ headerShown: false }} name="DashBoard" component={DashBoardHome} />
-            <stack.Screen options={{ headerShown: false }} name="Announcements" component={Announcments} />
-            <stack.Screen options={{ headerShown: false }} name="SelectionDays" component={SelectionDays} />
-            <stack.Screen options={{ headerShown: false }} name="MyPicks" component={MyPicks} />
-            <stack.Screen options={{ headerShown: false }} name="JoinWhatsApp" component={JoinWhatsApp} />
-            <stack.Screen options={{ headerShown: false }} name="Prizes" component={Prizes} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="DashBoard" component={DashBoardHome} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Announcements" component={Announcments} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="SelectionDays" component={SelectionDays} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="MyPicks" component={MyPicks} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="JoinWhatsApp" component={JoinWhatsApp} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Prizes" component={Prizes} />
             <stack.Screen options={{ headerShown: false }} name="Consolation" component={Consolation} />
-            <stack.Screen options={{ headerShown: false }} name="Notification" component={Notification} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Notification" component={Notification} />
         </stack.Navigator>
     )
 }
@@ -57,7 +57,7 @@ const StackInstideSelectionDay = () => {
         <stack.Navigator initialRouteName="SelectionDays">
             <stack.Screen options={{ headerShown: false }} name="SelectionDays" component={SelectionDays} />
             <stack.Screen options={{ headerShown: false }} name="DayPick" component={DayPick} />
-            <stack.Screen options={{ headerShown: false }} name="Notification" component={Notification} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Notification" component={Notification} />
         </stack.Navigator>
     )
 }
@@ -66,9 +66,9 @@ const StackInstideSelectionDay = () => {
 const StackInstideLeaderboard = () => {
     return (
         <stack.Navigator initialRouteName="Leaderboard">
-            <stack.Screen options={{ headerShown: false }} name="Leaderboard" component={LeaderBoard} />
-            <stack.Screen options={{ headerShown: false }} name="Consolation" component={Consolation} />
-            <stack.Screen options={{ headerShown: false }} name="GroupLeaderBoard" component={GroupLeaderBoard} />
+            <stack.Screen options={{ headerShown: false,orientation:'all' }} name="Leaderboard" component={LeaderBoard} />
+            <stack.Screen options={{ headerShown: false,orientation:'all' }} name="Consolation" component={Consolation} />
+            <stack.Screen options={{ headerShown: false,orientation:'all' }} name="GroupLeaderBoard" component={GroupLeaderBoard} />
         </stack.Navigator>
     )
 }
@@ -78,13 +78,13 @@ const StackInstideLeaderboard = () => {
 const StackInsideAccount = () => {
     return (
         <stack.Navigator initialRouteName="Account">
-            <stack.Screen options={{ headerShown: false }} name="Account" component={Account} />
-            <stack.Screen options={{ headerShown: false }} name="ChangePassword" component={ChangePassword} />
-            <stack.Screen options={{ headerShown: false }} name="AboutUs" component={AboutUs} />
-            <stack.Screen options={{ headerShown: false }} name="MemberShip" component={MemberShip} />
-            <stack.Screen options={{ headerShown: false }} name="MyMembership" component={MyMembership} />
-            <stack.Screen options={{ headerShown: false }} name="Notification" component={Notification} />
-            <stack.Screen options={{ headerShown: false }} name="PrivateGroupDetails" component={PrivateGroupDetails} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Account" component={Account} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="ChangePassword" component={ChangePassword} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="AboutUs" component={AboutUs} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="MemberShip" component={MemberShip} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="MyMembership" component={MyMembership} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Notification" component={Notification} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="PrivateGroupDetails" component={PrivateGroupDetails} />
         </stack.Navigator>
     )
 }
@@ -93,8 +93,8 @@ const StackInsideAccount = () => {
 const StackInsideRules = () => {
     return (
         <stack.Navigator initialRouteName="Rules">
-            <stack.Screen options={{ headerShown: false }} name="Rules" component={Rules} />
-            <stack.Screen options={{ headerShown: false }} name="Notifications" component={Notification} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Rules" component={Rules} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Notifications" component={Notification} />
         </stack.Navigator>
     )
 }
@@ -271,12 +271,12 @@ export const RootNavigator = () => {
     return (
         <NavigationContainer>
             <stack.Navigator initialRouteName="Login">
-                <stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
-                <stack.Screen options={{ headerShown: false }} name="SignUp" component={SignUp} />
-                <stack.Screen options={{ headerShown: false }} name="ForgotPassword" component={ForgotPassword} />
-                <stack.Screen options={{ headerShown: false }} name="BuyMemberShip" component={BuyMemberShip} />
-                <stack.Screen options={{ headerShown: false }} name="ChangePassword" component={ChangePassword} />
-                <stack.Screen options={{ headerShown: false }} name="OtpVerification" component={OtpVerification} />
+                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Login" component={Login} />
+                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="SignUp" component={SignUp} />
+                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="ForgotPassword" component={ForgotPassword} />
+                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="BuyMemberShip" component={BuyMemberShip} />
+                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="ChangePassword" component={ChangePassword} />
+                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="OtpVerification" component={OtpVerification} />
             </stack.Navigator>
         </NavigationContainer>
     )
@@ -287,12 +287,12 @@ export const AuthNavigator = () => {
     return (
         <NavigationContainer >
             <stack.Navigator initialRouteName='Home'>
-                <stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
-                <stack.Screen options={{ headerShown: false }} name="Dashboard" component={BottomTab} />
-                <stack.Screen options={{ headerShown: false }} name="BuyMemberShip" component={BuyMemberShip} />
-                <stack.Screen options={{ headerShown: false }} name="PrivateGroupDetails" component={PrivateGroupDetails} />
-                <stack.Screen options={{ headerShown: false }} name="MemberShip" component={MemberShip} />
-                <stack.Screen options={{ headerShown: false }} name="MyMembership" component={MyMembership} />
+                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Home" component={Home} />
+                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Dashboard" component={BottomTab} />
+                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="BuyMemberShip" component={BuyMemberShip} />
+                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="PrivateGroupDetails" component={PrivateGroupDetails} />
+                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="MemberShip" component={MemberShip} />
+                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="MyMembership" component={MyMembership} />
             </stack.Navigator>
         </NavigationContainer >
     )
@@ -304,11 +304,11 @@ export const RegisterFirstTime = () => {
         <NavigationContainer >
             <stack.Navigator initialRouteName='BuyMemberShip'>
                 {/* <stack.Screen options={{ headerShown: false }} name="Home" component={Home} /> */}
-                <stack.Screen options={{ headerShown: false }} name="Dashboard" component={BottomTab} />
-                <stack.Screen options={{ headerShown: false }} name="BuyMemberShip" component={BuyMemberShip} />
-                <stack.Screen options={{ headerShown: false }} name="MyMembership" component={MyMembership} />
-                <stack.Screen options={{ headerShown: false }} name="PrivateGroupDetails" component={PrivateGroupDetails} />
-                <stack.Screen options={{ headerShown: false }} name="MemberShip" component={MemberShip} />
+                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Dashboard" component={BottomTab} />
+                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="BuyMemberShip" component={BuyMemberShip} />
+                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="MyMembership" component={MyMembership} />
+                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="PrivateGroupDetails" component={PrivateGroupDetails} />
+                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="MemberShip" component={MemberShip} />
             </stack.Navigator>
         </NavigationContainer >
     )

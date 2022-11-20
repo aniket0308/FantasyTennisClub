@@ -123,8 +123,13 @@ export const callApi = (path, payload, type, dispatch) => {
                     }
                 }
             }else if(type == 'organizePrivateGroup' || type == 'privateGroup' || 'savePick'){
-                if (json.error == false) {
-                    Alert.alert(json?.message)
+                if(payload.submit !=undefined){
+                    payload.submit()
+                    payload.isLoading()
+                }else{
+                    if (json.error == false) {
+                        Alert.alert(json?.message)
+                    }
                 }
             }
             else {

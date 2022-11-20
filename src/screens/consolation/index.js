@@ -8,12 +8,14 @@ import SearchBar from "../../components/searchBar";
 import Loader from "../../components/loader";
 import consolationStyle from "./style";
 import Snackbar from 'react-native-snackbar';
+import RefreshControlPull from "../../components/refreshComponent";
 
 //Leaderboard Screen
 const Consolation = ({ route, navigation }) => {
     const [leaderBoardTournament, setLeaderBordTournament] = useState()
     const [isLoading, setIsLoading] = useState(false)
     const [searchResult, setSearchResult] = useState('')
+    const [refresh, setRefresh] = useState(false)
 
     const getTournamentLeaderBoard = async () => {
         const token = await AsyncStorage.getItem('@Token')
@@ -33,9 +35,8 @@ const Consolation = ({ route, navigation }) => {
             then((response) => response.json()).
             then((json) => {
                 if (json.success == true) {
+                    setRefresh(false)
                     setIsLoading(true)
-                } else {
-                    setIsLoading(false)
                 }
 
                 if (json.data == null) {
@@ -61,7 +62,7 @@ const Consolation = ({ route, navigation }) => {
                     //   onPress: () => { /* Do something. */ },
                     // },
                 });
-                setIsLoading(false)
+                setRefresh(false)
                 console.log('What Is Error In Get Api', e)
             })
     }
@@ -155,15 +156,15 @@ const Consolation = ({ route, navigation }) => {
                     showBackArrow={true}
                     onPressLeftIcon={() => navigation.goBack()}
                     title={route?.params == undefined ? '' : route?.params}
-                    subTitle={route?.params=='Season Ranking'? '':'View Horizontal'}
-                    titleStyle={{ alignSelf: 'center', fontSize: 22,marginTop:8 }}
+                    subTitle={route?.params == 'Season Ranking' ? '' : 'View Horizontal'}
+                    titleStyle={{ alignSelf: 'center', fontSize: 22, marginTop: 8 }}
                     subTitleStyle={{ alignSelf: 'center', color: constants.colors.darkGreen }}
                     rightIcon={constants.icons.participant}
                     mainViewHeaderStyle={{ paddingBottom: 10, paddingTop: 10 }}
                     resizeMode='stretch'
-                    rightIconStyle={{tintColor:'#23587B', height: widthPercentageToDP(7), width: widthPercentageToDP(7), alignSelf: 'center' }}
+                    rightIconStyle={{ tintColor: '#23587B', height: widthPercentageToDP(7), width: widthPercentageToDP(7), alignSelf: 'center' }}
                     rightIconTitle='Private group'
-                    rightIconTitleStyle={{color:'#23587B',fontFamily:constants.fonts.nuntinoRegular,fontSize:10,fontWeight:'600'}}
+                    rightIconTitleStyle={{ color: '#23587B', fontFamily: constants.fonts.nuntinoRegular, fontSize: 10, fontWeight: '600' }}
                 />
             </View>
             <View style={consolationStyle.mainViewScore}>
@@ -172,6 +173,15 @@ const Consolation = ({ route, navigation }) => {
                 />
                 {isLoading == true
                     ? <FlatList
+                        refreshControl={
+                            <RefreshControlPull
+                                refreshing={refresh}
+                                onRefresh={() => {
+                                    setRefresh(true)
+                                    getTournamentLeaderBoard()
+                                }}
+                            />
+                        }
                         horizontal={true}
                         scrollEnabled={true}
                         bounces={false}

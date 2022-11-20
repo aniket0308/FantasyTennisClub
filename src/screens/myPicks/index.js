@@ -6,12 +6,14 @@ import { utils } from "../../common";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
 import Loader from "../../components/loader";
+import RefreshControlPull from "../../components/refreshComponent";
 import myPicksStyle from "./style";
 
 const MyPicks = ({ route, navigation }) => {
 
     const [myAllPicks, setMyAllPicks] = useState()
     const [isLoading, setIsLoading] = useState(false)
+    const [refresh, setRefresh] = useState(false)
     
     const particularDayPick = myAllPicks?.filter((i) => {
         if (`day ${route.params}` == i.day) {
@@ -33,6 +35,7 @@ const MyPicks = ({ route, navigation }) => {
             then((response) => response.json()).
             then((json) => {
                 if (json.success == true) {
+                    setRefresh(false)
                     setIsLoading(true)
                 }
                 setMyAllPicks(json.data.days)
@@ -48,7 +51,7 @@ const MyPicks = ({ route, navigation }) => {
                     //   onPress: () => { /* Do something. */ },
                     // },
                   });
-                setIsLoading(false)
+                  setRefresh(false)
                 console.log('What Is Error In Get Api', e)
             })
     }
@@ -111,6 +114,15 @@ const MyPicks = ({ route, navigation }) => {
             {
                 isLoading == true
                     ? <FlatList
+                    refreshControl={
+                        <RefreshControlPull
+                        refreshing={refresh}
+                        onRefresh={()=>{
+                            setRefresh(true)
+                            getAllPickFromAPi()
+                        }}
+                        />
+                    }
                         showsVerticalScrollIndicator={false}
                         style={{ marginBottom: 20 }}
                         data={myAllPicks?.length > 0 && route?.params == 'All' ? myAllPicks : route?.params != 'All' && particularDayPick?.length > 0 ? particularDayPick : []}

@@ -16,14 +16,6 @@ const SelectionDays = ({ route, navigation }) => {
     const [days, setDays] = useState()
     const [isLoading, setIsLoading] = useState(false)
 
-    const tempArr = [
-        { day: 14, icon: constants.icons.winnerCup }, { day: 1 }, { day: 2 }, { day: 3 }, { day: 4 }, { day: 5 }, { day: 6 }, { day: 7 }, { day: 8 }, { day: 9 }, { day: 10 },
-        { day: 11 }, { day: 12 }, { day: 13 }
-    ]
-    const tempArr1 = [
-        { day: 1 }, { day: 2 }, { day: 3 }, { day: 4 }, { day: 5 }, { day: 6 }, { day: 7 }, { day: 6 }, { day: 5 }, { day: 4 },
-        { day: 3 }, { day: 2 }, { day: 1 }, { day: 14, icon: constants.icons.winnerCup }
-    ]
     const getDays = async () => {
         const token = await AsyncStorage.getItem('@Token')
         fetch('https://fantasytennisclub.com/admin/api/v1/member-dashboard', {

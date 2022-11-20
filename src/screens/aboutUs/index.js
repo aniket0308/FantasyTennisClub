@@ -7,11 +7,13 @@ import { Header } from "../../components";
 import Loader from "../../components/loader";
 import aboutUsStyle from "./style";
 import RenderHtml from 'react-native-render-html';
+import RefreshControlPull from "../../components/refreshComponent";
 
 const AboutUs = ({ navigation }) => {
 
     const [aboutUs, setAboutUs] = useState()
     const [isLoading, setIsLoading] = useState(false)
+    const [refresh,setRefresh]=useState(false)
 
     //get AboutUs From API
     const getAboutUsFromApi = async () => {
@@ -29,6 +31,7 @@ const AboutUs = ({ navigation }) => {
             then((json) => {
                 if (json.success == true) {
                     setIsLoading(true)
+                    setRefresh(false)
                 }
                 setAboutUs(json)
             }).
@@ -43,7 +46,7 @@ const AboutUs = ({ navigation }) => {
                     //   onPress: () => { /* Do something. */ },
                     // },
                 });
-                setIsLoading(false)
+                setRefresh(false)
                 console.log('What Is Error In Get Api', e)
             })
     }
@@ -65,7 +68,15 @@ const AboutUs = ({ navigation }) => {
             />
             <View style={aboutUsStyle.txtView}>
                 {isLoading == true
-                    ? <ScrollView bounces={false} style={{ flex: 1 }}>
+                    ? <ScrollView
+                     refreshControl={<RefreshControlPull 
+                        refreshing={refresh}
+                         onRefresh={()=>{
+                            setRefresh(true)
+                            getAboutUsFromApi()
+                    }} />} 
+                    bounces={true}
+                     style={{ flex: 1 }}>
                         {/* <Text style={aboutUsStyle.txt}>
                     Fantasy Tennis Club was founded in 2019 by real Tennis Players who enjoy and are passionate about the game of Tennis.
                 </Text>

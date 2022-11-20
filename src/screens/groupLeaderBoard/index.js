@@ -115,10 +115,10 @@ const GroupLeaderBoard = ({ route, navigation }) => {
                 <SafeAreaView />
                 <Header
                     showBackArrow={true}
-                    viewHeaderStyle={{width:"78%"}}
+                    viewHeaderStyle={{width:widthPercentageToDP(78)}}
                     onPressLeftIcon={() => navigation.goBack()}
                     title={'Group Leaderboard'}
-                    titleStyle={{ marginTop: 5 }}
+                    titleStyle={{ marginTop: 8, }}
                     subTitleStyle={{ alignSelf: 'center', color: constants.colors.darkGreen }}
                     mainViewHeaderStyle={{ paddingBottom: 10, paddingTop: 10 }}
                     resizeMode='stretch'

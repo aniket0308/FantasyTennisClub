@@ -20,7 +20,7 @@ export const authSlice = createSlice({
                 referral: actions.payload.referral,
                 navigation: actions.payload.navigation,
                 device_token: actions.payload.deviceToken,
-                platform:actions.payload.platform
+                platform: actions.payload.platform
             }
             //calling Api For Login
             utils.callApi('api/register', registerObj, 'Registered', actions.payload.dispatch)
@@ -32,7 +32,7 @@ export const authSlice = createSlice({
                 email: actions.payload.email,
                 password: actions.payload.password,
                 device_token: actions.payload.deviceToken,
-                platform:actions.payload.platform
+                platform: actions.payload.platform
             }
             //calling Api For Login
             utils.callApi('api/login', loginObj, 'login', actions?.payload?.dispatch)
@@ -75,24 +75,24 @@ export const authSlice = createSlice({
         },
         sendOtp: (state, actions) => {
             //calling Api For sending Otp
-            utils.callApi('api/send-otp', { email: actions.payload.email,navigation:actions.payload.navigation }, 'sendOtp', actions?.payload?.dispatch)
+            utils.callApi('api/send-otp', { email: actions.payload.email, navigation: actions.payload.navigation }, 'sendOtp', actions?.payload?.dispatch)
         },
         verifyOtp: (state, actions) => {
             //calling Api For Verifiying Otp
-            utils.callApi('api/verify-otp', {email:actions.payload.email , otp: actions.payload.otp,navigation:actions.payload.navigation }, 'VerifyOtp', actions?.payload?.dispatch)
+            utils.callApi('api/verify-otp', { email: actions.payload.email, otp: actions.payload.otp, navigation: actions.payload.navigation }, 'VerifyOtp', actions?.payload?.dispatch)
         },
-        savePicks:async(state, actions) => {
-            console.log(actions.payload);
-            const {match1,match2,match3}=actions.payload
-            console.log('aaa',match1);
-           const token =await AsyncStorage.getItem('@Token')
+        savePicks: async (state, actions) => {
+            const { matches,submit,isLoading } = actions.payload
+            let match=matches
+            const token = await AsyncStorage.getItem('@Token')
+            
             //calling Api For Saving Picks
-            utils.callApi('api/v1/tournaments/1/1/save-members-picks', {'40':match1.id,'41':match2.id,'42':match3.id,token}, 'savePick')
+            utils.callApi('api/v1/tournaments/1/1/save-members-picks', {match,token,submit,isLoading}, 'savePick')
         },
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { login, logout, registration, joinPrivateGroup, oganizePrivateGroup, isLoaderVisible, isLoaderNotVisible, sendOtp,verifyOtp,savePicks} = authSlice.actions
+export const { login, logout, registration, joinPrivateGroup, oganizePrivateGroup, isLoaderVisible, isLoaderNotVisible, sendOtp, verifyOtp, savePicks } = authSlice.actions
 
 export default authSlice.reducer

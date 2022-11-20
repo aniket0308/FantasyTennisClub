@@ -1,17 +1,21 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import React, { useEffect, useState } from "react"
-import {FlatList, SafeAreaView, StatusBar, Text, View } from "react-native"
+import { FlatList, SafeAreaView, StatusBar, Text, View } from "react-native"
 import Snackbar from 'react-native-snackbar';
 import { utils } from "../../common";
 import { constants } from "../../common/constant"
 import { Header } from "../../components"
 import Loader from "../../components/loader"
+import RefreshControlPull from "../../components/refreshComponent";
 import announcementStyle from "./style"
 
 const Announcments = ({ navigation }) => {
 
     const [announcements, setAnnouncements] = useState()
     const [isLoading, setIsLoading] = useState(false)
+    const [refresh, setRefresh] = useState(false)
+
+
     const getAllAnnouncements = async () => {
         const token = await AsyncStorage.getItem('@Token')
         //calling api for Announcements
@@ -27,21 +31,22 @@ const Announcments = ({ navigation }) => {
             then((json) => {
                 if (json.success == true) {
                     setIsLoading(true)
+                    setRefresh(false)
                 }
                 setAnnouncements(json.data)
             }).
-            catch(e =>{
+            catch(e => {
                 Snackbar.show({
                     text: e.toString(),
                     duration: 1000,
-                    backgroundColor:'red',
+                    backgroundColor: 'red',
                     // action: {
                     //   text: 'UNDO',
                     //   textColor: 'green',
                     //   onPress: () => { /* Do something. */ },
                     // },
-                  });
-                setIsLoading(false)
+                });
+                setRefresh(false)
                 console.log('What Is Error In Get Api', e)
             })
     }
@@ -74,12 +79,18 @@ const Announcments = ({ navigation }) => {
                 titleStyle={{ marginTop: 5, marginBottom: -10 }}
                 viewHeaderStyle={{ width: '100%' }}
                 rightIcon={constants.icons.shapeBell}
-                onPressRightIcon={()=>utils.navigateTo(navigation,constants.screens.notification)}
+                onPressRightIcon={() => utils.navigateTo(navigation, constants.screens.notification)}
                 onPressLeftIcon={() => navigation.goBack()}
             />
             {
                 isLoading == true
                 && <FlatList
+                    refreshControl={<RefreshControlPull
+                        refreshing={refresh}
+                        onRefresh={() => {
+                            setRefresh(true)
+                            getAllAnnouncements()
+                        }} />}
                     style={{ marginBottom: 20 }}
                     showsVerticalScrollIndicator={false}
                     data={announcements?.length > 0 ? announcements : []}
@@ -89,8 +100,8 @@ const Announcments = ({ navigation }) => {
                 />
             }
             {
-                    isLoading == false
-                    && <Loader/>
+                isLoading == false
+                && <Loader />
             }
         </View>
     )

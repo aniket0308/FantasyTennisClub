@@ -3,11 +3,13 @@ import React, { useEffect, useState } from "react";
 import { Image, SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import Snackbar from "react-native-snackbar";
+import { useDispatch } from "react-redux";
 import { utils } from "../../common";
 import { constants } from "../../common/constant";
 import { Button, Header } from "../../components";
 import CardWithImage from "../../components/cardWithImage";
 import Loader from "../../components/loader";
+import { logout } from "../../redux/slice/auth";
 import forgotPasswordStyle from "../forgetPassword/style";
 import membershipStyle from "../membership/style";
 import myMembershipStyle from "./style";
@@ -16,6 +18,7 @@ const MyMembership = ({ navigation, route }) => {
 
     const [memberShip, setMemberShip] = useState()
     const [isLoading, setIsLoading] = useState(false)
+    const dispatch=useDispatch()
 
     const getAllMemberShips = async () => {
         const token = await AsyncStorage.getItem('@Token')
@@ -94,12 +97,19 @@ const MyMembership = ({ navigation, route }) => {
                         })
                     }
                     {route?.params!==false
-                        // && isLoading == false
-                        && <Button
+                        && isLoading == true
+                        &&<>
+                        <Button
                             titleText={'Update Membership'}
                             btnStyle={{ width: '100%' }}
                             onPress={() => utils.navigateTo(navigation, constants.screens.buyMemberShip)}
                         />
+                        <Button
+                            titleText={'Logout'}
+                            btnStyle={{ width: '100%',marginTop:10 }}
+                            onPress={() => dispatch(logout())}
+                        />
+                        </> 
                     }
                 </View>
             </ScrollView>

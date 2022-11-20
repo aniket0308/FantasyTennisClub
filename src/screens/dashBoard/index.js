@@ -8,6 +8,7 @@ import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
 import Loader from "../../components/loader";
+import RefreshControlPull from "../../components/refreshComponent";
 import PushNotificationService from "../../pushNotification/pushNotification";
 import dashboardStyle from "./style";
 
@@ -16,6 +17,7 @@ const DashBoardHome = ({ navigation }) => {
 
     const [announcements, setAnnouncements] = useState()
     const [isLoading, setIsLoading] = useState(false)
+    const [refresh, setRefresh] = useState(false)
     const [days, setDays] = useState()
     let notification = new PushNotificationService()
     const getAllAnnouncements = async () => {
@@ -33,6 +35,7 @@ const DashBoardHome = ({ navigation }) => {
             then((json) => {
                 if (json.success == true) {
                     setIsLoading(true)
+                    setRefresh(false)
                 }
                 setAnnouncements(json.data)
             }
@@ -48,7 +51,7 @@ const DashBoardHome = ({ navigation }) => {
                     //   onPress: () => { /* Do something. */ },
                     // },
                 });
-                setIsLoading(false)
+                setRefresh(false)
                 console.log('What Is Error In Get Api', e.toString())
             })
     }
@@ -67,6 +70,7 @@ const DashBoardHome = ({ navigation }) => {
             then((json) => {
                 if (json.success == true) {
                     setIsLoading(true)
+                    setRefresh(false)
                 }
                 setDays(json)
             }).
@@ -81,7 +85,7 @@ const DashBoardHome = ({ navigation }) => {
                     //   onPress: () => { /* Do something. */ },
                     // },
                 });
-                setIsLoading(false)
+                setRefresh(false)
                 console.log('What Is Error In Get Api', e)
             })
     }
@@ -169,7 +173,7 @@ const DashBoardHome = ({ navigation }) => {
             >
                 {
                     item.score
-                    && <Text style={dashboardStyle.txtScore}>{days?.data[item?.title == 'Leaderboard'?'leaderboard':item?.title == 'consolation'?'consolation':'season_ranking']}</Text>
+                    && <Text style={dashboardStyle.txtScore}>{days?.data[item?.title == 'Leaderboard' ? 'leaderboard' : item?.title == 'consolation' ? 'consolation' : 'season_ranking']}</Text>
                 }
                 {
                     item.icon
@@ -211,18 +215,21 @@ const DashBoardHome = ({ navigation }) => {
                     rightIconStyle={{ alignSelf: 'center' }}
                 />
                 {isLoading == true
-                    && <ScrollView showsVerticalScrollIndicator={false} bounces={true}>
+                    && <ScrollView
+                        refreshControl={
+                            <RefreshControlPull
+                                onRefresh={() => {
+                                    setRefresh(true)
+                                    getDays()
+                                    getAllAnnouncements()
+                                }}
+                                refreshing={refresh}
+                            />
+                        }
+                        style={{ marginBottom: 20 }}
+                        showsVerticalScrollIndicator={false}
+                        bounces={true}>
                         <View>
-                            {/* <FlatList
-                                style={{ marginBottom: 25 }}
-                                scrollEnabled={false}
-                                data={tempData}
-                                numColumns={2}
-                                contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}
-                                renderItem={renderItem}
-                                key={(item) => item}
-                                keyExtractor={item => item}
-                            /> */}
                             <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-around' }}>
                                 {
                                     tempData.map((item, index) => {
