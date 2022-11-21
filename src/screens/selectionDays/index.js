@@ -88,7 +88,7 @@ const SelectionDays = ({ route, navigation }) => {
                                         style={[
                                             selectionDayStyle.touchItem,
                                             {
-                                                backgroundColor: item.day < 6 ? constants.colors.labelColor : constants.colors.white,
+                                                backgroundColor: item.is_consolation_day == true&&myPicks!=='MY PICKS' ? constants.colors.labelColor : constants.colors.white,
                                                 marginTop: index != 0 || index != 1 ? 20 : 0,
                                                 marginRight: index + 1 % 4 == 0 ? 10 : 10,
                                                 marginLeft: index + 1 % 2 == 0 ? 0 : 10
@@ -100,8 +100,8 @@ const SelectionDays = ({ route, navigation }) => {
                                                     <Image style={{ marginBottom: Platform.OS == "android" ? 10 : 0, height: widthPercentageToDP(10), width: widthPercentageToDP(12) }} source={constants.icons.winnerCup} resizeMode='contain' />
                                                     <Text style={[selectionDayStyle.TxtDay]}>Day 14</Text>
                                                 </> : <>
-                                                    <Text style={[selectionDayStyle.txtWhichDay, { color: item.day < 6 ? constants.colors.white : constants.colors.darkGreen }]} >{item.tournament_day.split(' ')[1]}</Text>
-                                                    <Text style={[selectionDayStyle.TxtDay, { color: item.day < 6 ? constants.colors.white : constants.colors.darkGreen }]}>Day</Text>
+                                                    <Text style={[selectionDayStyle.txtWhichDay, { color: item.is_consolation_day == true&&myPicks!=='MY PICKS' ? constants.colors.white : constants.colors.darkGreen }]} >{item.tournament_day.split(' ')[1]}</Text>
+                                                    <Text style={[selectionDayStyle.TxtDay, { color: item.is_consolation_day == true&&myPicks!=='MY PICKS' ? constants.colors.white : constants.colors.darkGreen }]}>Day</Text>
                                                 </>
                                         }
                                     </TouchableOpacity>

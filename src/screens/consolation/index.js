@@ -30,7 +30,7 @@ const Consolation = ({ route, navigation }) => {
             then((response) => response.json()).
             then((json) => {
                 if (json.success == true) {
-                    setIsLoading(true)
+                    route.params=='Season Ranking'?setIsLoading(true):setIsLoading(false)
                     setRefresh(false)
                 }
                 setLeaderBordTournament(json?.data?.id)
@@ -69,7 +69,6 @@ const Consolation = ({ route, navigation }) => {
             then((response) => response.json()).
             then((json) => {
                 if (json.success == true) {
-                    setRefresh(false)
                     setIsLoading(true)
                 }
 
@@ -103,9 +102,17 @@ const Consolation = ({ route, navigation }) => {
 
 
     useEffect(() => {
-        getTournamentId()
-        getTournamentLeaderBoard()
+            if(route.params=='Season Ranking'){
+                getTournamentLeaderBoard()
+            }else{
+                getTournamentId()
+                getTournamentLeaderBoard()
+            }
     }, [])
+
+    // useEffect(() => {
+    //     getTournamentLeaderBoard()
+    // }, [tournamentId])
 
     //renderLeaderboard function
     const leaderBoard = ({ item, index }) => {
@@ -194,8 +201,8 @@ const Consolation = ({ route, navigation }) => {
                     subTitle={route?.params == 'Season Ranking' ? '' : 'View Horizontal'}
                     titleStyle={{ alignSelf: 'center', fontSize: 22, marginTop: 8 }}
                     subTitleStyle={{ alignSelf: 'center', color: constants.colors.darkGreen }}
-                    rightIcon={constants.icons.participant}
-                    mainViewHeaderStyle={{ paddingBottom: 10, paddingTop: 10 }}
+                    rightIcon={route?.params == 'Season Ranking'?'':constants.icons.participant}
+                    mainViewHeaderStyle={{ paddingBottom: 10, paddingTop: 10,width:route.params=='Season Ranking'?widthPercentageToDP(75):null }}
                     resizeMode='stretch'
                     rightIconStyle={{ tintColor: '#23587B', height: widthPercentageToDP(7), width: widthPercentageToDP(7), alignSelf: 'center' }}
                     rightIconTitle='Private group'
@@ -218,6 +225,7 @@ const Consolation = ({ route, navigation }) => {
                                 refreshing={refresh}
                                 onRefresh={() => {
                                     setRefresh(true)
+                                    getTournamentId()
                                     getTournamentLeaderBoard()
                                 }}
                             />
