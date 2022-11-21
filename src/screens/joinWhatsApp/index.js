@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { Linking, SafeAreaView, StatusBar, Text, View } from "react-native";
+import { Alert, Linking, SafeAreaView, StatusBar, Text, View } from "react-native";
 import RenderHTML from "react-native-render-html";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import Snackbar from "react-native-snackbar";
@@ -112,7 +112,11 @@ const JoinWhatsApp = ({ navigation }) => {
                             <Text style={joinWhatsAppStyle.txtAgree}>I agree to the etiquete</Text>
                             <Button
                             onPress={async()=>{
-                                await Linking.openURL(joinWhatsApp);
+                                if(joinWhatsApp==''){
+                                    Alert.alert("Whatsapp group not created yet")
+                                }else{
+                                    await Linking.openURL(joinWhatsApp);
+                                }
                             }}
                                 titleText={'Join Group'}
                                 btnStyle={{ width: '90%', marginVertical: 10 }}
