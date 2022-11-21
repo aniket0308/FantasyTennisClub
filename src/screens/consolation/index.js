@@ -15,6 +15,41 @@ const Consolation = ({ route, navigation }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [searchResult, setSearchResult] = useState('')
     const [refresh, setRefresh] = useState(false)
+    const [tournamentId,setTournamentId]=useState()
+
+    const getTournamentId=async()=>{
+        const token = await AsyncStorage.getItem('@Token')
+        fetch('https://fantasytennisclub.com/admin/api/v1/member-dashboard', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${token}`
+            },
+        }).
+            then((response) => response.json()).
+            then((json) => {
+                if (json.success == true) {
+                    setIsLoading(true)
+                    setRefresh(false)
+                }
+                setLeaderBordTournament(json?.data?.id)
+            }).
+            catch(e => {
+                Snackbar.show({
+                    text: e.toString(),
+                    duration: 1000,
+                    backgroundColor: 'red',
+                    // action: {
+                    //   text: 'UNDO',
+                    //   textColor: 'green',
+                    //   onPress: () => { /* Do something. */ },
+                    // },
+                });
+                setRefresh(false)
+                console.log('What Is Error In Get Api', e)
+            })
+    }
 
     const getTournamentLeaderBoard = async () => {
         const token = await AsyncStorage.getItem('@Token')
@@ -22,8 +57,8 @@ const Consolation = ({ route, navigation }) => {
             route.params == 'Season Ranking'
                 ? 'https://fantasytennisclub.com/admin/api/v1/season-leaderboard'
                 : route.params == 'Consolation'
-                    ? 'https://fantasytennisclub.com/admin/api/v1/tournaments/1/group/consolation-leaderboard'
-                    : 'https://fantasytennisclub.com/admin/api/v1/tournaments/1/consolation-leaderboard', {
+                    ? `https://fantasytennisclub.com/admin/api/v1/tournaments/${tournamentId}/group/consolation-leaderboard`
+                    : `https://fantasytennisclub.com/admin/api/v1/tournaments/${tournamentId}/consolation-leaderboard`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -68,6 +103,7 @@ const Consolation = ({ route, navigation }) => {
 
 
     useEffect(() => {
+        getTournamentId()
         getTournamentLeaderBoard()
     }, [])
 

@@ -14,11 +14,45 @@ const Prizes = ({ navigation }) => {
     const [participant, setParticipants] = useState()
     const [description, setDescription] = useState()
     const [searchResult, setSearchResult] = useState('')
+    const [tournamentId,setTournamentId]=useState()
+
+    const getTournamentId=async()=>{
+        const token = await AsyncStorage.getItem('@Token')
+        fetch('https://fantasytennisclub.com/admin/api/v1/member-dashboard', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${token}`
+            },
+        }).
+            then((response) => response.json()).
+            then((json) => {
+                if (json.success == true) {
+                    setIsLoading(false)
+                }
+                setTournamentId(json?.data?.id)
+            }).
+            catch(e => {
+                Snackbar.show({
+                    text: e.toString(),
+                    duration: 1000,
+                    backgroundColor: 'red',
+                    // action: {
+                    //   text: 'UNDO',
+                    //   textColor: 'green',
+                    //   onPress: () => { /* Do something. */ },
+                    // },
+                });
+                console.log('What Is Error In Get Api', e)
+            })
+    }
+    
 
     const getAllTournamentParticipants = async () => {
         const token = await AsyncStorage.getItem('@Token')
         //calling api for Getting Participants
-        fetch('https://fantasytennisclub.com/admin/api/v1/tournaments/1/participations', {
+        fetch(`https://fantasytennisclub.com/admin/api/v1/tournaments/${tournamentId}/participations`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -86,9 +120,19 @@ const Prizes = ({ navigation }) => {
     }
 
     useEffect(() => {
-        getAllTournamentParticipants()
-        getDescription()
+        getTournamentId()
+        if(tournamentId!=undefined){
+            getAllTournamentParticipants()
+            getDescription()
+        }
     }, [])
+
+    useEffect(() => {
+        if(tournamentId!=undefined){
+            getAllTournamentParticipants()
+            getDescription()
+        }
+    }, [tournamentId])
 
     return (
         <View style={prizeStyle.mainContiner}>

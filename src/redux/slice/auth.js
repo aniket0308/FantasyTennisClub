@@ -82,12 +82,12 @@ export const authSlice = createSlice({
             utils.callApi('api/verify-otp', { email: actions.payload.email, otp: actions.payload.otp, navigation: actions.payload.navigation }, 'VerifyOtp', actions?.payload?.dispatch)
         },
         savePicks: async (state, actions) => {
-            const { matches,submit,isLoading } = actions.payload
+            const { matches,submit,isLoading,day,tournament_id } = actions.payload
             let match=matches
             const token = await AsyncStorage.getItem('@Token')
             
             //calling Api For Saving Picks
-            utils.callApi('api/v1/tournaments/1/1/save-members-picks', {match,token,submit,isLoading}, 'savePick')
+            utils.callApi(`api/v1/tournaments/${tournament_id}/${day}/save-members-picks`, {match,token,submit,isLoading}, 'savePick')
         },
     },
 })

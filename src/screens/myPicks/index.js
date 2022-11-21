@@ -13,6 +13,39 @@ const MyPicks = ({ route, navigation }) => {
     const [myAllPicks, setMyAllPicks] = useState()
     const [isLoading, setIsLoading] = useState(false)
     const [refresh, setRefresh] = useState(false)
+    const [tournamentId,setTournamentId]=useState()
+
+    const getTournamentId=async()=>{
+        const token = await AsyncStorage.getItem('@Token')
+        fetch('https://fantasytennisclub.com/admin/api/v1/member-dashboard', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${token}`
+            },
+        }).
+            then((response) => response.json()).
+            then((json) => {
+                if (json.success == true) {
+                    setIsLoading(false)
+                }
+                setTournamentId(json?.data?.id)
+            }).
+            catch(e => {
+                Snackbar.show({
+                    text: e.toString(),
+                    duration: 1000,
+                    backgroundColor: 'red',
+                    // action: {
+                    //   text: 'UNDO',
+                    //   textColor: 'green',
+                    //   onPress: () => { /* Do something. */ },
+                    // },
+                });
+                console.log('What Is Error In Get Api', e)
+            })
+    }
 
     const particularDayPick = myAllPicks?.filter((i) => {
         if (`day ${route.params}` == i.day) {
@@ -20,10 +53,11 @@ const MyPicks = ({ route, navigation }) => {
         }
     })
 
+
     const getAllPickFromAPi = async () => {
         const token = await AsyncStorage.getItem('@Token')
         //calling api for FAQS
-        fetch('https://fantasytennisclub.com/admin/api/v1/tournaments/1/my-picks', {
+        fetch(`https://fantasytennisclub.com/admin/api/v1/tournaments/${tournamentId}/my-picks`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -56,8 +90,21 @@ const MyPicks = ({ route, navigation }) => {
     }
 
     useEffect(() => {
-        getAllPickFromAPi()
+        getTournamentId()
+        if(tournamentId!=undefined)
+        {
+            getAllPickFromAPi()
+        }
+
     }, [])
+
+    useEffect(() => {
+        if(tournamentId!=undefined)
+        {
+            getAllPickFromAPi()
+        }
+
+    }, [tournamentId])
 
     const renderAllPickData = ({ item, index }) => {
         return (

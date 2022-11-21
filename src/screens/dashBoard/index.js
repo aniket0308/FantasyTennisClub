@@ -19,8 +19,6 @@ const DashBoardHome = ({ navigation }) => {
     const [refresh, setRefresh] = useState(false)
     const [days, setDays] = useState()
 
-    console.log('what are announcement',announcements);
-
     let notification = new PushNotificationService()
     const getAllAnnouncements = async () => {
         const token = await AsyncStorage.getItem('@Token')

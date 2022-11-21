@@ -177,7 +177,7 @@ const DayPick = ({ route, navigation }) => {
                                 btnStyle={{ width: '100%' }}
                                 onPress={() => {
                                     setIsLoading(false)
-                                    dispatch(savePicks({ matches: objects, submit: () => setIsSubmit(true), isLoading: () => setIsLoading(true) }))
+                                    dispatch(savePicks({ matches: objects, submit: () => setIsSubmit(true), isLoading: () => setIsLoading(true),day:particularDay?.id,tournament_id:particularDay?.tournament_id }))
                                 }}
                             />}
                     </>

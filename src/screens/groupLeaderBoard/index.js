@@ -15,10 +15,45 @@ const GroupLeaderBoard = ({ route, navigation }) => {
     const [leaderBoardTournament, setLeaderBordTournament] = useState()
     const [isLoading, setIsLoading] = useState(false)
     const [searchResult,setSearchResult]=useState('')
+    const [tournamentId,setTournamentId]=useState()
+
+    console.log('tournamentId',tournamentId);
+
+    const getTournamentId=async()=>{
+        const token = await AsyncStorage.getItem('@Token')
+        fetch('https://fantasytennisclub.com/admin/api/v1/member-dashboard', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${token}`
+            },
+        }).
+            then((response) => response.json()).
+            then((json) => {
+                if (json.success == true) {
+                    setIsLoading(true)
+                }
+                setTournamentId(json?.data?.id)
+            }).
+            catch(e => {
+                Snackbar.show({
+                    text: e.toString(),
+                    duration: 1000,
+                    backgroundColor: 'red',
+                    // action: {
+                    //   text: 'UNDO',
+                    //   textColor: 'green',
+                    //   onPress: () => { /* Do something. */ },
+                    // },
+                });
+                console.log('What Is Error In Get Api', e)
+            })
+    }
 
     const getTournamentLeaderBoard = async () => {
         const token = await AsyncStorage.getItem('@Token')
-        fetch('https://fantasytennisclub.com/admin/api/v1/tournaments/1/group/leaderboard', {
+        fetch(`https://fantasytennisclub.com/admin/api/v1/tournaments/${tournamentId}/group/leaderboard`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -51,8 +86,17 @@ const GroupLeaderBoard = ({ route, navigation }) => {
 
 
     useEffect(() => {
-        getTournamentLeaderBoard()
+        getTournamentId()
+        if(tournamentId!=undefined){
+            getTournamentLeaderBoard()
+        }
     }, [])
+
+    useEffect(() => {
+        if(tournamentId!=undefined){
+            getTournamentLeaderBoard()
+        }
+    }, [tournamentId])
 
     //renderLeaderboard function
     const leaderBoard = ({ item, index }) => {
