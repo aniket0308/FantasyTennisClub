@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { widthPercentageToDP } from "react-native-responsive-screen";
 import { constants } from "../../common/constant";
 
 const forgotPasswordStyle=StyleSheet.create({
@@ -6,8 +7,8 @@ const forgotPasswordStyle=StyleSheet.create({
         backgroundColor:constants.colors.backGroundLight
     },
     imgLogo: {
-        height: 180,
-        width: 180,
+        height: widthPercentageToDP(60),
+        width: widthPercentageToDP(60),
         alignSelf: 'center',
         marginBottom: 20
     },

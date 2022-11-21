@@ -10,6 +10,7 @@ import Loader from "../../components/loader";
 import { isLoaderVisible, login } from "../../redux/slice/auth";
 import loginStyle from "./style";
 import messaging, { firebase } from '@react-native-firebase/messaging';
+import forgotPasswordStyle from "../forgetPassword/style";
 console.log(firebase.app.length);
 
 //Login Screen
@@ -54,7 +55,7 @@ const Login = ({ navigation }) => {
                 scrollEnabled={false}
                 contentContainerStyle={{ justifyContent: 'center', height: Dimensions.get('screen').height }}
                 style={[commonStyle.container, loginStyle.container]} >
-                <Image style={loginStyle.imgLogo} resizeMode='contain' source={constants.icons.logo} />
+                <Image style={forgotPasswordStyle.imgLogo} resizeMode='contain' source={constants.icons.logo} />
                 <FloatingInput
                     textIsEditable={!isLoading}
                     // refs={emailRef}

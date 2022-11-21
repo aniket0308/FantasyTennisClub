@@ -1,12 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { FlatList, SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
+import { FlatList, RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
 import Snackbar from 'react-native-snackbar';
 import { utils } from "../../common";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
 import Loader from "../../components/loader";
-import RefreshControlPull from "../../components/refreshComponent";
 import myPicksStyle from "./style";
 
 const MyPicks = ({ route, navigation }) => {
@@ -14,7 +13,7 @@ const MyPicks = ({ route, navigation }) => {
     const [myAllPicks, setMyAllPicks] = useState()
     const [isLoading, setIsLoading] = useState(false)
     const [refresh, setRefresh] = useState(false)
-    
+
     const particularDayPick = myAllPicks?.filter((i) => {
         if (`day ${route.params}` == i.day) {
             return i
@@ -44,14 +43,14 @@ const MyPicks = ({ route, navigation }) => {
                 Snackbar.show({
                     text: e.toString(),
                     duration: 1000,
-                    backgroundColor:'red',
+                    backgroundColor: 'red',
                     // action: {
                     //   text: 'UNDO',
                     //   textColor: 'green',
                     //   onPress: () => { /* Do something. */ },
                     // },
-                  });
-                  setRefresh(false)
+                });
+                setRefresh(false)
                 console.log('What Is Error In Get Api', e)
             })
     }
@@ -104,7 +103,7 @@ const MyPicks = ({ route, navigation }) => {
                 titleStyle={{ alignSelf: 'center', fontSize: 22 }}
                 subTitleStyle={{ alignSelf: 'center', color: constants.colors.darkGreen }}
                 rightIcon={constants.icons.shapeBell}
-                onPressRightIcon={()=>utils.navigateTo(navigation,constants.screens.notification)}
+                onPressRightIcon={() => utils.navigateTo(navigation, constants.screens.notification)}
                 mainViewHeaderStyle={{ paddingBottom: 10, paddingTop: 10 }}
                 resizeMode='stretch'
                 rightIconStyle={{ alignSelf: 'center' }}
@@ -114,15 +113,20 @@ const MyPicks = ({ route, navigation }) => {
             {
                 isLoading == true
                     ? <FlatList
-                    refreshControl={
-                        <RefreshControlPull
-                        refreshing={refresh}
-                        onRefresh={()=>{
-                            setRefresh(true)
-                            getAllPickFromAPi()
-                        }}
-                        />
-                    }
+                        refreshControl={
+                            <RefreshControl
+                                title='Loading...'
+                                tintColor={constants.colors.darkBlue}
+                                colors={[constants.colors.darkBlue]}
+                                titleColor={constants.colors.darkBlue}
+                                size='large'
+                                refreshing={refresh}
+                                onRefresh={() => {
+                                    setRefresh(true)
+                                    getAllPickFromAPi()
+                                }}
+                            />
+                        }
                         showsVerticalScrollIndicator={false}
                         style={{ marginBottom: 20 }}
                         data={myAllPicks?.length > 0 && route?.params == 'All' ? myAllPicks : route?.params != 'All' && particularDayPick?.length > 0 ? particularDayPick : []}

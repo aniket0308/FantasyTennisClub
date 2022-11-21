@@ -1,19 +1,18 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
+import { RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
 import Snackbar from 'react-native-snackbar';
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
 import Loader from "../../components/loader";
 import aboutUsStyle from "./style";
 import RenderHtml from 'react-native-render-html';
-import RefreshControlPull from "../../components/refreshComponent";
 
 const AboutUs = ({ navigation }) => {
 
     const [aboutUs, setAboutUs] = useState()
     const [isLoading, setIsLoading] = useState(false)
-    const [refresh,setRefresh]=useState(false)
+    const [refresh, setRefresh] = useState(false)
 
     //get AboutUs From API
     const getAboutUsFromApi = async () => {
@@ -69,14 +68,20 @@ const AboutUs = ({ navigation }) => {
             <View style={aboutUsStyle.txtView}>
                 {isLoading == true
                     ? <ScrollView
-                     refreshControl={<RefreshControlPull 
-                        refreshing={refresh}
-                         onRefresh={()=>{
-                            setRefresh(true)
-                            getAboutUsFromApi()
-                    }} />} 
-                    bounces={true}
-                     style={{ flex: 1 }}>
+                        refreshControl={
+                            <RefreshControl
+                                title='Loading...'
+                                tintColor={constants.colors.darkBlue}
+                                colors={[constants.colors.darkBlue]}
+                                titleColor={constants.colors.darkBlue}
+                                size='large'
+                                refreshing={refresh}
+                                onRefresh={() => {
+                                    setRefresh(true)
+                                    getAboutUsFromApi()
+                                }} />}
+                        bounces={true}
+                        style={{ flex: 1 }}>
                         {/* <Text style={aboutUsStyle.txt}>
                     Fantasy Tennis Club was founded in 2019 by real Tennis Players who enjoy and are passionate about the game of Tennis.
                 </Text>

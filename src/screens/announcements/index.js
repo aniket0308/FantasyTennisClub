@@ -1,12 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import React, { useEffect, useState } from "react"
-import { FlatList, SafeAreaView, StatusBar, Text, View } from "react-native"
+import { FlatList, RefreshControl, SafeAreaView, StatusBar, Text, View } from "react-native"
 import Snackbar from 'react-native-snackbar';
 import { utils } from "../../common";
 import { constants } from "../../common/constant"
 import { Header } from "../../components"
 import Loader from "../../components/loader"
-import RefreshControlPull from "../../components/refreshComponent";
 import announcementStyle from "./style"
 
 const Announcments = ({ navigation }) => {
@@ -85,12 +84,18 @@ const Announcments = ({ navigation }) => {
             {
                 isLoading == true
                 && <FlatList
-                    refreshControl={<RefreshControlPull
-                        refreshing={refresh}
-                        onRefresh={() => {
-                            setRefresh(true)
-                            getAllAnnouncements()
-                        }} />}
+                    refreshControl={
+                        <RefreshControl
+                            title='Loading...'
+                            tintColor={constants.colors.darkBlue}
+                            colors={[constants.colors.darkBlue]}
+                            titleColor={constants.colors.darkBlue}
+                            size='large'
+                            refreshing={refresh}
+                            onRefresh={() => {
+                                setRefresh(true)
+                                getAllAnnouncements()
+                            }} />}
                     style={{ marginBottom: 20 }}
                     showsVerticalScrollIndicator={false}
                     data={announcements?.length > 0 ? announcements : []}

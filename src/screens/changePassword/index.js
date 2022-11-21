@@ -50,7 +50,7 @@ const ChangePassword = ({ route, navigation }) => {
                     && <></>}
                 {route?.params == 'changePassword'
                     ? <>
-                        <Image style={forgotPasswordStyle.imgLogo} source={constants.icons.logo} />
+                        <Image style={forgotPasswordStyle.imgLogo} resizeMode='contain' source={constants.icons.logo} />
                         <FloatingInput
                             textIsEditable={!isLoading}
                             headerText={'Old Password'}
@@ -84,7 +84,7 @@ const ChangePassword = ({ route, navigation }) => {
                     </>
                     : route?.params?.name == 'forgotPassword'
                         ? <>
-                            <Image style={forgotPasswordStyle.imgLogo} source={constants.icons.logo} />
+                            <Image style={forgotPasswordStyle.imgLogo} resizeMode='contain' source={constants.icons.logo} />
                             <FloatingInput
                                 textIsEditable={!isLoading}
                                 headerText={'New Password'}
@@ -124,7 +124,7 @@ const ChangePassword = ({ route, navigation }) => {
                                 />
                             </>
                             : <>
-                                <Image style={forgotPasswordStyle.imgLogo} source={constants.icons.logo} />
+                                <Image style={forgotPasswordStyle.imgLogo} resizeMode='contain' source={constants.icons.logo} />
                                 <FloatingInput
                                     textIsEditable={!isLoading}
                                     headerText={'Full Name'}

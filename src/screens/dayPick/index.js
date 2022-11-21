@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { FlatList, Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
 import Snackbar from "react-native-snackbar";
 import { useDispatch } from "react-redux";
@@ -8,7 +8,6 @@ import { constants } from "../../common/constant";
 import { Button } from "../../components";
 import CardWithImage from "../../components/cardWithImage";
 import Loader from "../../components/loader";
-import RefreshControlPull from "../../components/refreshComponent";
 import { savePicks } from "../../redux/slice/auth";
 import dayPickStyle from "./style";
 
@@ -19,7 +18,7 @@ const DayPick = ({ route, navigation }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [match, setMatch] = useState()
     const [selectedPlayer, setSelectedPlayer] = useState([])
-    const [refresh,setRefresh]=useState(false)
+    const [refresh, setRefresh] = useState(false)
     const [tempArr, setTempArr] = useState([])
     const [objects, setObjects] = useState({})
     const dispatch = useDispatch()
@@ -130,15 +129,20 @@ const DayPick = ({ route, navigation }) => {
             <Text style={dayPickStyle.txtDay}>Day {route.params <= 9 ? `0${route.params}` : route.params}</Text>
             <Text style={dayPickStyle.txtSubmit}>{isSubmit == false ? 'Submit your picks below' : '‌‌Your Picks have been entered successfully!'}</Text>
             <ScrollView
-            refreshControl={
-                <RefreshControlPull
-                refreshing={refresh}
-                onRefresh={()=>{
-                    setRefresh(true)
-                    getAllMatchesOfParticulatDay()
-                }}
-                />
-            }
+                refreshControl={
+                    <RefreshControl
+                        title='Loading...'
+                        tintColor={constants.colors.darkBlue}
+                        colors={[constants.colors.darkBlue]}
+                        titleColor={constants.colors.darkBlue}
+                        size='large'
+                        refreshing={refresh}
+                        onRefresh={() => {
+                            setRefresh(true)
+                            getAllMatchesOfParticulatDay()
+                        }}
+                    />
+                }
                 scrollEnabled={isSubmit == true ? false : true}
                 bounces={true}
                 style={{ marginBottom: 25 }}

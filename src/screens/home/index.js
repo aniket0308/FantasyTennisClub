@@ -59,7 +59,7 @@ const Home = ({ navigation }) => {
         <>
             <StatusBar backgroundColor={constants.colors.darkGreen} />
             <View style={[commonStyle.container, homeStyle.container]}>
-                <Image source={constants.icons.logo} resizeMode='contain' style={{ width: widthPercentageToDP(80), height: widthPercentageToDP(80) }} />
+                <Image source={constants.icons.logo} resizeMode='contain' style={{ width: widthPercentageToDP(60), height: widthPercentageToDP(60) }} />
                 <Text style={homeStyle.textReadyPlay}>Ready?? Play!!!</Text>
                 <Text style={homeStyle.textTapEnter}>tap here to enter</Text>
                 <Image source={constants.icons.downArrow} resizeMode='contain' />

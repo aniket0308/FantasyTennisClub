@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { FlatList, Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import Snackbar from 'react-native-snackbar';
 import { utils } from "../../common";
@@ -8,7 +8,6 @@ import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
 import Loader from "../../components/loader";
-import RefreshControlPull from "../../components/refreshComponent";
 import PushNotificationService from "../../pushNotification/pushNotification";
 import dashboardStyle from "./style";
 
@@ -19,6 +18,9 @@ const DashBoardHome = ({ navigation }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [refresh, setRefresh] = useState(false)
     const [days, setDays] = useState()
+
+    console.log('what are announcement',announcements);
+
     let notification = new PushNotificationService()
     const getAllAnnouncements = async () => {
         const token = await AsyncStorage.getItem('@Token')
@@ -214,21 +216,27 @@ const DashBoardHome = ({ navigation }) => {
                     resizeMode='contain'
                     rightIconStyle={{ alignSelf: 'center' }}
                 />
-                {isLoading == true
+                {isLoading == true 
                     && <ScrollView
                         refreshControl={
-                            <RefreshControlPull
-                                onRefresh={() => {
-                                    setRefresh(true)
-                                    getDays()
-                                    getAllAnnouncements()
-                                }}
-                                refreshing={refresh}
-                            />
-                        }
+                            <RefreshControl
+                            refreshing={refresh}
+                            onRefresh={()=>{
+                                setRefresh(true)
+                                getAllAnnouncements()
+                                getDays()
+                            }}
+                            title='Loading...'
+                            tintColor={constants.colors.darkBlue}
+                            colors={[constants.colors.darkBlue]}
+                            titleColor={constants.colors.darkBlue}
+                            size='large'
+                        />
+                          }
                         style={{ marginBottom: 20 }}
                         showsVerticalScrollIndicator={false}
-                        bounces={true}>
+                        bounces={true}
+                        >
                         <View>
                             <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-around' }}>
                                 {
@@ -261,7 +269,7 @@ const DashBoardHome = ({ navigation }) => {
                             }
                         </View>
                     </ScrollView >
-                }
+                } 
                 {
                     isLoading == false
                     && <Loader />

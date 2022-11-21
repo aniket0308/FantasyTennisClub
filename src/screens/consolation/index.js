@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { Alert, FlatList, Image, Platform, SafeAreaView, Text, TextInput, View } from "react-native";
+import { Alert, FlatList, Image, Platform, RefreshControl, SafeAreaView, Text, TextInput, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
@@ -8,7 +8,6 @@ import SearchBar from "../../components/searchBar";
 import Loader from "../../components/loader";
 import consolationStyle from "./style";
 import Snackbar from 'react-native-snackbar';
-import RefreshControlPull from "../../components/refreshComponent";
 
 //Leaderboard Screen
 const Consolation = ({ route, navigation }) => {
@@ -174,7 +173,12 @@ const Consolation = ({ route, navigation }) => {
                 {isLoading == true
                     ? <FlatList
                         refreshControl={
-                            <RefreshControlPull
+                            <RefreshControl
+                                title='Loading...'
+                                tintColor={constants.colors.darkBlue}
+                                colors={[constants.colors.darkBlue]}
+                                titleColor={constants.colors.darkBlue}
+                                size='large'
                                 refreshing={refresh}
                                 onRefresh={() => {
                                     setRefresh(true)

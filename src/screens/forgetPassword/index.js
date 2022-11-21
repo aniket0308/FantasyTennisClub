@@ -35,7 +35,7 @@ const ForgotPassword = ({ navigation }) => {
                     showBackArrow={true}
                     onPressLeftIcon={()=>navigation.goBack()}
                 />
-                <Image style={forgotPasswordStyle.imgLogo} source={constants.icons.logo} />
+                <Image style={forgotPasswordStyle.imgLogo} resizeMode='contain' source={constants.icons.logo} />
                 <FloatingInput
                     headerText={'E-mail'}
                     textInputStyle={{ marginTop: 15 }}

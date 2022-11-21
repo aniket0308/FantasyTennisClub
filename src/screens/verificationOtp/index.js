@@ -35,7 +35,7 @@ const OtpVerification = ({ navigation, route }) => {
                     showBackArrow={true}
                     onPressLeftIcon={() => navigation.goBack()}
                 />
-                <Image style={forgotPasswordStyle.imgLogo} source={constants.icons.logo} />
+                <Image style={loginStyle.imgLogo} resizeMode='contain' source={constants.icons.logo} />
                 <OTPInputView
                     style={{ width: '80%', height: 200, alignSelf: 'center' }}
                     autoFocusOnLoad={false}
