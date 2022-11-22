@@ -112,7 +112,7 @@ const JoinWhatsApp = ({ navigation }) => {
                             <Text style={joinWhatsAppStyle.txtAgree}>I agree to the etiquete</Text>
                             <Button
                             onPress={async()=>{
-                                if(joinWhatsApp==''){
+                                if(joinWhatsApp==''||joinWhatsApp==null||joinWhatsApp==undefined){
                                     Alert.alert("Whatsapp group not created yet")
                                 }else{
                                     await Linking.openURL(joinWhatsApp);
