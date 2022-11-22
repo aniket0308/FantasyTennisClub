@@ -62,10 +62,10 @@ const Home = ({ navigation }) => {
                 <Image source={constants.icons.logo} resizeMode='contain' style={{ width: widthPercentageToDP(60), height: widthPercentageToDP(60) }} />
                 <Text style={homeStyle.textReadyPlay}>Ready?? Play!!!</Text>
                 <Text style={homeStyle.textTapEnter}>tap here to enter</Text>
-                <Image source={constants.icons.downArrow} resizeMode='contain' />
+                <Image source={constants.icons.downArrow} style={{height:widthPercentageToDP(20)}} resizeMode='contain' />
                 <TouchableOpacity
                     disabled={isLoading == false ? true : false}
-                    onPress={() => { utils.navigateTo(navigation,isMembership==true?'Dashboard':'MyMembership') }}
+                    onPress={() => { utils.navigateTo(navigation,isMembership==false?'Dashboard':'MyMembership') }}
                     activeOpacity={1}
                     style={homeStyle.tennisBall}>
                     <Image resizeMode="contain" style={{ height: widthPercentageToDP(15), width: widthPercentageToDP(15) }} source={constants.icons.tennisBall} />

@@ -160,14 +160,13 @@ const LeaderBoard = ({ route, navigation }) => {
                     onPressLeftIcon={() => navigation.goBack()}
                     title={'Leaderboard'}
                     subTitle={'View Horizontal'}
-                    titleStyle={{ alignSelf: 'center', fontSize: 22, }}
+                    titleStyle={{ alignSelf: 'center', fontSize: 22 }}
                     subTitleStyle={{ alignSelf: 'center', color: constants.colors.darkGreen }}
                     rightIcon={constants.icons.participant}
-                    mainViewHeaderStyle={{ paddingBottom: 10, paddingTop: 10 }}
+                    mainViewHeaderStyle={{ paddingBottom: 10, paddingTop: 10,paddingRight:5 }}
                     resizeMode='stretch'
                     onPressRightIcon={()=>utils.navigateTo(navigation,'GroupLeaderBoard')}
-                    rightIconStyle={{tintColor:'#23587B', height: widthPercentageToDP(7), width: widthPercentageToDP(7), alignSelf: 'center' }}
-                    rightIconTitle='Private group'
+                    rightIconStyle={{tintColor:'#23587B', height: widthPercentageToDP(16), width: widthPercentageToDP(16), alignSelf: 'center' }}
                     rightIconTitleStyle={{color:'#23587B',fontFamily:constants.fonts.nuntinoRegular,fontSize:10,fontWeight:'600'}}
                 />
             </View>

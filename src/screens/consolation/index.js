@@ -204,8 +204,7 @@ const Consolation = ({ route, navigation }) => {
                     rightIcon={route?.params == 'Season Ranking'?'':constants.icons.participant}
                     mainViewHeaderStyle={{ paddingBottom: 10, paddingTop: 10,width:route.params=='Season Ranking'?widthPercentageToDP(75):null }}
                     resizeMode='stretch'
-                    rightIconStyle={{ tintColor: '#23587B', height: widthPercentageToDP(7), width: widthPercentageToDP(7), alignSelf: 'center' }}
-                    rightIconTitle='Private group'
+                    rightIconStyle={{tintColor:'#23587B', height: widthPercentageToDP(16), width: widthPercentageToDP(16), alignSelf: 'center' ,marginTop:10}}
                     rightIconTitleStyle={{ color: '#23587B', fontFamily: constants.fonts.nuntinoRegular, fontSize: 10, fontWeight: '600' }}
                 />
             </View>
