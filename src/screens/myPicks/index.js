@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { FlatList, RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
+import { widthPercentageToDP } from "react-native-responsive-screen";
 import Snackbar from 'react-native-snackbar';
 import { utils } from "../../common";
 import { constants } from "../../common/constant";
@@ -153,7 +154,7 @@ const MyPicks = ({ route, navigation }) => {
                 onPressRightIcon={() => utils.navigateTo(navigation, constants.screens.notification)}
                 mainViewHeaderStyle={{ paddingBottom: 10, paddingTop: 10 }}
                 resizeMode='stretch'
-                rightIconStyle={{ alignSelf: 'center' }}
+                rightIconStyle={{height:widthPercentageToDP(6),width:widthPercentageToDP(6) ,marginTop:-10}}
                 showBackArrow={true}
                 onPressLeftIcon={() => navigation.goBack()}
             />

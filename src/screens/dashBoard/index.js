@@ -95,30 +95,6 @@ const DashBoardHome = ({ navigation }) => {
         getAllAnnouncements()
     }, [])
 
-    const tempInsightsData = [
-        {
-            insights: 'Insights for Wimbledon Day 12:',
-            text: `•N. DJOKOVIC is favorite with 92.4% of members picks while C. NORRIE got 7.6%
-•E. MERTENS/S. ZHANG was chosen 70.6% and D. COLLINS/D. KRAWCZYK 29.4%
-•B. KREJCIKOVA/K. SINIAKOVA received 77.1% support and L. KICHENOK/J. OSTAPENKO earned 22.9%
-            `
-        },
-        {
-            insights: 'Insights for Wimbledon Day 11:',
-            text: `•N. DJOKOVIC is favorite with 92.4% of members picks while C. NORRIE got 7.6%
-•E. MERTENS/S. ZHANG was chosen 70.6% and D. COLLINS/D. KRAWCZYK 29.4%
-•B. KREJCIKOVA/K. SINIAKOVA received 77.1% support and L. KICHENOK/J. OSTAPENKO earned 22.9%
-            `
-        },
-        {
-            insights: 'Insights for Wimbledon Day 10:',
-            text: `•N. DJOKOVIC is favorite with 92.4% of members picks while C. NORRIE got 7.6%
-•E. MERTENS/S. ZHANG was chosen 70.6% and D. COLLINS/D. KRAWCZYK 29.4%
-•B. KREJCIKOVA/K. SINIAKOVA received 77.1% support and L. KICHENOK/J. OSTAPENKO earned 22.9%
-            `
-        }
-    ]
-
     const tempData = [
         {
             score: '105 / 23',
@@ -160,7 +136,7 @@ const DashBoardHome = ({ navigation }) => {
                                 : item.title == 'PRIZES'
                                     ? constants.screens.prizes
                                     : item.title == 'Leaderboard'
-                                        ? constants.screens.leaderBoard
+                                        ? 'Leaderboard'
                                         : 'Consolation',
                         item.title
                     )
@@ -212,7 +188,7 @@ const DashBoardHome = ({ navigation }) => {
                     onPressRightIcon={() => utils.navigateTo(navigation, constants.screens.notification)}
                     mainViewHeaderStyle={{ paddingBottom: 10, paddingTop: 10 }}
                     resizeMode='contain'
-                    rightIconStyle={{ alignSelf: 'center' }}
+                    rightIconStyle={{height:widthPercentageToDP(6),width:widthPercentageToDP(6) ,marginTop:-10}}
                 />
                 {isLoading == true 
                     && <ScrollView

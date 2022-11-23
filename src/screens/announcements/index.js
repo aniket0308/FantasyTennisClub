@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import React, { useEffect, useState } from "react"
 import { FlatList, RefreshControl, SafeAreaView, StatusBar, Text, View } from "react-native"
+import { widthPercentageToDP } from "react-native-responsive-screen";
 import Snackbar from 'react-native-snackbar';
 import { utils } from "../../common";
 import { constants } from "../../common/constant"
@@ -80,6 +81,7 @@ const Announcments = ({ navigation }) => {
                 rightIcon={constants.icons.shapeBell}
                 onPressRightIcon={() => utils.navigateTo(navigation, constants.screens.notification)}
                 onPressLeftIcon={() => navigation.goBack()}
+                rightIconStyle={{height:widthPercentageToDP(6),width:widthPercentageToDP(6)}}
             />
             {
                 isLoading == true

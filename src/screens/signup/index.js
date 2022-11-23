@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StatusBar, Dimensions, SafeAreaView, Platform } from 'react-native'
+import { View, Text, StatusBar, Dimensions, SafeAreaView, Platform, TouchableOpacity } from 'react-native'
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useDispatch, useSelector } from "react-redux";
 import { utils } from "../../common";
@@ -126,7 +126,9 @@ const SignUp = ({ navigation }) => {
             {isLoading == true && <Loader />}
             <View style={signUpStyle.footer}>
                 <Text style={signUpStyle.txtNewToFantasy} >Already have a Fantasy Tennis Club? </Text>
-                <Text onPress={() => isLoading == false ? utils.navigateTo(navigation, constants.screens.login) : ''} style={signUpStyle.txtSignUp}>Login</Text>
+                <TouchableOpacity onPress={() => isLoading == false ? utils.navigateTo(navigation, constants.screens.login) : ''} >
+                <Text style={signUpStyle.txtSignUp}>Login</Text>
+                </TouchableOpacity>
             </View>
         </>
     )

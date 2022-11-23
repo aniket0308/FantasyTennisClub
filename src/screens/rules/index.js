@@ -8,6 +8,7 @@ import Loader from "../../components/loader";
 import rulesStyle from "./style";
 import Snackbar from 'react-native-snackbar';
 import RenderHtml from 'react-native-render-html';
+import { widthPercentageToDP } from "react-native-responsive-screen";
 
 //Rules Screen
 const Rules = ({ navigation }) => {
@@ -130,6 +131,7 @@ const Rules = ({ navigation }) => {
                 title={'Rules and FAQs'}
                 titleStyle={{ marginTop: 5, marginBottom: -10 }}
                 rightIcon={constants.icons.shapeBell}
+                rightIconStyle={{height:widthPercentageToDP(6),width:widthPercentageToDP(6)}}
                 onPressRightIcon={() => utils.navigateTo(navigation, constants.screens.notification)}
                 onPressLeftIcon={() => navigation.goBack()}
             />

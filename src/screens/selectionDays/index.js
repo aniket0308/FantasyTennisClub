@@ -73,6 +73,7 @@ const SelectionDays = ({ route, navigation }) => {
                 titleStyle={{ fontSize: 22,marginTop:10 }}
                 viewHeaderStyle={{ width: '100%' }}
                 rightIcon={constants.icons.shapeBell}
+                rightIconStyle={{height:widthPercentageToDP(6),width:widthPercentageToDP(6) ,marginTop:-10}}
                 onPressRightIcon={() => utils.navigateTo(navigation, constants.screens.notification)}
                 onPressLeftIcon={() => navigation.goBack()}
             />
@@ -84,7 +85,7 @@ const SelectionDays = ({ route, navigation }) => {
                             && days?.data?.days.reverse().map((item, index) => {
                                 return (
                                     <TouchableOpacity
-                                        onPress={() => utils.navigateTo(navigation, route.params == undefined ? constants.screens.dayPick : constants.screens.myPicks, item.tournament_day.split(' ')[1])}
+                                        onPress={() => utils.navigateTo(navigation,item?.is_lock_form==1?'LockedScreen':route.params == undefined ? constants.screens.dayPick : constants.screens.myPicks,item?.is_lock_form==1?{item,tournament_day:item.tournament_day.split(' ')[1]}:item.tournament_day.split(' ')[1])}
                                         style={[
                                             selectionDayStyle.touchItem,
                                             {

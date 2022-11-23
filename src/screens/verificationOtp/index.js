@@ -10,6 +10,7 @@ import OTPInputView from "@twotalltotems/react-native-otp-input";
 import { useDispatch, useSelector } from "react-redux";
 import { isLoaderVisible, verifyOtp } from "../../redux/slice/auth";
 import Loader from "../../components/loader";
+import verificationStyle from "./style";
 
 //OtpVerification Screen
 const OtpVerification = ({ navigation, route }) => {
@@ -35,7 +36,7 @@ const OtpVerification = ({ navigation, route }) => {
                     showBackArrow={true}
                     onPressLeftIcon={() => navigation.goBack()}
                 />
-                <Image style={loginStyle.imgLogo} resizeMode='contain' source={constants.icons.logo} />
+                <Image style={verificationStyle.imgLogo} resizeMode='contain' source={constants.icons.logo} />
                 <OTPInputView
                     style={{ width: '80%', height: 200, alignSelf: 'center' }}
                     autoFocusOnLoad={false}

@@ -30,6 +30,7 @@ import Consolation from "../screens/consolation"
 import MyMembership from "../screens/myMembership"
 import GroupLeaderBoard from "../screens/groupLeaderBoard"
 import OtpVerification from "../screens/verificationOtp"
+import LockedScreen from "../screens/lockedScreen"
 
 //Stacks Of Screen To Navigate
 const stack = createNativeStackNavigator()
@@ -47,6 +48,7 @@ const StackInstideDashBoard = () => {
             <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Prizes" component={Prizes} />
             <stack.Screen options={{ headerShown: false }} name="Consolation" component={Consolation} />
             <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Notification" component={Notification} />
+            <stack.Screen options={{ headerShown: false,orientation:'all' }} name="Leaderboard" component={LeaderBoard} />
         </stack.Navigator>
     )
 }
@@ -58,6 +60,7 @@ const StackInstideSelectionDay = () => {
             <stack.Screen options={{ headerShown: false }} name="SelectionDays" component={SelectionDays} />
             <stack.Screen options={{ headerShown: false }} name="DayPick" component={DayPick} />
             <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Notification" component={Notification} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="LockedScreen" component={LockedScreen} />
         </stack.Navigator>
     )
 }
@@ -65,10 +68,10 @@ const StackInstideSelectionDay = () => {
 //Stack inside Leaderboard Tab
 const StackInstideLeaderboard = () => {
     return (
-        <stack.Navigator initialRouteName="Leaderboard">
-            <stack.Screen options={{ headerShown: false,orientation:'all' }} name="Leaderboard" component={LeaderBoard} />
+        <stack.Navigator initialRouteName="GroupLeaderBoard">
             <stack.Screen options={{ headerShown: false,orientation:'all' }} name="Consolation" component={Consolation} />
             <stack.Screen options={{ headerShown: false,orientation:'all' }} name="GroupLeaderBoard" component={GroupLeaderBoard} />
+            <stack.Screen options={{ headerShown: false,orientation:'all' }} name="LeaderBoard" component={LeaderBoard} />
         </stack.Navigator>
     )
 }
@@ -110,7 +113,7 @@ const BottomTab = ({ navigation }) => {
                     options={{
                         headerShown: false, tabBarIcon: ({ focused }) => {
                             return (
-                                <View>
+                                <View style={{paddingVertical:20}}>
                                     <Image
                                         source={constants.icons.home}
                                         resizeMode='contain'
@@ -141,7 +144,7 @@ const BottomTab = ({ navigation }) => {
                     options={{
                         headerShown: false, tabBarIcon: ({ focused }) => {
                             return (
-                                <View>
+                                <View style={{paddingVertical:20}}>
                                     <Image
                                         source={constants.icons.selectionDays}
                                         resizeMode='contain'
@@ -196,13 +199,13 @@ const BottomTab = ({ navigation }) => {
                             )
                         }
                     }}
-                    name="LeaderBoard"
+                    name="GroupLeaderBoard"
                     component={StackInstideLeaderboard} />
                 <bottomTab.Screen
                     options={{
                         headerShown: false, tabBarIcon: ({ focused }) => {
                             return (
-                                <View>
+                                <View style={{paddingVertical:20}}>
                                     <Image
                                         source={constants.icons.rules}
                                         style={{
@@ -233,7 +236,7 @@ const BottomTab = ({ navigation }) => {
                     options={{
                         headerShown: false, tabBarIcon: ({ focused }) => {
                             return (
-                                <View style={{ left: -10 }}>
+                                <View style={{paddingVertical:20,marginLeft:-10}}>
                                     <Image
                                         source={constants.icons.account}
                                         style={{

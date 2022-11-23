@@ -4,6 +4,7 @@ import { FlatList, Image, RefreshControl, SafeAreaView, ScrollView, StatusBar, T
 import SelectDropdown from "react-native-select-dropdown";
 import Snackbar from "react-native-snackbar";
 import { useDispatch } from "react-redux";
+import { utils } from "../../common";
 import { constants } from "../../common/constant";
 import { Button } from "../../components";
 import CardWithImage from "../../components/cardWithImage";
@@ -195,6 +196,15 @@ const DayPick = ({ route, navigation }) => {
                                 )
                             })
                         }
+                         {isLoading == true
+                            && <Button
+                                // disabled={}
+                                titleText={'Home'}
+                                btnStyle={{ width: '100%' }}
+                                onPress={() => {
+                                    utils.navigateTo(navigation,constants.screens.dashBoard)
+                                }}
+                            />}
                     </>
                 }
             </ScrollView >
