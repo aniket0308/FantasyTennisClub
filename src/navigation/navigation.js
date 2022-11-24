@@ -31,6 +31,7 @@ import MyMembership from "../screens/myMembership"
 import GroupLeaderBoard from "../screens/groupLeaderBoard"
 import OtpVerification from "../screens/verificationOtp"
 import LockedScreen from "../screens/lockedScreen"
+import seasonLeaderBoard from "../screens/seasonLeaderBoard"
 
 //Stacks Of Screen To Navigate
 const stack = createNativeStackNavigator()
@@ -68,10 +69,11 @@ const StackInstideSelectionDay = () => {
 //Stack inside Leaderboard Tab
 const StackInstideLeaderboard = () => {
     return (
-        <stack.Navigator initialRouteName="GroupLeaderBoard">
+        <stack.Navigator initialRouteName="seasonLeaderBoard">
             <stack.Screen options={{ headerShown: false,orientation:'all' }} name="Consolation" component={Consolation} />
             <stack.Screen options={{ headerShown: false,orientation:'all' }} name="GroupLeaderBoard" component={GroupLeaderBoard} />
             <stack.Screen options={{ headerShown: false,orientation:'all' }} name="LeaderBoard" component={LeaderBoard} />
+            <stack.Screen options={{ headerShown: false,orientation:'all' }} name="seasonLeaderBoard" component={seasonLeaderBoard} />
         </stack.Navigator>
     )
 }

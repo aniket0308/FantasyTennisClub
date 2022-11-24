@@ -5,6 +5,7 @@ import Snackbar from "react-native-snackbar";
 import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
+import Loader from "../../components/loader";
 import notificationStyle from "./style";
 
 const Notification = ({ navigation }) => {
@@ -63,7 +64,7 @@ const Notification = ({ navigation }) => {
                         <Text style={[notificationStyle.txtFtc, { color: constants.colors.labelColor, fontWeight: '400', fontSize: 12, marginTop: 5 }]}>{item?.description}</Text>
                     </View>
                 </View>
-                <Text style={[notificationStyle.txtFtc, { color: constants.colors.black, fontWeight: '400', fontSize: 12, marginTop: 5, alignSelf: 'center' }]}>5 minutes</Text>
+                <Text style={[notificationStyle.txtFtc, { color: constants.colors.black, fontWeight: '400', fontSize: 12, marginTop: 5, alignSelf: 'center' }]}>{item?.time_ago}</Text>
             </View>
         )
     }
@@ -80,15 +81,18 @@ const Notification = ({ navigation }) => {
                 onPressLeftIcon={() => navigation.goBack()}
             />
             {
-                notification?.data == null || notification?.data?.length == 0 || notification?.data == undefined
-                    ? <Text>No Notification</Text>
-                    : <FlatList
-                        showsVerticalScrollIndicator={false}
-                        bounces={false}
-                        style={notificationStyle.flatListView}
-                        data={notification?.data}
-                        renderItem={renderNotification}
-                    />
+
+                isLoading == false
+                    ? <Loader />
+                    : notification?.data == null || notification?.data?.length == 0 || notification?.data == undefined
+                        ? <Text>No Notification</Text>
+                        : <FlatList
+                            showsVerticalScrollIndicator={false}
+                            bounces={false}
+                            style={notificationStyle.flatListView}
+                            data={notification?.data}
+                            renderItem={renderNotification}
+                        />
             }
         </View>
     )
