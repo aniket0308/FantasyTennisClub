@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { FlatList, Image, Platform, SafeAreaView, Text, TextInput, View } from "react-native";
+import { FlatList, Image, Platform, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import Snackbar from 'react-native-snackbar';
 import { constants } from "../../common/constant";
@@ -188,9 +188,9 @@ const LeaderBoard = ({ route, navigation }) => {
                     />
                     : <Loader />
                 }
-                <View style={leaderBoardStyle.ViewConsolation}>
-                    <Text onPress={() => utils.navigateTo(navigation,'Consolation','Consolation')} style={leaderBoardStyle.consolation}>Consolation</Text>
-                </View>
+                <TouchableOpacity onPress={() => utils.navigateTo(navigation,'Consolation','Consolation')} style={leaderBoardStyle.ViewConsolation}>
+                    <Text style={leaderBoardStyle.consolation}>Consolation</Text>
+                </TouchableOpacity>
             </View>
         </>
     )

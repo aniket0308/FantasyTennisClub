@@ -45,7 +45,7 @@ const ChangePassword = ({ route, navigation }) => {
                 scrollEnabled={true}
                 showsVerticalScrollIndicator={false}
                 bounces={false}
-                style={[commonStyle.container, { backgroundColor: constants.colors.backGroundLight }]} >
+                style={[commonStyle.container, { backgroundColor: constants.colors.backGroundLight,marginBottom:20 }]} >
                 {route?.params != 'contactUs'
                     && <></>}
                 {route?.params == 'changePassword'

@@ -188,29 +188,29 @@ const DashBoardHome = ({ navigation }) => {
                     onPressRightIcon={() => utils.navigateTo(navigation, constants.screens.notification)}
                     mainViewHeaderStyle={{ paddingBottom: 10, paddingTop: 10 }}
                     resizeMode='contain'
-                    rightIconStyle={{height:widthPercentageToDP(6),width:widthPercentageToDP(6) ,marginTop:-10}}
+                    rightIconStyle={{ height: widthPercentageToDP(6), width: widthPercentageToDP(6), marginTop: -10 }}
                 />
-                {isLoading == true 
+                {isLoading == true
                     && <ScrollView
                         refreshControl={
                             <RefreshControl
-                            refreshing={refresh}
-                            onRefresh={()=>{
-                                setRefresh(true)
-                                getAllAnnouncements()
-                                getDays()
-                            }}
-                            title='Loading...'
-                            tintColor={constants.colors.darkBlue}
-                            colors={[constants.colors.darkBlue]}
-                            titleColor={constants.colors.darkBlue}
-                            size='large'
-                        />
-                          }
+                                refreshing={refresh}
+                                onRefresh={() => {
+                                    setRefresh(true)
+                                    getAllAnnouncements()
+                                    getDays()
+                                }}
+                                title='Loading...'
+                                tintColor={constants.colors.darkBlue}
+                                colors={[constants.colors.darkBlue]}
+                                titleColor={constants.colors.darkBlue}
+                                size='large'
+                            />
+                        }
                         style={{ marginBottom: 20 }}
                         showsVerticalScrollIndicator={false}
                         bounces={true}
-                        >
+                    >
                         <View>
                             <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-around' }}>
                                 {
@@ -223,7 +223,9 @@ const DashBoardHome = ({ navigation }) => {
                             </View>
                             <View style={[commonStyle.row, { justifyContent: 'space-between', marginVertical: 20, alignItems: 'center' }]}>
                                 <Text style={dashboardStyle.txtGeneral}>General Anouncements:</Text>
-                                <Text onPress={() => utils.navigateTo(navigation, constants.screens.announcements)} style={[dashboardStyle.txtGeneral, { fontSize: 16 }]}>See All</Text>
+                                <TouchableOpacity onPress={() => utils.navigateTo(navigation, constants.screens.announcements)}>
+                                    <Text style={[dashboardStyle.txtGeneral, { fontSize: 16 }]}>See All</Text>
+                                </TouchableOpacity>
                             </View>
                             {/* <FlatList
                                 bounces={false}
@@ -243,7 +245,7 @@ const DashBoardHome = ({ navigation }) => {
                             }
                         </View>
                     </ScrollView >
-                } 
+                }
                 {
                     isLoading == false
                     && <Loader />
