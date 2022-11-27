@@ -3,137 +3,30 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
 import RenderHTML from "react-native-render-html";
 import { widthPercentageToDP } from "react-native-responsive-screen";
+import { useDispatch } from "react-redux";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
 import Loader from "../../components/loader";
 import SearchBar from "../../components/searchBar";
+import { getTournamentParticipants } from "../../redux/slice/auth";
 import prizeStyle from "./style";
 
-const Prizes = ({ navigation }) => {
+const Prizes = ({ navigation,route }) => {
 
     const [isLoading, setIsLoading] = useState(false)
-    const [participant, setParticipants] = useState()
-    const [description, setDescription] = useState()
+    const [description, setDescription] = useState(route?.params)
     const [searchResult, setSearchResult] = useState('')
-    const [tournamentId,setTournamentId]=useState()
-
-    const getTournamentId=async()=>{
-        const token = await AsyncStorage.getItem('@Token')
-        fetch('https://fantasytennisclub.com/admin/api/v1/member-dashboard', {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "Authorization": `Bearer ${token}`
-            },
-        }).
-            then((response) => response.json()).
-            then((json) => {
-                if (json.success == true) {
-                    setIsLoading(false)
-                }
-                setTournamentId(json?.data?.id)
-            }).
-            catch(e => {
-                Snackbar.show({
-                    text: e.toString(),
-                    duration: 1000,
-                    backgroundColor: 'red',
-                    // action: {
-                    //   text: 'UNDO',
-                    //   textColor: 'green',
-                    //   onPress: () => { /* Do something. */ },
-                    // },
-                });
-                console.log('What Is Error In Get Api', e)
-            })
-    }
-    
+    const [data,setData]=useState()
+    const dispatch=useDispatch()
 
     const getAllTournamentParticipants = async () => {
-        const token = await AsyncStorage.getItem('@Token')
-        //calling api for Getting Participants
-        fetch(`https://fantasytennisclub.com/admin/api/v1/tournaments/${tournamentId}/participations`, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "Authorization": `Bearer ${token}`
-            },
-        }).
-            then((response) => response.json()).
-            then((json) => {
-                if (json.success == true) {
-                    setIsLoading(true)
-                }
-                setParticipants(json.data)
-            }
-            ).
-            catch(e => {
-                Snackbar.show({
-                    text: e.toString(),
-                    duration: 1000,
-                    backgroundColor: 'red',
-                    // action: {
-                    //   text: 'UNDO',
-                    //   textColor: 'green',
-                    //   onPress: () => { /* Do something. */ },
-                    // },
-                });
-                setIsLoading(false)
-                console.log('What Is Error In Get Api', e.toString())
-            })
-    }
-
-    const getDescription = async () => {
-        const token = await AsyncStorage.getItem('@Token')
-        //calling api for Getting Participants
-        fetch('https://fantasytennisclub.com/admin/api/v1/member-dashboard', {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "Authorization": `Bearer ${token}`
-            },
-        }).
-            then((response) => response.json()).
-            then((json) => {
-                if (json.success == true) {
-                    setIsLoading(true)
-                }
-                setDescription(json?.data?.description)
-            }
-            ).
-            catch(e => {
-                Snackbar.show({
-                    text: e.toString(),
-                    duration: 1000,
-                    backgroundColor: 'red',
-                    // action: {
-                    //   text: 'UNDO',
-                    //   textColor: 'green',
-                    //   onPress: () => { /* Do something. */ },
-                    // },
-                });
-                setIsLoading(false)
-                console.log('What Is Error In Get Api', e.toString())
-            })
+        const tournamentId = await AsyncStorage.getItem('@TournamentId')
+        dispatch(getTournamentParticipants({setIsLoading,setData,tournamentId}))
     }
 
     useEffect(() => {
-        getTournamentId()
-        if(tournamentId!=undefined){
             getAllTournamentParticipants()
-            getDescription()
-        }
     }, [])
-
-    useEffect(() => {
-        if(tournamentId!=undefined){
-            getAllTournamentParticipants()
-            getDescription()
-        }
-    }, [tournamentId])
 
     return (
         <View style={prizeStyle.mainContiner}>
@@ -156,8 +49,8 @@ const Prizes = ({ navigation }) => {
                     />
                     <View style={{ marginTop: 10, marginLeft: 10 }}>
                         {
-                            participant?.length > 0
-                            && participant.map((item) => {
+                            data?.data?.length > 0
+                            && data?.data.map((item) => {
                                 if (searchResult != '') {
                                     if (item?.name.toLowerCase().includes(searchResult)) {
                                         return <Text style={prizeStyle.txtName}>{item?.name}</Text>
@@ -168,7 +61,7 @@ const Prizes = ({ navigation }) => {
                             })
                         }
                         {
-                            description
+                            description && isLoading==true
                             && <RenderHTML
                                 source={{ html: `${description}` }}
                             />

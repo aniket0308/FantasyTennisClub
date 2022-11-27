@@ -83,7 +83,7 @@ const Account = ({ navigation }) => {
                         tempArr.map((item, index) => {
                             return (
                                 <CardWithImage
-                                    disabled={isLoading == false ? false : true}
+                                    // disabled={isLoading == false ? false : true}
                                     onPress={() => {
                                         item == 'Change password'
                                             ? utils.navigateTo(navigation, constants.screens.changePassword, 'changePassword')

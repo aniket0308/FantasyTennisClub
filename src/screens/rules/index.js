@@ -9,85 +9,26 @@ import rulesStyle from "./style";
 import Snackbar from 'react-native-snackbar';
 import RenderHtml from 'react-native-render-html';
 import { widthPercentageToDP } from "react-native-responsive-screen";
+import { useDispatch } from "react-redux";
+import { getFaq, getRules } from "../../redux/slice/auth";
 
 //Rules Screen
 const Rules = ({ navigation }) => {
 
-    const [rules, setRules] = useState([])
-    const [faq, setFaq] = useState([])
-    const [rulesLoading, setRulesLoading] = useState(false)
+    const [faq, setFaq] = useState()
     const [isLoading, setIsLoading] = useState(false)
     const [refresh, setRefresh] = useState(false)
+    const [data,setData]=useState()
+    const dispatch=useDispatch()
 
     //Function For Getting Rules From Api
     const getRulesFromApi = async () => {
-        const token = await AsyncStorage.getItem('@Token')
-        fetch('https://fantasytennisclub.com/admin/api/v1/page/rules', {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "Authorization": `Bearer ${token}`
-            },
-        }).
-            then((response) => response.json()).
-            then((json) => {
-                if (json.success == true) {
-                    setRefresh(false)
-                    setRulesLoading(true)
-                }
-                setRules(json)
-            }).
-            catch(e => {
-                Snackbar.show({
-                    text: e.toString(),
-                    duration: 1000,
-                    backgroundColor: 'red',
-                    // action: {
-                    //   text: 'UNDO',
-                    //   textColor: 'green',
-                    //   onPress: () => { /* Do something. */ },
-                    // },
-                });
-                setRefresh(false)
-                console.log('What Is Error In Get Api', e)
-            })
+        dispatch(getRules({setIsLoading,setData,setRefresh}))
     }
 
     //get Faq From Api
     const getFaqFromApi = async () => {
-        const token = await AsyncStorage.getItem('@Token')
-        //calling api for FAQS
-        fetch('https://fantasytennisclub.com/admin/api/v1/page/faqs', {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "Authorization": `Bearer ${token}`
-            },
-        }).
-            then((response) => response.json()).
-            then((json) => {
-                if (json.success == true) {
-                    setRefresh(false)
-                    setIsLoading(true)
-                }
-                setFaq(json)
-            }).
-            catch(e => {
-                Snackbar.show({
-                    text: e.toString(),
-                    duration: 1000,
-                    backgroundColor: 'red',
-                    // action: {
-                    //   text: 'UNDO',
-                    //   textColor: 'green',
-                    //   onPress: () => { /* Do something. */ },
-                    // },
-                });
-                setRefresh(false)
-                console.log('What Is Error In Get Api', e)
-            })
+        dispatch(getFaq({setIsLoading,setFaq,setRefresh}))
     }
 
     useEffect(() => {
@@ -99,12 +40,10 @@ const Rules = ({ navigation }) => {
     const RenderRules = () => {
         return (
             <View style={[rulesStyle.viewRules, { backgroundColor: '#F5F8FA' }]}>
-                <Text style={rulesStyle.txtRules} >{rules?.data?.title}</Text>
+                <Text style={rulesStyle.txtRules} >{data?.data?.title}</Text>
                 <RenderHtml
-                    source={{ html: `${rules?.data?.content}` }}
+                    source={{ html: `${data?.data?.content}` }}
                 />
-                {/* <Text
-                    style={[rulesStyle.txtText, { textAlign: 'auto' }]} >{rules?.data?.content}</Text> */}
             </View>
         )
     }
@@ -112,12 +51,10 @@ const Rules = ({ navigation }) => {
     const RenderFaq = () => {
         return (
             <View style={[rulesStyle.viewRules, { backgroundColor: '#F5F8FA', marginTop: 20 }]}>
-                <Text style={rulesStyle.txtRules} >Frequently Asked Questions:</Text>
+                <Text style={rulesStyle.txtRules} >{faq?.data?.title}</Text>
                 <RenderHtml
                     source={{ html: `${faq?.data?.content}` }}
                 />
-                {/* <Text
-                    style={[rulesStyle.txtText, { textAlign: 'auto' }]} >{faq?.data?.content}</Text> */}
             </View>
         )
     }
@@ -135,7 +72,7 @@ const Rules = ({ navigation }) => {
                 onPressRightIcon={() => utils.navigateTo(navigation, constants.screens.notification)}
                 onPressLeftIcon={() => navigation.goBack()}
             />
-            {isLoading == true && rulesLoading == true
+            {isLoading == true 
                 ? <ScrollView
                     refreshControl={
                         <RefreshControl
@@ -153,14 +90,8 @@ const Rules = ({ navigation }) => {
                         />
                     }
                     style={{ marginBottom: 25 }}>
-                    {
-                        rules?.length != 0
-                        && <RenderRules />
-                    }
-                    {
-                        faq.length != 0
-                        && <RenderFaq />
-                    }
+                        <RenderRules />
+                        <RenderFaq />
                 </ScrollView>
                 : <Loader />
             }

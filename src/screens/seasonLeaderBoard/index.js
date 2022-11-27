@@ -2,11 +2,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { FlatList, RefreshControl, SafeAreaView, Text, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
-import Snackbar from "react-native-snackbar";
+import { useDispatch } from "react-redux";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
 import Loader from "../../components/loader";
 import SearchBar from "../../components/searchBar";
+import { getSeasonLeaderBoard } from "../../redux/slice/auth";
 import consolationStyle from "../consolation/style";
 
 
@@ -16,50 +17,12 @@ const seasonLeaderBoard = ({ route, navigation }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [searchResult, setSearchResult] = useState('')
     const [refresh, setRefresh] = useState(false)
+    const [data,setData]=useState()
+    const dispatch=useDispatch()
 
     //Function For Getting Season Leaderboard
     const getTournamentLeaderBoard = async () => {
-        const token = await AsyncStorage.getItem('@Token')
-        fetch('https://fantasytennisclub.com/admin/api/v1/season-leaderboard', {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "Authorization": `Bearer ${token}`
-            },
-        }).
-            then((response) => response.json()).
-            then((json) => {
-                if (json.success == true) {
-                    setIsLoading(true)
-                }
-
-                if (json.data == null) {
-                    setIsLoading(false)
-                    Alert.alert(
-                        "Fantasy Tennis Club",
-                        json?.message,
-                        [
-                            { text: "OK", onPress: () => navigation.goBack() }
-                        ]
-                    );
-                }
-                setLeaderBordTournament(json)
-            }).
-            catch(e => {
-                Snackbar.show({
-                    text: e.toString(),
-                    duration: 1000,
-                    backgroundColor: 'red',
-                    // action: {
-                    //   text: 'UNDO',
-                    //   textColor: 'green',
-                    //   onPress: () => { /* Do something. */ },
-                    // },
-                });
-                setRefresh(false)
-                console.log('What Is Error In Get Api', e)
-            })
+      dispatch(getSeasonLeaderBoard({setIsLoading,setRefresh,setData}))
     }
 
 
@@ -164,7 +127,7 @@ const seasonLeaderBoard = ({ route, navigation }) => {
                         horizontal={true}
                         scrollEnabled={true}
                         bounces={false}
-                        data={[leaderBoardTournament]}
+                        data={[data]}
                         contentContainerStyle={{ flexDirection: 'row',marginBottom :25 }}
                         style={{ flexDirection: 'row', marginHorizontal: 10, marginTop: 10 }}
                         renderItem={leaderBoard}

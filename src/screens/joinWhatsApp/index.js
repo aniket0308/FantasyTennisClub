@@ -4,87 +4,27 @@ import { Alert, Linking, SafeAreaView, StatusBar, Text, View } from "react-nativ
 import RenderHTML from "react-native-render-html";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import Snackbar from "react-native-snackbar";
+import { useDispatch } from "react-redux";
 import { utils } from "../../common";
 import { constants } from "../../common/constant";
 import { Button, Header } from "../../components";
 import Loader from "../../components/loader";
+import { getEtiquites } from "../../redux/slice/auth";
 import joinWhatsAppStyle from "./style";
 
-const JoinWhatsApp = ({ navigation }) => {
+const JoinWhatsApp = ({ navigation,route }) => {
 
     const [isLoading, setIsLoading] = useState(false)
-    const [etiquete, setEtiquete] = useState({})
-    const [joinWhatsApp,setJoinWhatsApp]=useState('')
-
-    const joinWhatsAppGroup = async () => {
-        const token = await AsyncStorage.getItem('@Token')
-        fetch('https://fantasytennisclub.com/admin/api/v1/member-dashboard', {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "Authorization": `Bearer ${token}`
-            },
-        }).
-            then((response) => response.json()).
-            then((json) => {
-                if (json.success == true) {
-                    setIsLoading(true)
-                }
-                setJoinWhatsApp(json?.data?.whatsapp_group_link)
-            }).
-            catch(e => {
-                Snackbar.show({
-                    text: e.toString(),
-                    duration: 1000,
-                    backgroundColor: 'red',
-                    // action: {
-                    //   text: 'UNDO',
-                    //   textColor: 'green',
-                    //   onPress: () => { /* Do something. */ },
-                    // },
-                });
-                setIsLoading(false)
-                console.log('What Is Error In Get Api', e)
-            })
-    }
+    const [joinWhatsApp,setJoinWhatsApp]=useState(route?.params)
+    const [data,setData]=useState()
+    const dispatch=useDispatch()
 
     const getEtiquete = async () => {
-        const token = await AsyncStorage.getItem('@Token')
-        fetch('https://fantasytennisclub.com/admin/api/v1/page/whatsapp-group', {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "Authorization": `Bearer ${token}`
-            },
-        }).
-            then((response) => response.json()).
-            then((json) => {
-                if (json?.success == true) {
-                    setIsLoading(true)
-                }
-                setEtiquete(json)
-            }).
-            catch(e => {
-                Snackbar.show({
-                    text: e.toString(),
-                    duration: 1000,
-                    backgroundColor: 'red',
-                    // action: {
-                    //   text: 'UNDO',
-                    //   textColor: 'green',
-                    //   onPress: () => { /* Do something. */ },
-                    // },
-                });
-                setIsLoading(false)
-                console.log('What Is Error In Get Api', e)
-            })
+        dispatch(getEtiquites({setIsLoading,setData}))
     }
 
     useEffect(() => {
         getEtiquete()
-        joinWhatsAppGroup()
     }, [])
 
     return (
@@ -106,7 +46,7 @@ const JoinWhatsApp = ({ navigation }) => {
                         <View style={[joinWhatsAppStyle.viewEtiquites, { backgroundColor: '#F5F8FA' }]}>
                             <Text style={joinWhatsAppStyle.txtEtiquite} >Etiquete:</Text>
                             <RenderHTML
-                            source={{ html:`${etiquete?.data&&etiquete?.data?.content}`}}
+                            source={{ html:`${data?.data&&data?.data?.content}`}}
                             />
                         </View>
                         <View style={joinWhatsAppStyle.viewAgreeEtiquites}>

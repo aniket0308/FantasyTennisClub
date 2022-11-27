@@ -1,31 +1,27 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { FlatList, Image, RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { Image, RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
-import Snackbar from "react-native-snackbar";
 import { useDispatch } from "react-redux";
 import { utils } from "../../common";
 import { constants } from "../../common/constant";
 import { Button } from "../../components";
 import CardWithImage from "../../components/cardWithImage";
 import Loader from "../../components/loader";
-import { savePicks } from "../../redux/slice/auth";
+import { getDays, savePicks } from "../../redux/slice/auth";
 import dayPickStyle from "./style";
 
 const DayPick = ({ route, navigation }) => {
 
     const [isSubmit, setIsSubmit] = useState(false)
-    const [matches, setMatches] = useState()
     const [isLoading, setIsLoading] = useState(false)
     const [match, setMatch] = useState()
     const [selectedPlayer, setSelectedPlayer] = useState([])
     const [refresh, setRefresh] = useState(false)
     const [tempArr, setTempArr] = useState([])
     const [objects, setObjects] = useState({})
+    const [days, setDays] = useState()
     const dispatch = useDispatch()
-    const particularDay = matches?.find(item => 'day ' + route?.params == item?.tournament_day)
-    console.log('What is particular day', particularDay);
-    // let a=[0,1,2,3].
+    const particularDay = days?.data?.days?.find(item => 'day ' + route?.params == item?.tournament_day)
     if (objects != undefined) {
         Object.keys(objects).forEach(key => {
             if (objects[key] === undefined) {
@@ -33,43 +29,9 @@ const DayPick = ({ route, navigation }) => {
             }
         });
     }
-    console.log('OBJECYSSSSS,ob', objects);
-    console.log('OBJECYSSSSS,ob', selectedPlayer);
     //get Particular Day Match
-    const getAllMatchesOfParticulatDay = async () => {
-        const token = await AsyncStorage.getItem('@Token')
-
-        // get Particular Day Match
-        fetch('https://fantasytennisclub.com/admin/api/v1/member-dashboard', {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "Authorization": `Bearer ${token}`
-            },
-        }).
-            then((response) => response.json()).
-            then((json) => {
-                if (json.success == true) {
-                    setRefresh(false)
-                    setIsLoading(true)
-                }
-                setMatches(json?.data?.days)
-            }).
-            catch(e => {
-                Snackbar.show({
-                    text: e.toString(),
-                    duration: 1000,
-                    backgroundColor: 'red',
-                    // action: {
-                    //   text: 'UNDO',
-                    //   textColor: 'green',
-                    //   onPress: () => { /* Do something. */ },
-                    // },
-                });
-                setRefresh(false)
-                console.log('What Is Error In Get Api', e)
-            })
+    const getAllMatchesOfParticulatDay = () => {
+        dispatch(getDays({setIsLoading,setRefresh,setDays}))
     }
 
     useEffect(() => {

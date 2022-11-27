@@ -59,11 +59,6 @@ export const callApi = (path, payload, type, dispatch) => {
                     text: json.message,
                     duration: 1000,
                     backgroundColor: 'red',
-                    // action: {
-                    //   text: 'UNDO',
-                    //   textColor: 'green',
-                    //   onPress: () => { /* Do something. */ },
-                    // },
                 });
             }
 
@@ -113,7 +108,7 @@ export const callApi = (path, payload, type, dispatch) => {
             else if (type == 'VerifyOtp') {
                 if (json.error == false) {
                     if (payload?.navigation != undefined) {
-                        utils.navigateTo(payload.navigation, constants.screens.changePassword, {email: payload.email,name:'forgotPassword'})
+                        utils.navigateTo(payload.navigation, constants.screens.changePassword, { email: payload.email, name: 'forgotPassword' })
                     }
                 }
             } else if (type == 'resetPassword') {
@@ -122,11 +117,11 @@ export const callApi = (path, payload, type, dispatch) => {
                         utils.navigateTo(payload.navigation, constants.screens.login)
                     }
                 }
-            }else if(type == 'organizePrivateGroup' || type == 'privateGroup' || 'savePick'){
-                if(payload.submit !=undefined){
+            } else if (type == 'organizePrivateGroup' || type == 'privateGroup' || 'savePick') {
+                if (payload.submit != undefined) {
                     payload.submit()
                     payload.isLoading()
-                }else{
+                } else {
                     if (json.error == false) {
                         Alert.alert(json?.message)
                     }
@@ -141,11 +136,6 @@ export const callApi = (path, payload, type, dispatch) => {
                         text: json.message,
                         duration: 1000,
                         backgroundColor: 'green',
-                        // action: {
-                        //   text: 'UNDO',
-                        //   textColor: 'green',
-                        //   onPress: () => { /* Do something. */ },
-                        // },
                     });
 
                 }
@@ -162,18 +152,13 @@ export const callApi = (path, payload, type, dispatch) => {
                 text: error.toString(),
                 duration: 1000,
                 backgroundColor: 'red',
-                // action: {
-                //   text: 'UNDO',
-                //   textColor: 'green',
-                //   onPress: () => { /* Do something. */ },
-                // },
             });
             console.log('Error Is', error)
         })
 }
 
 //calling apis for get
-export const callApiGet = async (path, token) => {
+export const callApiGet = async (path, payload) => {
     const urlPath = `${URL}${path}`
     try {
         fetch(urlPath, {
@@ -181,10 +166,33 @@ export const callApiGet = async (path, token) => {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                "Authorization": `Bearer ${token}`
+                "Authorization": `Bearer ${payload?.token}`
             },
-        }).then((response) => response.json()).then((json) => json)
+        }).then((response) => response.json()).then(async (json) => {
+            if (payload?.setDays) {
+                await AsyncStorage.setItem('@TournamentId', `${json?.data?.id}`)
+                payload.setDays(json)
+            }
+            if (payload.setData) {
+                payload.setData(json)
+            }
+            if (payload.setRefresh) {
+                payload.setRefresh(false)
+            }
+            if(payload.setFaq){
+                payload.setFaq(json)
+            }
+            payload.setIsLoading(true)
+            return json
+        }).catch(e => {
+            Snackbar.show({
+                text: e.toString(),
+                duration: 1000,
+                backgroundColor: 'red',
+            });
+            payload.setRefresh(false)
+        })
     } catch (error) {
-        console.log('What Is Error', error);
+        console.log('What Is Error In Get Api', error.toString())
     }
 }

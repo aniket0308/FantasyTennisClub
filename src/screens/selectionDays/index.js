@@ -2,11 +2,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { Image, Platform, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
-import Snackbar from "react-native-snackbar";
+import { useDispatch } from "react-redux";
 import { utils } from "../../common";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
 import Loader from "../../components/loader";
+import { getDays } from "../../redux/slice/auth";
 import selectionDayStyle from "./style";
 
 //SelectionDays Screen
@@ -15,42 +16,10 @@ const SelectionDays = ({ route, navigation }) => {
     const [myPicks, setMyPicks] = useState('')
     const [days, setDays] = useState()
     const [isLoading, setIsLoading] = useState(false)
-
-    const getDays = async () => {
-        const token = await AsyncStorage.getItem('@Token')
-        fetch('https://fantasytennisclub.com/admin/api/v1/member-dashboard', {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "Authorization": `Bearer ${token}`
-            },
-        }).
-            then((response) => response.json()).
-            then((json) => {
-                if (json.success == true) {
-                    setIsLoading(true)
-                }
-                setDays(json)
-            }).
-            catch(e => {
-                Snackbar.show({
-                    text: e.toString(),
-                    duration: 1000,
-                    backgroundColor: 'red',
-                    // action: {
-                    //   text: 'UNDO',
-                    //   textColor: 'green',
-                    //   onPress: () => { /* Do something. */ },
-                    // },
-                });
-                setIsLoading(false)
-                console.log('What Is Error In Get Api', e)
-            })
-    }
+    const dispatch=useDispatch()
 
     useEffect(() => {
-        getDays()
+        dispatch(getDays({setIsLoading,setDays}))
     }, [])
 
     useEffect(() => {

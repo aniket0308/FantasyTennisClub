@@ -118,14 +118,6 @@ const BuyMemberShip = ({ navigation }) => {
             />
             {isLoading == true
                 ? <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 25 }}>
-                    {/* <FlatList
-                        data={memberShip?.length > 0 ? memberShip : []}
-                        numColumns={2}
-                        style={{ flexDirection: 'row', marginBottom: 25, alignSelf: 'center' }}
-                        renderItem={renderMemberShip}
-                        key={(item) => item.id}
-                        keyExtractor={item => item}
-                    /> */}
                     <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', marginHorizontal: widthPercentageToDP(3) }}>
                         {
                             memberShip?.length > 0

@@ -1,10 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { FlatList, Image, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from "react-native";
-import Snackbar from "react-native-snackbar";
+import { useDispatch } from "react-redux";
 import { constants } from "../../common/constant";
 import Loader from "../../components/loader";
 import SearchBar from "../../components/searchBar";
+import { getSavedPicks } from "../../redux/slice/auth";
 import dayPickStyle from "../dayPick/style";
 import leaderBoardStyle from "../leaderBoard/style";
 import selectionDayStyle from "../selectionDays/style";
@@ -12,47 +13,17 @@ import selectionDayStyle from "../selectionDays/style";
 const LockedScreen = ({ navigation, route }) => {
 
     const [isLoading, setIsLoading] = useState(false)
-    const [saveMemberPicks, setSaveMemberPicks] = useState()
     const [searchResult, setSearchResult] = useState('')
+    const [data,setData]=useState()
+    const dispatch=useDispatch()
 
     //function for getting save member picks
     const getSaveMemberPicks = async () => {
-        const token = await AsyncStorage.getItem('@Token')
-        fetch(`https://fantasytennisclub.com/admin/api/v1/tournaments/${route.params.item?.tournament_id}/${route?.params?.tournament_day}/members-picks`, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "Authorization": `Bearer ${token}`
-            },
-        }).
-            then((response) => response.json()).
-            then((json) => {
-                if (json.success == true) {
-                    setIsLoading(true)
-                } else {
-                    setIsLoading(true)
-                }
-                setSaveMemberPicks(json)
-            }).
-            catch(e => {
-                Snackbar.show({
-                    text: e.toString(),
-                    duration: 1000,
-                    backgroundColor: 'red',
-                    // action: {
-                    //   text: 'UNDO',
-                    //   textColor: 'green',
-                    //   onPress: () => { /* Do something. */ },
-                    // },
-                });
-                setIsLoading(false)
-                console.log('What Is Error In Get Api', e)
-            })
+        const tournamentId = await AsyncStorage.getItem('@TournamentId')
+        dispatch(getSavedPicks({setData,setIsLoading,tournamentId,tournament_day:route?.params?.tournament_day}))
     }
 
     const getMemberPickRender = ({ item, index }) => {
-        console.log('what is item', item);
         return (
             <View style={{ padding: 5, flexDirection: 'row' }}>
                 {
@@ -124,7 +95,7 @@ const LockedScreen = ({ navigation, route }) => {
                         horizontal={true}
                         scrollEnabled={true}
                         bounces={false}
-                        data={[saveMemberPicks]}
+                        data={[data]}
                         contentContainerStyle={{ flexDirection: 'row' }}
                         style={{ flexDirection: 'row', marginHorizontal: 10, marginTop: 10 }}
                         renderItem={getMemberPickRender}

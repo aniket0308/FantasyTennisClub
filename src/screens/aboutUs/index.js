@@ -1,53 +1,23 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
-import Snackbar from 'react-native-snackbar';
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
 import Loader from "../../components/loader";
 import aboutUsStyle from "./style";
 import RenderHtml from 'react-native-render-html';
+import { useDispatch } from "react-redux";
+import { aboutUs } from "../../redux/slice/auth";
 
 const AboutUs = ({ navigation }) => {
 
-    const [aboutUs, setAboutUs] = useState()
     const [isLoading, setIsLoading] = useState(false)
     const [refresh, setRefresh] = useState(false)
+    const [data,setData]=useState()
+    const dispatch=useDispatch()
 
     //get AboutUs From API
     const getAboutUsFromApi = async () => {
-        const token = await AsyncStorage.getItem('@Token')
-        //calling api for FAQS
-        fetch('https://fantasytennisclub.com/admin/api/v1/page/about', {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "Authorization": `Bearer ${token}`
-            },
-        }).
-            then((response) => response.json()).
-            then((json) => {
-                if (json.success == true) {
-                    setIsLoading(true)
-                    setRefresh(false)
-                }
-                setAboutUs(json)
-            }).
-            catch(e => {
-                Snackbar.show({
-                    text: e.toString(),
-                    duration: 1000,
-                    backgroundColor: 'red',
-                    // action: {
-                    //   text: 'UNDO',
-                    //   textColor: 'green',
-                    //   onPress: () => { /* Do something. */ },
-                    // },
-                });
-                setRefresh(false)
-                console.log('What Is Error In Get Api', e)
-            })
+        dispatch(aboutUs({setRefresh,setData,setIsLoading}))
     }
 
     useEffect(() => {
@@ -82,26 +52,9 @@ const AboutUs = ({ navigation }) => {
                                 }} />}
                         bounces={true}
                         style={{ flex: 1 }}>
-                        {/* <Text style={aboutUsStyle.txt}>
-                    Fantasy Tennis Club was founded in 2019 by real Tennis Players who enjoy and are passionate about the game of Tennis.
-                </Text>
-                <Text style={[aboutUsStyle.txt, { marginVertical: 20 }]}>
-                    Our experts are professional tennis players that enjoy and love the game of tennis and like to share their views on styles, discuss rivalries and talk tennis.
-                </Text>
-                <Text style={aboutUsStyle.txt}>
-                    Fantasy Tennis Club was created to promote the interaction of a fiery Tennis community.
-                </Text>
-                <View style={[commonStyle.row, { marginTop: 30 }]}>
-                    <Text style={[aboutUsStyle.txt]}>
-                        Our Mission:   Enhance the tennis experience of our members by becoming part of an interactive community.
-                    </Text>
-                </View> */}
                         <RenderHtml
-                            source={{ html: `${aboutUs?.data?.content}` }}
+                            source={{ html: `${data?.data?.content}` }}
                         />
-                        {/* <Text style={aboutUsStyle.txt}>
-                            {aboutUs?.data?.content}
-                        </Text> */}
                     </ScrollView>
                     : <Loader />
                 }

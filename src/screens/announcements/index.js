@@ -1,58 +1,23 @@
-import AsyncStorage from "@react-native-async-storage/async-storage"
 import React, { useEffect, useState } from "react"
 import { FlatList, RefreshControl, SafeAreaView, StatusBar, Text, View } from "react-native"
 import { widthPercentageToDP } from "react-native-responsive-screen";
-import Snackbar from 'react-native-snackbar';
+import { useDispatch } from "react-redux";
 import { utils } from "../../common";
 import { constants } from "../../common/constant"
 import { Header } from "../../components"
 import Loader from "../../components/loader"
+import { getAnnouncements } from "../../redux/slice/auth";
 import announcementStyle from "./style"
 
 const Announcments = ({ navigation }) => {
 
-    const [announcements, setAnnouncements] = useState()
     const [isLoading, setIsLoading] = useState(false)
     const [refresh, setRefresh] = useState(false)
-
-
-    const getAllAnnouncements = async () => {
-        const token = await AsyncStorage.getItem('@Token')
-        //calling api for Announcements
-        fetch('https://fantasytennisclub.com/admin/api/v1/announcements/general/all', {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "Authorization": `Bearer ${token}`
-            },
-        }).
-            then((response) => response.json()).
-            then((json) => {
-                if (json.success == true) {
-                    setIsLoading(true)
-                    setRefresh(false)
-                }
-                setAnnouncements(json.data)
-            }).
-            catch(e => {
-                Snackbar.show({
-                    text: e.toString(),
-                    duration: 1000,
-                    backgroundColor: 'red',
-                    // action: {
-                    //   text: 'UNDO',
-                    //   textColor: 'green',
-                    //   onPress: () => { /* Do something. */ },
-                    // },
-                });
-                setRefresh(false)
-                console.log('What Is Error In Get Api', e)
-            })
-    }
+    const [data, setData] = useState()
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        getAllAnnouncements()
+        dispatch(getAnnouncements({setIsLoading, setRefresh, setData,filter:'all'}))
     }, [])
 
     //rendering Announcements
@@ -61,7 +26,6 @@ const Announcments = ({ navigation }) => {
             <View style={[announcementStyle.viewInsights, { backgroundColor: index == 0 ? '#F5F8FA' : constants.colors.white, marginTop: index != 0 ? 10 : 0 }]}>
                 <Text style={announcementStyle.txtInsights} >{item?.title}</Text>
                 <Text
-                    // numberOfLines={index != 0 ? 3 : 10}
                     style={announcementStyle.txtText} >
                     {item.description}
                 </Text>
@@ -81,7 +45,7 @@ const Announcments = ({ navigation }) => {
                 rightIcon={constants.icons.shapeBell}
                 onPressRightIcon={() => utils.navigateTo(navigation, constants.screens.notification)}
                 onPressLeftIcon={() => navigation.goBack()}
-                rightIconStyle={{height:widthPercentageToDP(6),width:widthPercentageToDP(6)}}
+                rightIconStyle={{ height: widthPercentageToDP(6), width: widthPercentageToDP(6) }}
             />
             {
                 isLoading == true
@@ -96,11 +60,11 @@ const Announcments = ({ navigation }) => {
                             refreshing={refresh}
                             onRefresh={() => {
                                 setRefresh(true)
-                                getAllAnnouncements()
+                                dispatch(getAnnouncements({setIsLoading, setRefresh, setData,filter:'all'}))
                             }} />}
                     style={{ marginBottom: 20 }}
                     showsVerticalScrollIndicator={false}
-                    data={announcements?.length > 0 ? announcements : []}
+                    data={data?.data?.length > 0 ? data?.data : []}
                     renderItem={renderAnnouncments}
                     key={(item) => item}
                     keyExtractor={item => item}

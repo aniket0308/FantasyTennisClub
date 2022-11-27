@@ -1,102 +1,31 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { FlatList, Image, Platform, SafeAreaView, Text, TextInput, View } from "react-native";
+import { FlatList, SafeAreaView, Text, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
-import Snackbar from 'react-native-snackbar';
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
 import Loader from "../../components/loader";
 import groupLeaderBoardStyle from "./style";
 import { utils } from "../../common";
 import SearchBar from "../../components/searchBar";
+import { useDispatch } from "react-redux";
+import { getLeaderBoard } from "../../redux/slice/auth";
 
 //GroupLeaderBoard Screen
 const GroupLeaderBoard = ({ route, navigation }) => {
-    const [leaderBoardTournament, setLeaderBordTournament] = useState()
     const [isLoading, setIsLoading] = useState(false)
-    const [searchResult,setSearchResult]=useState('')
-    const [tournamentId,setTournamentId]=useState()
-
-    console.log('tournamentId',tournamentId);
-
-    const getTournamentId=async()=>{
-        const token = await AsyncStorage.getItem('@Token')
-        fetch('https://fantasytennisclub.com/admin/api/v1/member-dashboard', {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "Authorization": `Bearer ${token}`
-            },
-        }).
-            then((response) => response.json()).
-            then((json) => {
-                if (json.success == true) {
-                    setIsLoading(true)
-                }
-                setTournamentId(json?.data?.id)
-            }).
-            catch(e => {
-                Snackbar.show({
-                    text: e.toString(),
-                    duration: 1000,
-                    backgroundColor: 'red',
-                    // action: {
-                    //   text: 'UNDO',
-                    //   textColor: 'green',
-                    //   onPress: () => { /* Do something. */ },
-                    // },
-                });
-                console.log('What Is Error In Get Api', e)
-            })
-    }
+    const [searchResult, setSearchResult] = useState('')
+    const [data, setData] = useState('')
+    const dispatch = useDispatch()
 
     const getTournamentLeaderBoard = async () => {
-        const token = await AsyncStorage.getItem('@Token')
-        fetch(`https://fantasytennisclub.com/admin/api/v1/tournaments/${tournamentId}/group/leaderboard`, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "Authorization": `Bearer ${token}`
-            },
-        }).
-            then((response) => response.json()).
-            then((json) => {
-                if (json.success == true) {
-                    setIsLoading(true)
-                }
-                setLeaderBordTournament(json)
-            }).
-            catch(e => {
-                Snackbar.show({
-                    text: e.toString(),
-                    duration: 1000,
-                    backgroundColor:'red',
-                    // action: {
-                    //   text: 'UNDO',
-                    //   textColor: 'green',
-                    //   onPress: () => { /* Do something. */ },
-                    // },
-                  });
-                setIsLoading(false)
-                console.log('What Is Error In Get Api', e)
-            })
+        const tournamentId = await AsyncStorage.getItem('@TournamentId')
+        dispatch(getLeaderBoard({ setData, setIsLoading, tournamentId }))
     }
 
-
     useEffect(() => {
-        getTournamentId()
-        if(tournamentId!=undefined){
-            getTournamentLeaderBoard()
-        }
+        getTournamentLeaderBoard()
     }, [])
-
-    useEffect(() => {
-        if(tournamentId!=undefined){
-            getTournamentLeaderBoard()
-        }
-    }, [tournamentId])
 
     //renderLeaderboard function
     const leaderBoard = ({ item, index }) => {
@@ -109,30 +38,30 @@ const GroupLeaderBoard = ({ route, navigation }) => {
                                 <Text
                                     style={[groupLeaderBoardStyle.txtTitle,
                                     {
-                                        marginRight:20,
+                                        marginRight: 20,
                                     }]}
                                 >{headerItem}</Text>
                                 {
                                     item?.data?.data.map((dataItem, dataIndex) => {
-                                        if(searchResult!=''){
-                                            if(dataItem.member.toLowerCase().includes(searchResult)){
-                                                return(
+                                        if (searchResult != '') {
+                                            if (dataItem.member.toLowerCase().includes(searchResult)) {
+                                                return (
                                                     <Text
-                                                    style={[groupLeaderBoardStyle.txtScore,{marginLeft:headerItem=='Contact'?0:10}]}>
-                                                    {
-                                                        headerIndex == 0
-                                                            ? dataItem.member
-                                                            : headerIndex == 1
-                                                                ? dataItem.total
-                                                                : dataItem.days_point[(headerIndex - 1).toString()]
-                                                    }
-                                                </Text>
+                                                        style={[groupLeaderBoardStyle.txtScore, { marginLeft: headerItem == 'Contact' ? 0 : 10 }]}>
+                                                        {
+                                                            headerIndex == 0
+                                                                ? dataItem.member
+                                                                : headerIndex == 1
+                                                                    ? dataItem.total
+                                                                    : dataItem.days_point[(headerIndex - 1).toString()]
+                                                        }
+                                                    </Text>
                                                 )
                                             }
-                                        }else{
+                                        } else {
                                             return (
                                                 <Text
-                                                    style={[groupLeaderBoardStyle.txtScore,{marginLeft:headerItem=='Contact'?0:10}]}>
+                                                    style={[groupLeaderBoardStyle.txtScore, { marginLeft: headerItem == 'Contact' ? 0 : 10 }]}>
                                                     {
                                                         headerIndex == 0
                                                             ? dataItem.member
@@ -159,7 +88,7 @@ const GroupLeaderBoard = ({ route, navigation }) => {
                 <SafeAreaView />
                 <Header
                     showBackArrow={true}
-                    viewHeaderStyle={{width:widthPercentageToDP(78)}}
+                    viewHeaderStyle={{ width: widthPercentageToDP(78) }}
                     onPressLeftIcon={() => navigation.goBack()}
                     title={'Group Leaderboard'}
                     titleStyle={{ marginTop: 8, }}
@@ -171,14 +100,14 @@ const GroupLeaderBoard = ({ route, navigation }) => {
             </View>
             <View style={groupLeaderBoardStyle.mainViewScore}>
                 <SearchBar
-                onChangeText={(searchResult)=>setSearchResult(searchResult)}
+                    onChangeText={(searchResult) => setSearchResult(searchResult)}
                 />
                 {isLoading == true
                     ? <FlatList
                         horizontal={true}
                         scrollEnabled={true}
                         bounces={false}
-                        data={[leaderBoardTournament]}
+                        data={[data]}
                         contentContainerStyle={{ flexDirection: 'row' }}
                         style={{ flexDirection: 'row', marginHorizontal: 10, marginTop: 10 }}
                         renderItem={leaderBoard}
@@ -188,7 +117,7 @@ const GroupLeaderBoard = ({ route, navigation }) => {
                     : <Loader />
                 }
                 <View style={groupLeaderBoardStyle.ViewConsolation}>
-                    <Text onPress={() => utils.navigateTo(navigation,'Consolation','Consolation')} style={groupLeaderBoardStyle.consolation}>Consolation</Text>
+                    <Text onPress={() => utils.navigateTo(navigation, 'Consolation', 'Group Consolation')} style={groupLeaderBoardStyle.consolation}>Consolation</Text>
                 </View>
             </View>
         </>

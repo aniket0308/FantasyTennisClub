@@ -82,17 +82,184 @@ export const authSlice = createSlice({
             utils.callApi('api/verify-otp', { email: actions.payload.email, otp: actions.payload.otp, navigation: actions.payload.navigation }, 'VerifyOtp', actions?.payload?.dispatch)
         },
         savePicks: async (state, actions) => {
-            const { matches,submit,isLoading,day,tournament_id } = actions.payload
-            let match=matches
+            const { matches, submit, isLoading, day, tournament_id } = actions.payload
+            let match = matches
             const token = await AsyncStorage.getItem('@Token')
-            
+
             //calling Api For Saving Picks
-            utils.callApi(`api/v1/tournaments/${tournament_id}/${day}/save-members-picks`, {match,token,submit,isLoading}, 'savePick')
+            utils.callApi(`api/v1/tournaments/${tournament_id}/${day}/save-members-picks`, { match, token, submit, isLoading }, 'savePick')
         },
-    },
+        getAnnouncements: async (state, actions) => {
+            console.log('what is state', actions);
+
+            const announcementObj = {
+                token: await AsyncStorage.getItem('@Token'),
+                setIsLoading: actions.payload?.setIsLoading,
+                setRefresh: actions.payload?.setRefresh,
+                setData: actions.payload.setData
+            }
+            //calling Api For Getting Announcement
+            utils.callApiGet(`api/v1/announcements/general${actions.payload?.filter == true ? '/all' : ''}`, announcementObj)
+        },
+        getDays: async (state, actions) => {
+            const getDaysObj = {
+                token: await AsyncStorage.getItem('@Token'),
+                setIsLoading: actions.payload?.setIsLoading,
+                setRefresh: actions.payload?.setRefresh,
+                setDays: actions.payload.setDays
+            }
+            //calling Api For Getting Days
+            utils.callApiGet(`api/v1/member-dashboard`, getDaysObj)
+        },
+        getAllPicksFormApi: async (state, actions) => {
+            const pickObj = {
+                token: await AsyncStorage.getItem('@Token'),
+                setIsLoading: actions.payload?.setIsLoading,
+                setRefresh: actions.payload?.setRefresh,
+                setData: actions.payload.setData
+            }
+            //calling Api For Getting picks
+            utils.callApiGet(`api/v1/tournaments/${actions.payload.tournamentId}/my-picks`, pickObj)
+        },
+        getSeasonLeaderBoard: async (state, actions) => {
+            const seasonObj = {
+                token: await AsyncStorage.getItem('@Token'),
+                setIsLoading: actions.payload?.setIsLoading,
+                setRefresh: actions.payload?.setRefresh,
+                setData: actions.payload.setData
+            }
+            //calling Api For Getting seasonLeaderBoard
+            utils.callApiGet(`api/v1/season-leaderboard`, seasonObj)
+        },
+        getGroupConsolationLeaderBoard: async (state, actions) => {
+            const seasonObj = {
+                token: await AsyncStorage.getItem('@Token'),
+                setIsLoading: actions.payload?.setIsLoading,
+                setRefresh: actions.payload?.setRefresh,
+                setData: actions.payload.setData
+            }
+            //calling Api For Getting getGroupConsolationLeaderBoard
+            utils.callApiGet(`api/v1/tournaments/${actions.payload.tournamentId}/group/consolation-leaderboard`, seasonObj)
+        },
+        getConsolationLeaderBoard: async (state, actions) => {
+            const seasonObj = {
+                token: await AsyncStorage.getItem('@Token'),
+                setIsLoading: actions.payload?.setIsLoading,
+                setRefresh: actions.payload?.setRefresh,
+                setData: actions.payload.setData
+            }
+            //calling Api For Getting getConsolationLeaderBoard
+            utils.callApiGet(`api/v1/tournaments/${actions.payload.tournamentId}/consolation-leaderboard`, seasonObj)
+        },
+        getLeaderBoard: async (state, actions) => {
+            const seasonObj = {
+                token: await AsyncStorage.getItem('@Token'),
+                setIsLoading: actions.payload?.setIsLoading,
+                setRefresh: actions.payload?.setRefresh,
+                setData: actions.payload.setData
+            }
+            //calling Api For Getting groupLeaderboard
+            utils.callApiGet(`api/v1/tournaments/${actions.payload.tournamentId}/group/leaderboard`, seasonObj)
+        },
+        getTournamentLeaderBoard: async (state, actions) => {
+            const seasonObj = {
+                token: await AsyncStorage.getItem('@Token'),
+                setIsLoading: actions.payload?.setIsLoading,
+                setRefresh: actions.payload?.setRefresh,
+                setData: actions.payload.setData
+            }
+            //calling Api For Getting leaderboard
+            utils.callApiGet(`api/v1/tournaments/${actions.payload.tournamentId}/leaderboard`, seasonObj)
+        },
+        getEtiquites: async (state, actions) => {
+            const seasonObj = {
+                token: await AsyncStorage.getItem('@Token'),
+                setIsLoading: actions.payload?.setIsLoading,
+                setRefresh: actions.payload?.setRefresh,
+                setData: actions.payload.setData
+            }
+            //calling Api For Getting etiquites
+            utils.callApiGet(`api/v1/page/whatsapp-group`, seasonObj)
+        },
+        getTournamentParticipants: async (state, actions) => {
+            const seasonObj = {
+                token: await AsyncStorage.getItem('@Token'),
+                setIsLoading: actions.payload?.setIsLoading,
+                setRefresh: actions.payload?.setRefresh,
+                setData: actions.payload.setData
+            }
+            //calling Api For Getting etiquites
+            utils.callApiGet(`api/v1/tournaments/${actions.payload.tournamentId}/participations`, seasonObj)
+        },
+        getNotifications: async (state, actions) => {
+            const seasonObj = {
+                token: await AsyncStorage.getItem('@Token'),
+                setIsLoading: actions.payload?.setIsLoading,
+                setRefresh: actions.payload?.setRefresh,
+                setData: actions.payload.setData
+            }
+            //calling Api For Getting etiquites
+            utils.callApiGet(`api/v1/announcements/member`, seasonObj)
+        },
+        getMyMembership: async (state, actions) => {
+            const seasonObj = {
+                token: await AsyncStorage.getItem('@Token'),
+                setIsLoading: actions.payload?.setIsLoading,
+                setRefresh: actions.payload?.setRefresh,
+                setData: actions.payload.setData
+            }
+            //calling Api For Getting getMyMembership
+            utils.callApiGet(`api/v1/user/my-membership`, seasonObj)
+        },
+        getSavedPicks: async (state, actions) => {
+            const seasonObj = {
+                token: await AsyncStorage.getItem('@Token'),
+                setIsLoading: actions.payload?.setIsLoading,
+                setRefresh: actions.payload?.setRefresh,
+                setData: actions.payload.setData
+            }
+            //calling Api For Getting getMyMembership
+            utils.callApiGet(`api/v1/tournaments/${tournamentId}/${actions?.payload?.tournament_day}/members-picks`, seasonObj)
+        },
+        aboutUs: async (state, actions) => {
+            const seasonObj = {
+                token: await AsyncStorage.getItem('@Token'),
+                setIsLoading: actions.payload?.setIsLoading,
+                setRefresh: actions.payload?.setRefresh,
+                setData: actions.payload.setData
+            }
+            //calling Api For Getting about
+            utils.callApiGet(`api/v1/page/about`, seasonObj)
+        },
+        getRules: async (state, actions) => {
+            const seasonObj = {
+                token: await AsyncStorage.getItem('@Token'),
+                setIsLoading: actions.payload?.setIsLoading,
+                setRefresh: actions.payload?.setRefresh,
+                setData: actions.payload.setData
+            }
+            //calling Api For Getting about
+            utils.callApiGet(`api/v1/page/rules`, seasonObj)
+        },
+        getFaq: async (state, actions) => {
+            const seasonObj = {
+                token: await AsyncStorage.getItem('@Token'),
+                setIsLoading: actions.payload?.setIsLoading,
+                setRefresh: actions.payload?.setRefresh,
+                setFaq: actions.payload.setFaq
+            }
+            //calling Api For Getting about
+            utils.callApiGet(`api/v1/page/faqs`, seasonObj)
+
+        }
+
+    }
+
 })
 
 // Action creators are generated for each case reducer function
-export const { login, logout, registration, joinPrivateGroup, oganizePrivateGroup, isLoaderVisible, isLoaderNotVisible, sendOtp, verifyOtp, savePicks } = authSlice.actions
+export const { login, logout, registration, joinPrivateGroup, oganizePrivateGroup, isLoaderVisible, isLoaderNotVisible, sendOtp, verifyOtp, savePicks,
+    getAnnouncements, getDays, getAllPicksFormApi, getSeasonLeaderBoard, getGroupConsolationLeaderBoard, getConsolationLeaderBoard, getLeaderBoard, getEtiquites,
+    getTournamentLeaderBoard, getTournamentParticipants, getNotifications, getMyMembership, getSavedPicks, aboutUs,getRules,getFaq } = authSlice.actions
 
 export default authSlice.reducer

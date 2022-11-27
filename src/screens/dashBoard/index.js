@@ -1,99 +1,31 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { FlatList, Image, RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { Image, RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
-import Snackbar from 'react-native-snackbar';
+import { useDispatch } from "react-redux";
 import { utils } from "../../common";
 import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
 import Loader from "../../components/loader";
 import PushNotificationService from "../../pushNotification/pushNotification";
+import { getAnnouncements, getDays } from "../../redux/slice/auth";
 import dashboardStyle from "./style";
 
 //Dashboard Of Screen Or Say Home Screen
 const DashBoardHome = ({ navigation }) => {
 
-    const [announcements, setAnnouncements] = useState()
     const [isLoading, setIsLoading] = useState(false)
     const [refresh, setRefresh] = useState(false)
     const [days, setDays] = useState()
+    const [data, setData] = useState()
+    const dispatch = useDispatch()
 
     let notification = new PushNotificationService()
-    const getAllAnnouncements = async () => {
-        const token = await AsyncStorage.getItem('@Token')
-        //calling api for Announcements
-        fetch('https://fantasytennisclub.com/admin/api/v1/announcements/general', {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "Authorization": `Bearer ${token}`
-            },
-        }).
-            then((response) => response.json()).
-            then((json) => {
-                if (json.success == true) {
-                    setIsLoading(true)
-                    setRefresh(false)
-                }
-                setAnnouncements(json.data)
-            }
-            ).
-            catch(e => {
-                Snackbar.show({
-                    text: e.toString(),
-                    duration: 1000,
-                    backgroundColor: 'red',
-                    // action: {
-                    //   text: 'UNDO',
-                    //   textColor: 'green',
-                    //   onPress: () => { /* Do something. */ },
-                    // },
-                });
-                setRefresh(false)
-                console.log('What Is Error In Get Api', e.toString())
-            })
-    }
-
-    const getDays = async () => {
-        const token = await AsyncStorage.getItem('@Token')
-        fetch('https://fantasytennisclub.com/admin/api/v1/member-dashboard', {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "Authorization": `Bearer ${token}`
-            },
-        }).
-            then((response) => response.json()).
-            then((json) => {
-                if (json.success == true) {
-                    setIsLoading(true)
-                    setRefresh(false)
-                }
-                setDays(json)
-            }).
-            catch(e => {
-                Snackbar.show({
-                    text: e.toString(),
-                    duration: 1000,
-                    backgroundColor: 'red',
-                    // action: {
-                    //   text: 'UNDO',
-                    //   textColor: 'green',
-                    //   onPress: () => { /* Do something. */ },
-                    // },
-                });
-                setRefresh(false)
-                console.log('What Is Error In Get Api', e)
-            })
-    }
 
     useEffect(() => {
-        getDays()
-        getAllAnnouncements()
-    }, [])
+        dispatch(getDays({ setIsLoading, setRefresh, setDays }))
+        dispatch(getAnnouncements({ setIsLoading, setRefresh, setData }))
+    }, [refresh])
 
     const tempData = [
         {
@@ -126,20 +58,22 @@ const DashBoardHome = ({ navigation }) => {
         return (
             <TouchableOpacity
                 onPress={() => {
+                    if(item.icon){
+                        utils.navigateTo(navigation,constants.screens.joinWhatsApp,days.data.whatsapp_group_link)
+                    }else{
+                        utils.navigateTo(
+                            navigation,
+                            item.title == 'MY PICKS'
+                                ? constants.screens.selectionDays
+                                    : item.title == 'PRIZES'
+                                        ? constants.screens.prizes
+                                        : item.title == 'Leaderboard'
+                                            ? 'Leaderboard'
+                                            : 'Consolation',
+                            item.title=='PRIZES'?days.data.description:item.title
+                        )
+                    }
                     // notification.localNotification()
-                    utils.navigateTo(
-                        navigation,
-                        item.title == 'MY PICKS'
-                            ? constants.screens.selectionDays
-                            : item.icon
-                                ? constants.screens.joinWhatsApp
-                                : item.title == 'PRIZES'
-                                    ? constants.screens.prizes
-                                    : item.title == 'Leaderboard'
-                                        ? 'Leaderboard'
-                                        : 'Consolation',
-                        item.title
-                    )
                 }
                 }
                 style={[dashboardStyle.touchableView, {
@@ -197,8 +131,8 @@ const DashBoardHome = ({ navigation }) => {
                                 refreshing={refresh}
                                 onRefresh={() => {
                                     setRefresh(true)
-                                    getAllAnnouncements()
-                                    getDays()
+                                    dispatch(getDays({ setIsLoading, setRefresh, setDays }))
+                                    dispatch(getAnnouncements({ setIsLoading, setRefresh, setData }))
                                 }}
                                 title='Loading...'
                                 tintColor={constants.colors.darkBlue}
@@ -227,19 +161,9 @@ const DashBoardHome = ({ navigation }) => {
                                     <Text style={[dashboardStyle.txtGeneral, { fontSize: 16 }]}>See All</Text>
                                 </TouchableOpacity>
                             </View>
-                            {/* <FlatList
-                                bounces={false}
-                                style={{ marginBottom: 20 }}
-                                showsVerticalScrollIndicator={false}
-                                scrollEnabled={true}
-                                data={announcements?.length > 0 ? announcements : []}
-                                renderItem={renderInsightData}
-                                key={(item) => item}
-                                keyExtractor={item => item}
-                            /> */}
                             {
-                                announcements?.length > 0 &&
-                                announcements.map((i, index) => {
+                                data?.data?.length > 0 &&
+                                data?.data.map((i, index) => {
                                     return renderInsightData(i, index)
                                 })
                             }

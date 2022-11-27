@@ -25,8 +25,6 @@ const PrivateGroupDetails = ({ route, navigation }) => {
     const [groupParticipant, setGroupParticipant] = useState('')
     const [loggedInUserName, setLoggedInUserName] = useState('')
     const [membership, setMemberShip] = useState()
-    const [tournamentId, setTournamentId] = useState()
-
     const isLoading = useSelector(state => state?.profile?.isLoading)
     const dispatch = useDispatch()
 
