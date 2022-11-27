@@ -16,7 +16,7 @@ const ForgotPassword = ({ navigation }) => {
 
     const [email,setEmail]=useState('')
     const dispatch=useDispatch()
-    const isLoading=useSelector(state=>state.auth.isLoading)
+    const [isLoading,setIsLoading]=useState(false)
 
     return (
         <>
@@ -46,8 +46,8 @@ const ForgotPassword = ({ navigation }) => {
                 <Button
                 disabled={isLoading}
                 onPress={()=>{
-                    dispatch(isLoaderVisible())
-                    dispatch(sendOtp({email,navigation,dispatch}))
+                    setIsLoading(true)
+                    dispatch(sendOtp({email,navigation,dispatch,setIsLoading}))
                 }}
                 titleText='Reset Password'
                 btnStyle={{marginTop:100}}

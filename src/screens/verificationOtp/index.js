@@ -38,7 +38,7 @@ const OtpVerification = ({ navigation, route }) => {
                 />
                 <Image style={verificationStyle.imgLogo} resizeMode='contain' source={constants.icons.logo} />
                 <OTPInputView
-                    style={{ width: '80%', height: 200, alignSelf: 'center' }}
+                    style={{ width: '80%', height: widthPercentageToDP(20), alignSelf: 'center' }}
                     autoFocusOnLoad={false}
                     codeInputFieldStyle={{ width: widthPercentageToDP(16), fontSize: widthPercentageToDP(5), color: constants.colors.darkGreen, borderBottomWidth: 1, borderBottomColor: constants.colors.darkGreen, borderColor: constants.colors.backGroundLight }}
                     onCodeFilled={(code) => {

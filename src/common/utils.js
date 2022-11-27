@@ -49,17 +49,24 @@ export const callApi = (path, payload, type, dispatch) => {
     })
         .then((res) => res.json())
         .then(async (json) => {
-            console.log('what is dispatch', json);
+            console.log('what is dispatch', dispatch);
             if (dispatch != undefined) {
                 dispatch(isLoaderNotVisible())
                 dispatch(isLoaderNotVisibleProfile())
             }
-            if (json.error == true) {
+            if (json.error == true ) {
                 Snackbar.show({
                     text: json.message,
                     duration: 1000,
                     backgroundColor: 'red',
                 });
+                if (payload.setIsLoading != undefined) {
+                    payload.setIsLoading(false)
+                }
+            }else{
+                if (payload.setIsLoading != undefined) {
+                    payload.setIsLoading(false)
+                }
             }
 
             console.log('Register Response', type);
@@ -68,7 +75,7 @@ export const callApi = (path, payload, type, dispatch) => {
                     storeData(json.data, true)
                 }
             } else if (type == 'logout') {
-                AsyncStorage.clear()
+                await AsyncStorage.clear()
             } else if (type == 'Registered') {
                 if (json.data != null) {
                     storeData(json.data, false)
@@ -179,7 +186,7 @@ export const callApiGet = async (path, payload) => {
             if (payload.setRefresh) {
                 payload.setRefresh(false)
             }
-            if(payload.setFaq){
+            if (payload.setFaq) {
                 payload.setFaq(json)
             }
             payload.setIsLoading(true)

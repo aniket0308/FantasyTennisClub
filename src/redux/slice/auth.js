@@ -32,7 +32,8 @@ export const authSlice = createSlice({
                 email: actions.payload.email,
                 password: actions.payload.password,
                 device_token: actions.payload.deviceToken,
-                platform: actions.payload.platform
+                platform: actions.payload.platform,
+                setIsLoading:actions.payload.setIsLoading
             }
             //calling Api For Login
             utils.callApi('api/login', loginObj, 'login', actions?.payload?.dispatch)
@@ -71,11 +72,12 @@ export const authSlice = createSlice({
         },
         logout: (state, actions) => {
             //calling Api For Logout
-            utils.callApi('api/v1/logout', {}, 'logout', actions?.payload?.dispatch)
+            utils.callApi('api/v1/logout', {setIsLoading:actions?.payload?.setIsLoading}, 'logout', actions?.payload?.dispatch)
+            return state
         },
         sendOtp: (state, actions) => {
             //calling Api For sending Otp
-            utils.callApi('api/send-otp', { email: actions.payload.email, navigation: actions.payload.navigation }, 'sendOtp', actions?.payload?.dispatch)
+            utils.callApi('api/send-otp', { email: actions.payload.email, navigation: actions.payload.navigation,setIsLoading:actions.payload.setIsLoading }, 'sendOtp', actions?.payload?.dispatch)
         },
         verifyOtp: (state, actions) => {
             //calling Api For Verifiying Otp

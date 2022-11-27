@@ -72,7 +72,10 @@ const MyMembership = ({ navigation, route }) => {
                             <Button
                                 titleText={'Logout'}
                                 btnStyle={{ width: '100%', marginTop: 10 }}
-                                onPress={() => dispatch(logout())}
+                                onPress={() => {
+                                    setIsLoading(true)
+                                    dispatch(logout({setIsLoading}))
+                                }}
                             />
                         </>
                     }

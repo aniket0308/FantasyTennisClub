@@ -19,7 +19,7 @@ const Account = ({ navigation }) => {
     const [mobileNumber, setMobileNumber] = useState('')
     const [, setRender] = useState({})
     const dispatch = useDispatch()
-    const isLoading = useSelector((state) => state?.auth?.isLoading)
+    const [isLoading, setIsLoading] = useState(false)
     const tempArr = ['My Memberships', 'Change password', 'Contact us', 'Notifications', 'About us', 'Logout']
 
     useEffect(() => {
@@ -90,7 +90,7 @@ const Account = ({ navigation }) => {
                                             : item == 'About us'
                                                 ? utils.navigateTo(navigation, constants.screens.aboutUs)
                                                 : item == 'My Memberships'
-                                                    ? utils.navigateTo(navigation, 'MyMembership',false)
+                                                    ? utils.navigateTo(navigation, 'MyMembership', false)
                                                     : item == 'Notifications'
                                                         ? utils.navigateTo(navigation, constants.screens.notification)
                                                         : item == 'Contact us'
@@ -98,8 +98,8 @@ const Account = ({ navigation }) => {
                                                             : null
 
                                         if (item == 'Logout') {
-                                            dispatch(isLoaderVisible())
-                                            dispatch(logout({ dispatch }))
+                                            setIsLoading(true)
+                                            dispatch(logout(setIsLoading))
                                         }
                                     }}
                                     containerStyle={{ marginBottom: 10, backgroundColor: item == 'Logout' ? constants.colors.darkBlue : constants.colors.cardColor }}

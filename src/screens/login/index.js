@@ -22,7 +22,7 @@ const Login = ({ navigation }) => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(true)
     const platform = Platform.OS == 'android' ? 'android' : 'ios'
     const dispatch = useDispatch()
-    const isLoading = useSelector((state) => state?.auth?.isLoading)
+    const [isLoading,setIsLoading]=useState(false)
     const requestUserPermission = async () => {
         try {
             const token = await messaging().getToken()
@@ -88,8 +88,8 @@ const Login = ({ navigation }) => {
                     titleText='Login'
                     btnStyle={{ marginTop: 34 }}
                     onPress={async () => {
-                        dispatch(isLoaderVisible())
-                        dispatch(login({ email, password, deviceToken, platform, dispatch }))
+                        setIsLoading(true)
+                        dispatch(login({ email, password, deviceToken, platform, dispatch,setIsLoading }))
                     }}
                 />
                 <SafeAreaView />

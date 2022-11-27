@@ -16,6 +16,7 @@ export const profileSlice = createSlice({
                 mobile_number: actions.payload.mobileNumber,
                 email: actions.payload.email,
                 token: await AsyncStorage.getItem('@Token'),
+                setIsLoading:actions.payload.setIsLoading,
                 navigation: actions.payload.navigation
             }
             //calling Api For Update Profile
@@ -36,6 +37,7 @@ export const profileSlice = createSlice({
                 confirm_new_password: actions.payload.confirmPassword,
                 navigation: actions.payload.navigation,
                 clearData: actions.payload.clearData,
+                setIsLoading:actions.payload.setIsLoading,
                 token: await AsyncStorage.getItem('@Token'),
             }
             //calling Api For Update changePassword
@@ -44,6 +46,7 @@ export const profileSlice = createSlice({
         resetPassword: async (state, actions) => {
             const resetPasswordObj = {
                 navigation: actions.payload.navigation,
+                setIsLoading:actions.payload.setIsLoading,
                 // token: await AsyncStorage.getItem('@Token'),
             }
             //calling Api For Reset Password
@@ -56,6 +59,7 @@ export const profileSlice = createSlice({
                 navigation: actions.payload.navigation,
                 clearAllData:actions.payload.clearAllData,
                 token: await AsyncStorage.getItem('@Token'),
+                setIsLoading:actions.payload.setIsLoading,
             }
             //calling Api For sending Inquiry
             utils.callApi('api/v1/inquiry', sendInquiryObj, 'inquiry', actions.payload.dispatch)

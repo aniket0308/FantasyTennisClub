@@ -23,7 +23,7 @@ const ChangePassword = ({ route, navigation }) => {
     const [text, setText] = useState('')
     const [email, setEmail] = useState(route?.params?.email)
     const dispatch = useDispatch()
-    const isLoading = useSelector((state) => state?.auth?.isLoading)
+    const [isLoading,setIsLoading]=useState(false)
 
     const clearAllData = () => {
         setText('')
@@ -155,18 +155,19 @@ const ChangePassword = ({ route, navigation }) => {
                     btnStyle={{ marginTop: 30 }}
                     onPress={() => {
                         if (route?.params?.editProfile == 'editProfile') {
-                            dispatch(isLoaderVisible())
-                            dispatch(editProfile({ fullName, mobileNumber,email, navigation, dispatch }))
+                            setIsLoading(true)
+                            dispatch(editProfile({ fullName, mobileNumber,email, navigation, dispatch,setIsLoading }))
                         } else if (route?.params == 'contactUs') {
-                            dispatch(isLoaderVisible())
-                            dispatch(sendInquiry({ subject, text, dispatch, clearAllData }))
+                            setIsLoading(true)
+                            dispatch(sendInquiry({ subject, text, dispatch, clearAllData ,setIsLoading}))
+                            setIsLoading(true)
                         } else if (route?.params?.name == 'forgotPassword') {
-                            dispatch(isLoaderVisible())
-                            dispatch(resetPassword({ email: route?.params?.email, newPassword, confirmPassword, navigation, dispatch }))
+                            setIsLoading(true)
+                            dispatch(resetPassword({ email: route?.params?.email, newPassword, confirmPassword, navigation, dispatch,setIsLoading}))
                         }
                         else {
-                            dispatch(isLoaderVisible())
-                            dispatch(changePassword({ oldPassword, newPassword, confirmPassword, navigation, clearAllData, dispatch }))
+                            setIsLoading(true)
+                            dispatch(changePassword({ oldPassword, newPassword, confirmPassword, navigation, clearAllData, dispatch,setIsLoading }))
                         }
                     }}
                 />
