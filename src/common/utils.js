@@ -77,8 +77,13 @@ export const callApi = (path, payload, type, dispatch) => {
             } else if (type == 'logout') {
                 await AsyncStorage.clear()
             } else if (type == 'Registered') {
-                if (json.data != null) {
-                    storeData(json.data, false)
+                if(json.error==false){
+                   let checkValidate= payload.validateForm()
+                   if(checkValidate.error==false){
+                       if (json.data != null) {
+                           storeData(json.data, false)
+                       }
+                   }
                 }
 
 

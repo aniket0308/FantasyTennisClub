@@ -10,6 +10,8 @@ import Loader from "../../components/loader";
 import { isLoaderVisible, registration } from "../../redux/slice/auth";
 import signUpStyle from "./style";
 import messaging, { firebase } from '@react-native-firebase/messaging';
+import Snackbar from "react-native-snackbar";
+import { widthPercentageToDP } from "react-native-responsive-screen";
 
 //SignUp (Registration) Screen
 const SignUp = ({ navigation }) => {
@@ -24,6 +26,28 @@ const SignUp = ({ navigation }) => {
     const dispatch = useDispatch()
     const platform = Platform.OS == 'android' ? 'android' : 'ios'
     const isLoading = useSelector((state) => state?.auth?.isLoading)
+
+    const validateForm = () => {
+        let obj = {}
+        if (mobileNumber.length > 15) {
+            obj.error = true
+            Snackbar.show({
+                text: 'Maximum 15 characters allowed in phone number',
+                duration: 1000,
+                backgroundColor: 'red',
+            })
+        } else if (password.length < 4) {
+            obj.error = true
+            Snackbar.show({
+                text: 'Minimmum 4 character required for password',
+                duration: 1000,
+                backgroundColor: 'red',
+            })
+        } else {
+            obj.error = false
+        }
+        return obj
+    }
 
     const requestUserPermission = async () => {
         try {
@@ -113,13 +137,14 @@ const SignUp = ({ navigation }) => {
                     value={referral}
                     autoCapitalize='none'
                 />
+                <Text style={{marginVertical:5,color:'red',fontWeight:'600',marginLeft:widthPercentageToDP(10)}}>*Mandatory Field</Text>
                 <Button
                     disabled={isLoading == true ? true : false}
                     titleText='Sign Up'
                     btnStyle={{ marginTop: 50 }}
                     onPress={() => {
                         dispatch(isLoaderVisible())
-                        dispatch(registration({ fullName, email, password, confirmPassword, mobileNumber, referral, deviceToken, navigation, platform, dispatch }))
+                        dispatch(registration({ fullName, email, password, confirmPassword, mobileNumber, referral, deviceToken, navigation, platform, dispatch, validateForm }))
                     }}
                 />
             </KeyboardAwareScrollView>
@@ -127,7 +152,7 @@ const SignUp = ({ navigation }) => {
             <View style={signUpStyle.footer}>
                 <Text style={signUpStyle.txtNewToFantasy} >Already have a Fantasy Tennis Club? </Text>
                 <TouchableOpacity onPress={() => isLoading == false ? utils.navigateTo(navigation, constants.screens.login) : ''} >
-                <Text style={signUpStyle.txtSignUp}>Login</Text>
+                    <Text style={signUpStyle.txtSignUp}>Login</Text>
                 </TouchableOpacity>
             </View>
         </>

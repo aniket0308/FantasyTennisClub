@@ -20,7 +20,8 @@ export const authSlice = createSlice({
                 referral: actions.payload.referral,
                 navigation: actions.payload.navigation,
                 device_token: actions.payload.deviceToken,
-                platform: actions.payload.platform
+                platform: actions.payload.platform,
+                validateForm:actions.payload.validateForm
             }
             //calling Api For Login
             utils.callApi('api/register', registerObj, 'Registered', actions.payload.dispatch)
