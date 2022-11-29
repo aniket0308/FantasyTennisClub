@@ -55,7 +55,9 @@ const Notification = ({ navigation }) => {
             {
 
                 data?.data == null || data?.data?.length == 0 || data?.data == undefined
-                    ? <Text>{data?.message}</Text>
+                    ?<View style={{justifyContent:'center',flex:1,alignItems:'center'}}> 
+                    <Text style={{fontSize:25,color:constants.colors.darkBlue,fontWeight:'600'}}>{data?.message}</Text>
+                    </View>
                     : <FlatList
                         showsVerticalScrollIndicator={false}
                         bounces={false}

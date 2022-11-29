@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { FlatList, SafeAreaView, Text, View } from "react-native";
+import { FlatList, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
@@ -116,9 +116,9 @@ const GroupLeaderBoard = ({ route, navigation }) => {
                     />
                     : <Loader />
                 }
-                <View style={groupLeaderBoardStyle.ViewConsolation}>
-                    <Text onPress={() => utils.navigateTo(navigation, 'Consolation', 'Group Consolation')} style={groupLeaderBoardStyle.consolation}>Consolation</Text>
-                </View>
+                <TouchableOpacity onPress={() => utils.navigateTo(navigation, 'Consolation', 'Group Consolation')} style={groupLeaderBoardStyle.ViewConsolation}>
+                    <Text style={groupLeaderBoardStyle.consolation}>Consolation</Text>
+                </TouchableOpacity>
             </View>
         </>
     )
