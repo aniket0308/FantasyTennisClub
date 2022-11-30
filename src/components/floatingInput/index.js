@@ -8,7 +8,8 @@ import floatingInputStyles from "./style";
 const FloatingInput = ({ textInputStyle, isEditable, onInputPress, headerStyle, value, headerText,
     passwordInput = false, refs, textStyle, keyboardType, returnKeyType, multiline, numberOfLines,
     blurOnSubmit, isTextIncluded = false, labelTextIncluded, rightIcon, rightIconStyle, autoCapitalize,
-    secureTextEntry, hideIcon = false, onChangeText, onTxtPress, onHideShow, onSubmitRef, textIsEditable
+    secureTextEntry, hideIcon = false, onChangeText, onTxtPress, onHideShow, onSubmitRef, textIsEditable,
+    mandatoryField,maxLength
 }) => {
     const moveText = useRef(new Animated.Value(0)).current;
 
@@ -67,7 +68,7 @@ const FloatingInput = ({ textInputStyle, isEditable, onInputPress, headerStyle, 
                 disabled={isEditable}
                 onPress={onInputPress}
                 style={[floatingInputStyles.viewContainer, textInputStyle]}>
-                <Animated.View style={[floatingInputStyles.animatedStyle, { top: value == '' ? 5 : 1 }, animStyle,]}>
+                <Animated.View style={[floatingInputStyles.animatedStyle, { top: value == '' ? 5 : 1, flexDirection: 'row' }, animStyle,]}>
                     <Text
                         style={{
                             ...floatingInputStyles.headertxt,
@@ -76,6 +77,9 @@ const FloatingInput = ({ textInputStyle, isEditable, onInputPress, headerStyle, 
                         }}>
                         {headerText}
                     </Text>
+                    {mandatoryField == true
+                        && <Text style={{marginLeft:3,color:'red'}}>*</Text>
+                    }
                 </Animated.View>
                 {
                     !passwordInput
@@ -98,6 +102,7 @@ const FloatingInput = ({ textInputStyle, isEditable, onInputPress, headerStyle, 
                                     editable={textIsEditable}
                                     autoCapitalize={autoCapitalize}
                                     onSubmitEditing={onSubmitRef}
+                                    maxLength={maxLength}
                                 />
                                 {isTextIncluded
                                     && <TouchableOpacity>
@@ -129,6 +134,7 @@ const FloatingInput = ({ textInputStyle, isEditable, onInputPress, headerStyle, 
                                 autoCapitalize={autoCapitalize}
                                 onSubmitEditing={onSubmitRef}
                                 editable={textIsEditable}
+                                maxLength={maxLength}
                             />
                             {
                                 hideIcon == true &&
@@ -144,9 +150,9 @@ const FloatingInput = ({ textInputStyle, isEditable, onInputPress, headerStyle, 
                 }
             </TouchableOpacity >
             {isTextIncluded
-                &&<TouchableOpacity onPress={onTxtPress}>
+                && <TouchableOpacity onPress={onTxtPress}>
                     <Text style={floatingInputStyles.lblRighText}>{labelTextIncluded}</Text>
-                </TouchableOpacity> 
+                </TouchableOpacity>
             }
         </>
     )

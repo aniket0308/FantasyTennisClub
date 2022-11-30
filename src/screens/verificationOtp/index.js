@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StatusBar, SafeAreaView, Dimensions, Image } from 'react-native'
+import { StatusBar, SafeAreaView, Dimensions, Image } from 'react-native'
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { Button, FloatingInput, Header } from "../../components";

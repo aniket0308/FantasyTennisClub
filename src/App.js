@@ -8,14 +8,12 @@
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react'
-import { widthPercentageToDP } from 'react-native-responsive-screen';
 import { Provider } from 'react-redux';
 import { AuthNavigator, AuthNavigators, RegisterFirstTime, RootNavigator } from './navigation/navigation';
 import { store } from './redux/store';
 import messaging from '@react-native-firebase/messaging';
 import PushNotificationService from './pushNotification/pushNotification';
 import Snackbar from 'react-native-snackbar';
-import Auth from './redux/slice/auth';
 
 const App = () => {
 
@@ -25,7 +23,7 @@ const App = () => {
   const [isMembership, setIsMembership] = useState()
   const [firstTime, setFirstTime] = useState()
   const [isLoading, setIsLoading] = useState(false)
-
+  
   const getData = async () => {
     try {
       const value = await AsyncStorage.getItem('@Token')
@@ -72,17 +70,17 @@ const App = () => {
         } else {
           setIsAuthentication()
         }
+        //Logout automatically if admin deletes user
+        if(json?.data?.is_member_deleted==true){
+          await AsyncStorage.clear()
+        }
+
       }).
       catch(e => {
         Snackbar.show({
           text: e.toString(),
           duration: 1000,
           backgroundColor: 'red',
-          // action: {
-          //   text: 'UNDO',
-          //   textColor: 'green',
-          //   onPress: () => { /* Do something. */ },
-          // },
         });
         setIsLoading(false)
         console.log('What Is Error In Get Api', e)

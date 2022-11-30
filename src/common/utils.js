@@ -54,7 +54,7 @@ export const callApi = (path, payload, type, dispatch) => {
                 dispatch(isLoaderNotVisible())
                 dispatch(isLoaderNotVisibleProfile())
             }
-            if (json.error == true ) {
+            if (json.error == true) {
                 Snackbar.show({
                     text: json.message,
                     duration: 1000,
@@ -63,7 +63,7 @@ export const callApi = (path, payload, type, dispatch) => {
                 if (payload.setIsLoading != undefined) {
                     payload.setIsLoading(false)
                 }
-            }else{
+            } else {
                 if (payload.setIsLoading != undefined) {
                     payload.setIsLoading(false)
                 }
@@ -77,13 +77,10 @@ export const callApi = (path, payload, type, dispatch) => {
             } else if (type == 'logout') {
                 await AsyncStorage.clear()
             } else if (type == 'Registered') {
-                if(json.error==false){
-                   let checkValidate= payload.validateForm()
-                   if(checkValidate.error==false){
-                       if (json.data != null) {
-                           storeData(json.data, false)
-                       }
-                   }
+                if (json.error == false) {
+                    if (json.data != null) {
+                        storeData(json.data, false)
+                    }
                 }
 
 

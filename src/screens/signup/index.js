@@ -88,12 +88,14 @@ const SignUp = ({ navigation }) => {
                 bounces={false}
                 style={[commonStyle.container, signUpStyle.container]} >
                 <FloatingInput
+                    mandatoryField={true}
                     textIsEditable={!isLoading}
                     headerText={'Full Name'}
                     onChangeText={(nameTxt) => { setFullName(nameTxt) }}
                     value={fullName}
                 />
                 <FloatingInput
+                    mandatoryField={true}
                     textIsEditable={!isLoading}
                     headerText={'E-mail'}
                     textInputStyle={{ marginTop: 15 }}
@@ -102,14 +104,17 @@ const SignUp = ({ navigation }) => {
                     autoCapitalize='none'
                 />
                 <FloatingInput
+                    mandatoryField={true}
                     textIsEditable={!isLoading}
                     headerText={'Mobile Number'}
                     textInputStyle={{ marginTop: 15 }}
                     onChangeText={(mobileTxt) => { setMobileNumber(mobileTxt) }}
                     value={mobileNumber}
                     keyboardType='phone-pad'
+                    maxLength={15}
                 />
                 <FloatingInput
+                mandatoryField={true}
                     textIsEditable={!isLoading}
                     headerText={'Password'}
                     textInputStyle={{ marginTop: 15 }}
@@ -120,6 +125,7 @@ const SignUp = ({ navigation }) => {
                     secureTextEntry={true}
                 />
                 <FloatingInput
+                    mandatoryField={true}
                     textIsEditable={!isLoading}
                     headerText={'Confirm password'}
                     textInputStyle={{ marginTop: 15 }}
@@ -137,14 +143,14 @@ const SignUp = ({ navigation }) => {
                     value={referral}
                     autoCapitalize='none'
                 />
-                <Text style={{marginVertical:5,color:'red',fontWeight:'600',marginLeft:widthPercentageToDP(10)}}>*Mandatory Field</Text>
+                <Text style={{ marginVertical: 5, color: 'red', fontWeight: '600', marginLeft: widthPercentageToDP(10) }}>*Mandatory Field</Text>
                 <Button
                     disabled={isLoading == true ? true : false}
                     titleText='Sign Up'
                     btnStyle={{ marginTop: 50 }}
                     onPress={() => {
                         dispatch(isLoaderVisible())
-                        dispatch(registration({ fullName, email, password, confirmPassword, mobileNumber, referral, deviceToken, navigation, platform, dispatch, validateForm }))
+                        dispatch(registration({ fullName, email, password, confirmPassword, mobileNumber, referral, deviceToken, navigation, platform, dispatch }))
                     }}
                 />
             </KeyboardAwareScrollView>
