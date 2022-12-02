@@ -32,6 +32,8 @@ import GroupLeaderBoard from "../screens/groupLeaderBoard"
 import OtpVerification from "../screens/verificationOtp"
 import LockedScreen from "../screens/lockedScreen"
 import seasonLeaderBoard from "../screens/seasonLeaderBoard"
+import Payment from "../screens/Payment"
+import PaymentConfirmation from "../screens/paymentConfirmation"
 
 //Stacks Of Screen To Navigate
 const stack = createNativeStackNavigator()
@@ -299,6 +301,8 @@ export const AuthNavigator = () => {
                 <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="PrivateGroupDetails" component={PrivateGroupDetails} />
                 <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="MemberShip" component={MemberShip} />
                 <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="MyMembership" component={MyMembership} />
+                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Payment" component={Payment} />
+                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="PaymentConfirmation" component={PaymentConfirmation} />
             </stack.Navigator>
         </NavigationContainer >
     )
@@ -315,6 +319,7 @@ export const RegisterFirstTime = () => {
                 <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="MyMembership" component={MyMembership} />
                 <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="PrivateGroupDetails" component={PrivateGroupDetails} />
                 <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="MemberShip" component={MemberShip} />
+                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Payment" component={Payment} />
             </stack.Navigator>
         </NavigationContainer >
     )

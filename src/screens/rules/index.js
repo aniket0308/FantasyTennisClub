@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
 import { utils } from "../../common";
@@ -6,7 +5,6 @@ import { constants } from "../../common/constant";
 import { Header } from "../../components";
 import Loader from "../../components/loader";
 import rulesStyle from "./style";
-import Snackbar from 'react-native-snackbar';
 import RenderHtml from 'react-native-render-html';
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { useDispatch } from "react-redux";
@@ -72,7 +70,7 @@ const Rules = ({ navigation }) => {
                 onPressRightIcon={() => utils.navigateTo(navigation, constants.screens.notification)}
                 onPressLeftIcon={() => navigation.goBack()}
             />
-            {isLoading == true 
+            {isLoading == true
                 ? <ScrollView
                     refreshControl={
                         <RefreshControl
@@ -90,8 +88,8 @@ const Rules = ({ navigation }) => {
                         />
                     }
                     style={{ marginBottom: 25 }}>
-                        <RenderRules />
-                        <RenderFaq />
+                    <RenderRules />
+                    <RenderFaq />
                 </ScrollView>
                 : <Loader />
             }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
+import { utils } from "../../common";
 import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
 import { Button, Header } from "../../components";
@@ -75,6 +76,7 @@ const MemberShip = ({ route, navigation }) => {
                     <Text style={[membershipStyle.txtDate, { fontSize: 18, color: constants.colors.black, fontWeight: '700' }]}>${route?.params?.price}</Text>
                 </View>
                 <Button
+                onPress={()=>navigation.navigate('Payment',{price:route?.params?.price})}
                     titleText={'Place Order'}
                     btnStyle={{ marginTop: 50, width: '100%' }}
                 />

@@ -65,6 +65,9 @@ export const constants = {
         effilTower: require(`${defaultPath}/effilTower.png`),
         map: require(`${defaultPath}/map.png`),
         whiteBackArrow: require(`${defaultPath}/whiteBackArrow.png`),
+        cards: require(`${defaultPath}/Visa.png`),
+        paymentFailed: require(`${defaultPath}/paymentFailed.png`),
+        paymentSuccess: require(`${defaultPath}/PaymentSuccess.png`),
     },
     fonts: {
         exo2Regular: 'Exo2-Regular',
