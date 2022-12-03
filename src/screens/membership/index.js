@@ -76,7 +76,7 @@ const MemberShip = ({ route, navigation }) => {
                     <Text style={[membershipStyle.txtDate, { fontSize: 18, color: constants.colors.black, fontWeight: '700' }]}>${route?.params?.price}</Text>
                 </View>
                 <Button
-                onPress={()=>navigation.navigate('Payment',{price:route?.params?.price})}
+                onPress={()=>navigation.navigate('Payment',{item:route.params})}
                     titleText={'Place Order'}
                     btnStyle={{ marginTop: 50, width: '100%' }}
                 />
