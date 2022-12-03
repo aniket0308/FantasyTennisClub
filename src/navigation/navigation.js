@@ -72,7 +72,7 @@ const StackInstideSelectionDay = () => {
 //Stack inside Leaderboard Tab
 const StackInstideLeaderboard = () => {
     return (
-        <stack.Navigator initialRouteName="seasonLeaderBoard">
+        <stack.Navigator initialRouteName="LeaderBoard">
             <stack.Screen options={{ headerShown: false,orientation:'all' }} name="Consolation" component={Consolation} />
             <stack.Screen options={{ headerShown: false,orientation:'all' }} name="GroupLeaderBoard" component={GroupLeaderBoard} />
             <stack.Screen options={{ headerShown: false,orientation:'all' }} name="LeaderBoard" component={LeaderBoard} />

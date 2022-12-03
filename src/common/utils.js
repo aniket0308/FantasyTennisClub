@@ -131,8 +131,10 @@ export const callApi = (path, payload, type, dispatch) => {
                     payload.submit()
                     payload.isLoading()
                 } else {
-                    if (json.error == false) {
+                    if (json.error == false && type!='sendPickEmail') {
                         Alert.alert(json?.message)
+                    }else{
+                        utils.navigateTo(payload.navigation, constants.screens.dashBoard)
                     }
                 }
             }

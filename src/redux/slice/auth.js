@@ -33,7 +33,7 @@ export const authSlice = createSlice({
                 password: actions.payload.password,
                 device_token: actions.payload.deviceToken,
                 platform: actions.payload.platform,
-                setIsLoading:actions.payload.setIsLoading
+                setIsLoading: actions.payload.setIsLoading
             }
             //calling Api For Login
             utils.callApi('api/login', loginObj, 'login', actions?.payload?.dispatch)
@@ -72,12 +72,12 @@ export const authSlice = createSlice({
         },
         logout: (state, actions) => {
             //calling Api For Logout
-            utils.callApi('api/v1/logout', {setIsLoading:actions?.payload?.setIsLoading}, 'logout', actions?.payload?.dispatch)
+            utils.callApi('api/v1/logout', { setIsLoading: actions?.payload?.setIsLoading }, 'logout', actions?.payload?.dispatch)
             return state
         },
         sendOtp: (state, actions) => {
             //calling Api For sending Otp
-            utils.callApi('api/send-otp', { email: actions.payload.email, navigation: actions.payload.navigation,setIsLoading:actions.payload.setIsLoading }, 'sendOtp', actions?.payload?.dispatch)
+            utils.callApi('api/send-otp', { email: actions.payload.email, navigation: actions.payload.navigation, setIsLoading: actions.payload.setIsLoading }, 'sendOtp', actions?.payload?.dispatch)
         },
         verifyOtp: (state, actions) => {
             //calling Api For Verifiying Otp
@@ -252,7 +252,29 @@ export const authSlice = createSlice({
             }
             //calling Api For Getting about
             utils.callApiGet(`api/v1/page/faqs`, seasonObj)
+        },
+        sendPicksToEmail: async (state, actions) => {
+            const sendEmailObj = {
+                token: await AsyncStorage.getItem('@Token'),
+                tournament_id: actions.payload.tournament_id,
+                day_id: actions.payload.day_id,
+                navigation: actions.payload.navigation
+            }
+            //calling Api For Sending Email
+            utils.callApi(`api/v1/send-picks-mail`, sendEmailObj, 'sendPickEmail')
+        },
+        doPaymentFromCard: async (state, actions) => {
+            const paymentObj = {
+                token: await AsyncStorage.getItem('@Token'),
+                data_value: actions.payload.dataValue,
+                data_descriptor: actions.payload.dataDescriptor,
+                amount:actions.payload.amount,
+                membership_type:actions.payload.membership_type,
+                navigation: actions.payload.navigation
+            }
 
+            //calling Api For Doing Payment
+            utils.callApi(`api/v1/capture-payment`, paymentObj, 'sendPickEmail')
         }
 
     }
@@ -262,6 +284,6 @@ export const authSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const { login, logout, registration, joinPrivateGroup, oganizePrivateGroup, isLoaderVisible, isLoaderNotVisible, sendOtp, verifyOtp, savePicks,
     getAnnouncements, getDays, getAllPicksFormApi, getSeasonLeaderBoard, getGroupConsolationLeaderBoard, getConsolationLeaderBoard, getLeaderBoard, getEtiquites,
-    getTournamentLeaderBoard, getTournamentParticipants, getNotifications, getMyMembership, getSavedPicks, aboutUs,getRules,getFaq } = authSlice.actions
+    getTournamentLeaderBoard, getTournamentParticipants, getNotifications, getMyMembership, getSavedPicks, aboutUs, getRules, getFaq, sendPicksToEmail,doPaymentFromCard} = authSlice.actions
 
 export default authSlice.reducer

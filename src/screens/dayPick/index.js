@@ -7,7 +7,7 @@ import { constants } from "../../common/constant";
 import { Button } from "../../components";
 import CardWithImage from "../../components/cardWithImage";
 import Loader from "../../components/loader";
-import { getDays, savePicks } from "../../redux/slice/auth";
+import { getDays, savePicks, sendPicksToEmail } from "../../redux/slice/auth";
 import dayPickStyle from "./style";
 
 const DayPick = ({ route, navigation }) => {
@@ -161,10 +161,11 @@ const DayPick = ({ route, navigation }) => {
                          {isLoading == true
                             && <Button
                                 // disabled={}
-                                titleText={'Home'}
+                                titleText={'Send to email'}
                                 btnStyle={{ width: '100%' }}
                                 onPress={() => {
-                                    utils.navigateTo(navigation,constants.screens.dashBoard)
+                                    setIsLoading(false)
+                                    dispatch(sendPicksToEmail({tournament_id:particularDay?.tournament_id,day_id:particularDay?.id,navigation}))
                                 }}
                             />}
                     </>

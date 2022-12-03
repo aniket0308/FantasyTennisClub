@@ -82,7 +82,7 @@ const DashBoardHome = ({ navigation }) => {
                 }]}
             >
                 {
-                    item.score
+                    item?.score 
                     && <Text style={dashboardStyle.txtScore}>{days?.data[item?.title == 'Leaderboard' ? 'leaderboard' : item?.title == 'consolation' ? 'consolation' : 'season_ranking']}</Text>
                 }
                 {
