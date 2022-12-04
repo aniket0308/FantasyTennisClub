@@ -7,7 +7,7 @@ import PaymementStyle from "./style";
 import { useDispatch } from "react-redux";
 import { doPaymentFromCard } from "../../redux/slice/auth";
 import Snackbar from "react-native-snackbar";
-// import RNAuthorizeNet from "react-native-reliantid-authorize-net";
+import RNAuthorizeNet from "react-native-reliantid-authorize-net";
 
 
 const Payment = ({ route, navigation }) => {
@@ -25,18 +25,18 @@ const Payment = ({ route, navigation }) => {
 
 
     const doPayment = async () => {
-    //     RNAuthorizeNet.getTokenWithRequestForCard({
-    //         LOGIN_ID: "833MhxBA",
-    //         CLIENT_KEY: "6hnN99UnEeHa67vwzS267g8jZRML3uGnT76heKW8daZkqGQAa65P2R6H8E78AX7N",
-    //         CARD_NO: "4007000000027",
-    //         EXPIRATION_MONTH: "05",
-    //         EXPIRATION_YEAR: "24",
-    //         CVV_NO: "089",
-    //     },true,
-    //     (res,response)=>{
-    //         console.log('ddfd',response);
-    //     }
-    //    )
+        RNAuthorizeNet.getTokenWithRequestForCard({
+            LOGIN_ID: "833MhxBA",
+            CLIENT_KEY: "6hnN99UnEeHa67vwzS267g8jZRML3uGnT76heKW8daZkqGQAa65P2R6H8E78AX7N",
+            CARD_NO: "4007000000027",
+            EXPIRATION_MONTH: "05",
+            EXPIRATION_YEAR: "24",
+            CVV_NO: "089",
+        },true,
+        (res,response)=>{
+            console.log('ddfd',response);
+        }
+       )
 
         // // await getTokenWithRequestForCard({
         // //     env: AuthorizeNetEnv.PRODUCTION, //AuthorizeNetEnv.PRODUCTION
