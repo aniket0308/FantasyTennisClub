@@ -49,11 +49,12 @@ export const callApi = (path, payload, type, dispatch) => {
     })
         .then((res) => res.json())
         .then(async (json) => {
-            console.log('what is dispatch', dispatch);
+            console.log('what is dispatch', json);
             if (dispatch != undefined) {
                 dispatch(isLoaderNotVisible())
                 dispatch(isLoaderNotVisibleProfile())
             }
+
             if (json.error == true) {
                 Snackbar.show({
                     text: json.message,
@@ -82,8 +83,6 @@ export const callApi = (path, payload, type, dispatch) => {
                         storeData(json.data, false)
                     }
                 }
-
-
             } else if (type == 'editProfile') {
                 if (json.error == false) {
                     await AsyncStorage.setItem('@Name', payload?.name)
@@ -126,14 +125,21 @@ export const callApi = (path, payload, type, dispatch) => {
                         utils.navigateTo(payload.navigation, constants.screens.login)
                     }
                 }
-            } else if (type == 'organizePrivateGroup' || type == 'privateGroup' || 'savePick') {
+            }
+            else if (type == 'organizePrivateGroup' || type == 'privateGroup' || 'savePick') {
                 if (payload.submit != undefined) {
                     payload.submit()
                     payload.isLoading()
                 } else {
-                    if (json.error == false && type!='sendPickEmail') {
+                    console.log('sdsdsds type',type);
+                    if (json.error == false && type != 'sendPickEmail' && type != 'PaymentCapture') {
                         Alert.alert(json?.message)
-                    }else{
+                    }
+                    else if (type == 'PaymentCapture') {
+                        payload.setIsLoading(false)
+                        utils.navigateTo(payload.navigation, 'PaymentConfirmation', json)
+                    }
+                    else {
                         utils.navigateTo(payload.navigation, constants.screens.dashBoard)
                     }
                 }

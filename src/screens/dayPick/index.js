@@ -31,7 +31,7 @@ const DayPick = ({ route, navigation }) => {
     }
     //get Particular Day Match
     const getAllMatchesOfParticulatDay = () => {
-        dispatch(getDays({setIsLoading,setRefresh,setDays}))
+        dispatch(getDays({ setIsLoading, setRefresh, setDays }))
     }
 
     useEffect(() => {
@@ -43,11 +43,18 @@ const DayPick = ({ route, navigation }) => {
         return (
             <>
                 <View style={dayPickStyle.txtViewSelectionStyle}>
-                    <Text style={dayPickStyle.selectionTxtStyle}>{`${item?.title ? item?.title : item?.match_title}`}</Text>
+                    <Text style={dayPickStyle.selectionTxtStyle}>{particularDay?.is_last_day == true ? `Day 14 Match 0${index + 1}` : `${item?.title ? item?.title : item?.match_title}`}</Text>
                 </View>
                 <SelectDropdown
                     buttonStyle={dayPickStyle.selectionButtonStyle}
-                    data={[item?.players[0]?.player, item?.players[1]?.player]}
+                    // data={[item?.players[index]?.player, item?.players[1]?.player]}
+                    data={
+                        particularDay?.is_last_day == true ?
+                            item?.players.map((item, index) => {
+                                return item.player
+                            })
+                            : [item?.players[0]?.player, item?.players[1]?.player]
+                    }
                     onSelect={(selectedItem, selectedindex) => {
                         const matchId = item?.players.find(i => i?.player == selectedItem && i)
                         const obj = {
@@ -90,6 +97,10 @@ const DayPick = ({ route, navigation }) => {
                 <Image style={{ height: 20, width: 20, tintColor: constants.colors.darkGreen }} source={constants.icons.backArrow} />
             </TouchableOpacity>
             <Text style={dayPickStyle.txtDay}>Day {route.params <= 9 ? `0${route.params}` : route.params}</Text>
+            {
+                route.params == 14
+                && <Text style={{ color: 'black', fontFamily: constants.fonts.notoSansBold, fontSize: 20, marginTop: -10, marginBottom: 5 }}>Tournament Champions</Text>
+            }
             <Text style={dayPickStyle.txtSubmit}>{isSubmit == false ? 'Submit your picks below' : '‌‌Your Picks have been entered successfully!'}</Text>
             <ScrollView
                 refreshControl={
@@ -116,11 +127,12 @@ const DayPick = ({ route, navigation }) => {
                         <View style={{ marginVertical: 30 }}>
                             {
                                 particularDay?.matches.map((item, index) => {
+                                    console.log('item?.is_last_day',);
                                     return (
                                         <CardWithImage
                                             containerStyle={{ backgroundColor: constants.colors.labelColor, marginBottom: 10 }}
-                                            labelTitle={`${item?.players[0]?.player} vs ${item?.players[1]?.player}`}
-                                            label={`${item?.title ? item?.title : item?.match_title}`}
+                                            labelTitle={particularDay?.is_last_day == true ? item?.title : `${item?.players[0]?.player} vs ${item?.players[1]?.player}`}
+                                            label={particularDay?.is_last_day == true ? `champion 0${index + 1}` : `${item?.title ? item?.title : item?.match_title}`}
                                             labelStyle={dayPickStyle.labelStyle}
                                             titleStyle={dayPickStyle.titleStyle}
                                         />
@@ -140,7 +152,7 @@ const DayPick = ({ route, navigation }) => {
                                 btnStyle={{ width: '100%' }}
                                 onPress={() => {
                                     setIsLoading(false)
-                                    dispatch(savePicks({ matches: objects, submit: () => setIsSubmit(true), isLoading: () => setIsLoading(true),day:particularDay?.id,tournament_id:particularDay?.tournament_id }))
+                                    dispatch(savePicks({ matches: objects, submit: () => setIsSubmit(true), isLoading: () => setIsLoading(true), day: particularDay?.id, tournament_id: particularDay?.tournament_id }))
                                 }}
                             />}
                     </>
@@ -158,14 +170,14 @@ const DayPick = ({ route, navigation }) => {
                                 )
                             })
                         }
-                         {isLoading == true
+                        {isLoading == true
                             && <Button
                                 // disabled={}
                                 titleText={'Send to email'}
                                 btnStyle={{ width: '100%' }}
                                 onPress={() => {
                                     setIsLoading(false)
-                                    dispatch(sendPicksToEmail({tournament_id:particularDay?.tournament_id,day_id:particularDay?.id,navigation}))
+                                    dispatch(sendPicksToEmail({ tournament_id: particularDay?.tournament_id, day_id: particularDay?.id, navigation }))
                                 }}
                             />}
                     </>

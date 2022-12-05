@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { doPaymentFromCard } from "../../redux/slice/auth";
 import Snackbar from "react-native-snackbar";
 import RNAuthorizeNet from "react-native-reliantid-authorize-net";
+import Loader from '../../components/loader'
 
 
 const Payment = ({ route, navigation }) => {
@@ -17,50 +18,29 @@ const Payment = ({ route, navigation }) => {
     const [cvc, setCvc] = useState('')
     const [year, setYear] = useState('')
     const [nameOnCard, setNameOnCard] = useState('')
+    const [isLoading, setIsLoading] = useState(false)
 
     const dispatch = useDispatch()
     const tempObj = route?.params?.item
 
-    console.log('tempObj====', tempObj);
-
+    const tournamentIdArr = tempObj?.tournaments.map((item, index) => {
+        return item.tournament_id
+    })
 
     const doPayment = async () => {
+        setIsLoading(true)
         RNAuthorizeNet.getTokenWithRequestForCard({
             LOGIN_ID: "833MhxBA",
             CLIENT_KEY: "6hnN99UnEeHa67vwzS267g8jZRML3uGnT76heKW8daZkqGQAa65P2R6H8E78AX7N",
-            CARD_NO: "4007000000027",
-            EXPIRATION_MONTH: "05",
-            EXPIRATION_YEAR: "24",
-            CVV_NO: "089",
-        },true,
-        (res,response)=>{
-            console.log('ddfd',response);
-        }
-       )
-
-        // // await getTokenWithRequestForCard({
-        // //     env: AuthorizeNetEnv.PRODUCTION, //AuthorizeNetEnv.PRODUCTION
-        // //     cardValues: {
-        // //         loginID: '833MhxBA',
-        // //         clientKey: '6hnN99UnEeHa67vwzS267g8jZRML3uGnT76heKW8daZkqGQAa65P2R6H8E78AX7N',
-        // //         // cardNumber: '4007 0000 0002 7',
-        // //         cardNumber: cardNumber,
-        // //         // cardCVV: '089',
-        // //         cardCVV: cvc,
-        // //         expirationYear: year,
-        // //         expirationMonth: month,
-        // //         // zipCode: '...', //Optional
-        // //         // cardHolderName: '...' //Optional
-        // //     },
-        // // }).then((response) => {
-        // //     dispatch(doPaymentFromCard({ data_value: response?.dataValue, data_descriptor: response?.dataDescriptor, amount: tempObj?.price, membership_type: tempObj?.membership_type }))
-        // // }).catch(e => {
-        // //     Snackbar.show({
-        // //         text: e.text,
-        // //         duration: 1000,
-        // //         backgroundColor: 'red',
-        // //     })
-        // });
+            CARD_NO: cardNumber,
+            EXPIRATION_MONTH: month,
+            EXPIRATION_YEAR: year,
+            CVV_NO: cvc,
+        }, true,
+            (res, response) => {
+                dispatch(doPaymentFromCard({ dataValue: response?.DATA_VALUE, dataDescriptor: response?.DATA_DESCRIPTOR, amount: tempObj?.price, membership_type: tempObj?.membership_type, tournamentIdArr, navigation,setIsLoading }))
+            }
+        )
     }
 
     return (
@@ -130,6 +110,9 @@ const Payment = ({ route, navigation }) => {
                     }}
                 />
             </View>
+            {isLoading == true
+                && <Loader />
+            }
         </View>
     )
 }

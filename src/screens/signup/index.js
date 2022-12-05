@@ -143,7 +143,7 @@ const SignUp = ({ navigation }) => {
                     value={referral}
                     autoCapitalize='none'
                 />
-                <Text style={{ marginVertical: 5, color: 'red', fontWeight: '600', marginLeft: widthPercentageToDP(10) }}>*Mandatory Field</Text>
+                <Text style={{ marginVertical: 5, color: 'red', fontWeight: '600', marginLeft: widthPercentageToDP(10),fontSize:10 }}>*Mandatory Field</Text>
                 <Button
                     disabled={isLoading == true ? true : false}
                     titleText='Sign Up'
@@ -157,7 +157,7 @@ const SignUp = ({ navigation }) => {
             {isLoading == true && <Loader />}
             <View style={signUpStyle.footer}>
                 <Text style={signUpStyle.txtNewToFantasy} >Already have a Fantasy Tennis Club? </Text>
-                <TouchableOpacity onPress={() => isLoading == false ? utils.navigateTo(navigation, constants.screens.login) : ''} >
+                <TouchableOpacity onPress={() =>  utils.navigateTo(navigation, constants.screens.login)} >
                     <Text style={signUpStyle.txtSignUp}>Login</Text>
                 </TouchableOpacity>
             </View>

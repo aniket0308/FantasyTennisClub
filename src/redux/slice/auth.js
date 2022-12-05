@@ -266,15 +266,17 @@ export const authSlice = createSlice({
         doPaymentFromCard: async (state, actions) => {
             const paymentObj = {
                 token: await AsyncStorage.getItem('@Token'),
-                data_value: actions.payload.dataValue,
-                data_descriptor: actions.payload.dataDescriptor,
+                dataValue: actions.payload.dataValue,
+                dataDescriptor: actions.payload.dataDescriptor,
                 amount:actions.payload.amount,
                 membership_type:actions.payload.membership_type,
-                navigation: actions.payload.navigation
+                membership_items:actions.payload.tournamentIdArr,
+                navigation: actions.payload.navigation,
+                setIsLoading:actions.payload.setIsLoading
             }
 
             //calling Api For Doing Payment
-            utils.callApi(`api/v1/capture-payment`, paymentObj, 'sendPickEmail')
+            utils.callApi(`api/v1/capture-payment`, paymentObj, 'PaymentCapture')
         }
 
     }
