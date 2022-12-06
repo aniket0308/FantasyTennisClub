@@ -16,7 +16,7 @@ const PaymentConfirmation = ({ route, navigation }) => {
             source={constants.icons.backArrow}
             />
             </TouchableOpacity>
-            <Image source={route.params?.success == true ? constants.icons.paymentSuccess : constants.icons.paymentFailed} style={{ height: widthPercentageToDP(50), width: widthPercentageToDP(50) }} resizeMode='contain' />
+            <Image source={route.params?.success == true ? constants.icons.paymentSuccess : constants.icons.paymentFailed} style={{ height: widthPercentageToDP(30), width: widthPercentageToDP(30) }} resizeMode='contain' />
             <Text style={{ color: 'black', fontSize: 24, fontWeight: '600', fontFamily: constants.fonts.notoSansRegular }}>{route.params?.success == true ? 'Payment Successfull' : 'Payment Failed'}</Text>
             <Text style={{ color: 'black', fontSize: 14, fontWeight: '600', fontFamily: constants.fonts.nuntinoRegular, textAlign: 'center' }}>{route.params?.message}</Text>
             <Button

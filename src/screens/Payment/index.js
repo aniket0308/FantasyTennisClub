@@ -23,9 +23,9 @@ const Payment = ({ route, navigation }) => {
     const dispatch = useDispatch()
     const tempObj = route?.params?.item
 
-    const tournamentIdArr = tempObj?.tournaments.map((item, index) => {
+    const tournamentIdArr = tempObj?.tournaments?tempObj?.tournaments.map((item, index) => {
         return item.tournament_id
-    })
+    }):[tempObj?.tournament_id]
 
     const doPayment = async () => {
         setIsLoading(true)
