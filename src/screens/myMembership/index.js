@@ -67,7 +67,7 @@ const MyMembership = ({ navigation, route }) => {
                             <Button
                                 titleText={'Update Membership'}
                                 btnStyle={{ width: '100%' }}
-                                onPress={() => utils.navigateTo(navigation, constants.screens.buyMemberShip)}
+                                onPress={() => utils.navigateTo(navigation, constants.screens.buyMemberShip,{showBackArrow:true})}
                             />
                             <Button
                                 titleText={'Logout'}

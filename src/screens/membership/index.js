@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
+import { useDispatch, useSelector } from "react-redux";
 import { utils } from "../../common";
 import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
 import { Button, Header } from "../../components";
+import { addMembership } from "../../redux/slice/auth";
 import membershipStyle from "./style";
 
 const MemberShip = ({ route, navigation }) => {
+
+    const dispatch=useDispatch()
 
     return (
         <View style={membershipStyle.mainContainer}>
@@ -21,7 +25,12 @@ const MemberShip = ({ route, navigation }) => {
                     titleStyle={{ marginTop: 5, marginBottom: -10 }}
                     onPressLeftIcon={() => navigation.goBack()}
                 />
-                <TouchableOpacity style={membershipStyle.addButtonView}>
+                <TouchableOpacity
+                onPress={()=>{
+                    dispatch(addMembership({membershipTournamentData:route?.params}))
+                    navigation.goBack()
+                }}
+                style={membershipStyle.addButtonView}>
                     <Text style={membershipStyle.plusIcon}>+</Text>
                 </TouchableOpacity>
             </View>

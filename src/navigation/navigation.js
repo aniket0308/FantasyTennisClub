@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { NavigationContainer } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { Image, Text, View } from "react-native"
+import { Image, Text, TouchableOpacity, View } from "react-native"
 import { constants } from "../common/constant"
 import Account from "../screens/account"
 import ForgotPassword from "../screens/forgetPassword"
@@ -87,7 +87,7 @@ const StackInsideAccount = () => {
     return (
         <stack.Navigator initialRouteName="Account">
             <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Account" component={Account} />
-            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="ChangePassword" component={ChangePassword} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait', }} name="ChangePassword" component={ChangePassword} />
             <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="AboutUs" component={AboutUs} />
             <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="MemberShip" component={MemberShip} />
             <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="MyMembership" component={MyMembership} />
@@ -116,9 +116,11 @@ const BottomTab = ({ navigation }) => {
                 initialRouteName="Dashboard">
                 <bottomTab.Screen
                     options={{
+                        unmountOnBlur: true ,
                         headerShown: false, tabBarIcon: ({ focused }) => {
                             return (
-                                <View style={{paddingVertical:20}}>
+                                <View
+                                style={{paddingVertical:20}}>
                                     <Image
                                         source={constants.icons.home}
                                         resizeMode='contain'
@@ -147,6 +149,7 @@ const BottomTab = ({ navigation }) => {
                     component={StackInstideDashBoard} />
                 <bottomTab.Screen
                     options={{
+                        unmountOnBlur: true ,
                         headerShown: false, tabBarIcon: ({ focused }) => {
                             return (
                                 <View style={{paddingVertical:20}}>
@@ -177,7 +180,7 @@ const BottomTab = ({ navigation }) => {
                     name="SelectionDays"
                     component={StackInstideSelectionDay} />
                 <bottomTab.Screen
-                    options={{
+                    options={{unmountOnBlur: true ,
                         headerShown: false,
                         tabBarIcon: ({ focused }) => {
                             return (
@@ -207,7 +210,7 @@ const BottomTab = ({ navigation }) => {
                     name="GroupLeaderBoard"
                     component={StackInstideLeaderboard} />
                 <bottomTab.Screen
-                    options={{
+                    options={{unmountOnBlur: true ,
                         headerShown: false, tabBarIcon: ({ focused }) => {
                             return (
                                 <View style={{paddingVertical:20}}>
@@ -239,6 +242,7 @@ const BottomTab = ({ navigation }) => {
                     component={StackInsideRules} />
                 <bottomTab.Screen
                     options={{
+                        unmountOnBlur: true ,
                         headerShown: false, tabBarIcon: ({ focused }) => {
                             return (
                                 <View style={{paddingVertical:20,marginLeft:-10}}>

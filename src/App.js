@@ -70,11 +70,6 @@ const App = () => {
         } else {
           setIsAuthentication()
         }
-        //Logout automatically if admin deletes user
-        if(json?.data?.is_member_deleted==true){
-          await AsyncStorage.clear()
-        }
-
       }).
       catch(e => {
         Snackbar.show({
@@ -114,11 +109,11 @@ const App = () => {
   return (
     <Provider store={store}>
       {
-        isAuthentication == true && firstTime=='true'
+        isAuthentication == true && firstTime == 'true'
           ? <RegisterFirstTime />
-          :isAuthentication == true && firstTime==null
-          ?<AuthNavigator/>
-          :isAuthentication==false&& <RootNavigator />
+          : isAuthentication == true && firstTime == null
+            ? <AuthNavigator />
+            : isAuthentication == false && <RootNavigator />
       }
     </Provider>
   );

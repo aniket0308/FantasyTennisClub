@@ -3,9 +3,10 @@ import { createSlice } from '@reduxjs/toolkit'
 import { utils } from '../../common';
 
 const initialState = {
-    isLoading: false
-}
-
+    isLoading:false,
+    membershipData:[],
+  }
+  
 export const authSlice = createSlice({
     name: 'auth',
     initialState,
@@ -268,17 +269,27 @@ export const authSlice = createSlice({
                 token: await AsyncStorage.getItem('@Token'),
                 dataValue: actions.payload.dataValue,
                 dataDescriptor: actions.payload.dataDescriptor,
-                amount:actions.payload.amount,
-                membership_type:actions.payload.membership_type,
-                membership_items:actions.payload.tournamentIdArr,
+                amount: actions.payload.amount,
+                membership_type: actions.payload.membership_type,
+                membership_items: actions.payload.tournamentIdArr,
                 navigation: actions.payload.navigation,
-                setIsLoading:actions.payload.setIsLoading
+                setIsLoading: actions.payload.setIsLoading
             }
 
             //calling Api For Doing Payment
             utils.callApi(`api/v1/capture-payment`, paymentObj, 'PaymentCapture')
+        },
+        checkLoginStep: async (state, actions) => {
+            const token = await AsyncStorage.getItem('@Token')
+            return { ...state, token }
+        },
+        addMembership: (state, action) => {
+            console.log('action.payload',action.payload);
+            let t=[]
+            t.push(action.payload)
+            state.membershipData=t
+            return state
         }
-
     }
 
 })
@@ -286,6 +297,7 @@ export const authSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const { login, logout, registration, joinPrivateGroup, oganizePrivateGroup, isLoaderVisible, isLoaderNotVisible, sendOtp, verifyOtp, savePicks,
     getAnnouncements, getDays, getAllPicksFormApi, getSeasonLeaderBoard, getGroupConsolationLeaderBoard, getConsolationLeaderBoard, getLeaderBoard, getEtiquites,
-    getTournamentLeaderBoard, getTournamentParticipants, getNotifications, getMyMembership, getSavedPicks, aboutUs, getRules, getFaq, sendPicksToEmail,doPaymentFromCard} = authSlice.actions
+    getTournamentLeaderBoard, getTournamentParticipants, getNotifications, getMyMembership, getSavedPicks, aboutUs, getRules, getFaq, sendPicksToEmail, doPaymentFromCard,
+    checkLoginStep,addMembership } = authSlice.actions
 
 export default authSlice.reducer

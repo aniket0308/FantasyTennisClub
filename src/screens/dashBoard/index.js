@@ -83,7 +83,7 @@ const DashBoardHome = ({ navigation }) => {
             >
                 {
                     item?.score 
-                    && <Text style={dashboardStyle.txtScore}>{days?.data[item?.title == 'Leaderboard' ? 'leaderboard' : item?.title == 'consolation' ? 'consolation' : 'season_ranking']}</Text>
+                    && <Text style={dashboardStyle.txtScore}>{days?.data[item?.title == 'Leaderboard' ? 'leaderboard' : item?.title == 'Consolation' ? 'consolation' : 'season_ranking']}</Text>
                 }
                 {
                     item.icon
@@ -157,7 +157,7 @@ const DashBoardHome = ({ navigation }) => {
                             </View>
                             <View style={[commonStyle.row, { justifyContent: 'space-between', marginVertical: 20, alignItems: 'center' }]}>
                                 <Text style={dashboardStyle.txtGeneral}>General Anouncements:</Text>
-                                <TouchableOpacity onPress={() => utils.navigateTo(navigation, constants.screens.announcements)}>
+                                <TouchableOpacity onPress={() => utils.navigateTo(navigation, constants.screens.announcements,{initial:false})}>
                                     <Text style={[dashboardStyle.txtGeneral, { fontSize: 16 }]}>See All</Text>
                                 </TouchableOpacity>
                             </View>
