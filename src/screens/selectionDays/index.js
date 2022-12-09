@@ -16,10 +16,10 @@ const SelectionDays = ({ route, navigation }) => {
     const [myPicks, setMyPicks] = useState('')
     const [days, setDays] = useState()
     const [isLoading, setIsLoading] = useState(false)
-    const dispatch=useDispatch()
-
+    const dispatch = useDispatch()
+    console.log('what are days', days?.data?.days.reverse());
     useEffect(() => {
-        dispatch(getDays({setIsLoading,setDays}))
+        dispatch(getDays({ setIsLoading, setDays }))
     }, [])
 
     useEffect(() => {
@@ -38,11 +38,11 @@ const SelectionDays = ({ route, navigation }) => {
             <SafeAreaView />
             <Header
                 showBackArrow={true}
-                title={myPicks=='MY PICKS'?'My Picks':'Selection Days'}
-                titleStyle={{ fontSize: 22,marginTop:10 }}
+                title={myPicks == 'MY PICKS' ? 'My Picks' : 'Selection Days'}
+                titleStyle={{ fontSize: 22, marginTop: 10 }}
                 viewHeaderStyle={{ width: '100%' }}
                 rightIcon={constants.icons.shapeBell}
-                rightIconStyle={{height:widthPercentageToDP(6),width:widthPercentageToDP(6) ,marginTop:-10}}
+                rightIconStyle={{ height: widthPercentageToDP(6), width: widthPercentageToDP(6), marginTop: -10 }}
                 onPressRightIcon={() => utils.navigateTo(navigation, constants.screens.notification)}
                 onPressLeftIcon={() => navigation.goBack()}
             />
@@ -54,11 +54,20 @@ const SelectionDays = ({ route, navigation }) => {
                             && days?.data?.days.reverse().map((item, index) => {
                                 return (
                                     <TouchableOpacity
-                                        onPress={() =>item?.alert_message?alert(item?.alert_message):utils.navigateTo(navigation,item?.is_lock_form==1?'LockedScreen':route.params == undefined ? constants.screens.dayPick : constants.screens.myPicks,item?.is_lock_form==1?{item,tournament_day:item.tournament_day.split(' ')[1]}:item.tournament_day.split(' ')[1])}
+                                        onPress={() => item?.alert_message
+                                            ? alert(item?.alert_message)
+                                            : utils.navigateTo(navigation, item?.is_lock_form == 1
+                                                ? 'LockedScreen'
+                                                : route.params == undefined
+                                                    ? constants.screens.dayPick
+                                                    : constants.screens.myPicks,
+                                                item?.is_lock_form == 1
+                                                    ? { item, tournament_day: item.tournament_day.split(' ')[1] }
+                                                    : item?.id)}
                                         style={[
                                             selectionDayStyle.touchItem,
                                             {
-                                                backgroundColor: item.is_consolation_day == true&&myPicks!=='MY PICKS' ? constants.colors.labelColor : constants.colors.white,
+                                                backgroundColor: item.is_consolation_day == true && myPicks !== 'MY PICKS' ? constants.colors.labelColor : constants.colors.white,
                                                 marginTop: index != 0 || index != 1 ? 20 : 0,
                                                 marginRight: index + 1 % 4 == 0 ? 10 : 10,
                                                 marginLeft: index + 1 % 2 == 0 ? 0 : 10
@@ -70,8 +79,8 @@ const SelectionDays = ({ route, navigation }) => {
                                                     <Image style={{ marginBottom: Platform.OS == "android" ? 10 : 0, height: widthPercentageToDP(10), width: widthPercentageToDP(12) }} source={constants.icons.winnerCup} resizeMode='contain' />
                                                     <Text style={[selectionDayStyle.TxtDay]}>Day 14</Text>
                                                 </> : <>
-                                                    <Text style={[selectionDayStyle.txtWhichDay, { color: item.is_consolation_day == true&&myPicks!=='MY PICKS' ? constants.colors.white : constants.colors.darkGreen }]} >{item.tournament_day.split(' ')[1]}</Text>
-                                                    <Text style={[selectionDayStyle.TxtDay, { color: item.is_consolation_day == true&&myPicks!=='MY PICKS' ? constants.colors.white : constants.colors.darkGreen }]}>Day</Text>
+                                                    <Text style={[selectionDayStyle.txtWhichDay, { color: item.is_consolation_day == true && myPicks !== 'MY PICKS' ? constants.colors.white : constants.colors.darkGreen }]} >{item.tournament_day.split(' ')[1]}</Text>
+                                                    <Text style={[selectionDayStyle.TxtDay, { color: item.is_consolation_day == true && myPicks !== 'MY PICKS' ? constants.colors.white : constants.colors.darkGreen }]}>Day</Text>
                                                 </>
                                         }
                                     </TouchableOpacity>
@@ -79,7 +88,7 @@ const SelectionDays = ({ route, navigation }) => {
                             })
                         }
                     </View>
-                    {myPicks == 'MY PICKS'&&isLoading==true
+                    {myPicks == 'MY PICKS' && isLoading == true
                         && <TouchableOpacity
                             onPress={() => utils.navigateTo(navigation, constants.screens.myPicks, 'All')}
                             style={selectionDayStyle.touchableAllPicks}>

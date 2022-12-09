@@ -23,7 +23,7 @@ const App = () => {
   const [isMembership, setIsMembership] = useState()
   const [firstTime, setFirstTime] = useState()
   const [isLoading, setIsLoading] = useState(false)
-  
+
   const getData = async () => {
     try {
       const value = await AsyncStorage.getItem('@Token')
@@ -62,27 +62,33 @@ const App = () => {
       then((response) => response.json()).
       then(async (json) => {
         console.log('what is json', json);
-        if (json?.success == true) {
-          setIsLoading(true)
-          await AsyncStorage.removeItem('@RegisterFirstTIme')
-          setIsMembership(json?.data?.is_member)
-          setRender({})
-        } else {
-          setIsAuthentication()
+        if (json['message'] != 'Unauthenticated.') {
+          if (json?.success == true) {
+            setIsLoading(true)
+            await AsyncStorage.removeItem('@RegisterFirstTIme')
+            setIsMembership(json?.data?.is_member)
+            setRender({})
+          } else {
+            setIsAuthentication()
+          }
+        }else{
+          await AsyncStorage.clear()
         }
+
       }).
       catch(e => {
-        Snackbar.show({
-          text: e.toString(),
-          duration: 1000,
-          backgroundColor: 'red',
-        });
+        // Snackbar.show({
+        //   text: e.toString(),
+        //   duration: 1000,
+        //   backgroundColor: 'red',
+        // });
         setIsLoading(false)
         console.log('What Is Error In Get Api', e)
       })
   }
 
   useEffect(() => {
+    getData()
     checkMemberShip()
   }, [])
 

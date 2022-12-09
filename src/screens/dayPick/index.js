@@ -21,7 +21,7 @@ const DayPick = ({ route, navigation }) => {
     const [objects, setObjects] = useState({})
     const [days, setDays] = useState()
     const dispatch = useDispatch()
-    const particularDay = days?.data?.days?.find(item => 'day ' + route?.params == item?.tournament_day)
+    const particularDay = days?.data?.days?.find(item => route?.params == item?.id)
     if (objects != undefined) {
         Object.keys(objects).forEach(key => {
             if (objects[key] === undefined) {
@@ -96,7 +96,7 @@ const DayPick = ({ route, navigation }) => {
             <TouchableOpacity onPress={() => isSubmit == true ? setIsSubmit(false) : navigation.goBack()} style={{ padding: 5, marginTop: 10, marginLeft: -5 }}>
                 <Image style={{ height: 20, width: 20, tintColor: constants.colors.darkGreen }} source={constants.icons.backArrow} />
             </TouchableOpacity>
-            <Text style={dayPickStyle.txtDay}>Day {route.params <= 9 ? `0${route.params}` : route.params}</Text>
+            <Text style={dayPickStyle.txtDay}>{particularDay?.tournament_day}</Text>
             {
                 route.params == 14
                 && <Text style={{ color: 'black', fontFamily: constants.fonts.notoSansBold, fontSize: 20, marginTop: -10, marginBottom: 5 }}>Tournament Champions</Text>

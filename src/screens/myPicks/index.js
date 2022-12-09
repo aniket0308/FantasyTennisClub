@@ -17,9 +17,8 @@ const MyPicks = ({ route, navigation }) => {
     const [data,setData]=useState()
     const dispatch=useDispatch()
 
-
-    const particularDayPick = data?.data?.days.filter((i) => {
-        if (`day ${route.params}` == i.day) {
+    const particularDayPick = data?.data?.days.find((i) => {
+        if (route.params == i.id) {
             return i
         }
     })
@@ -74,7 +73,7 @@ const MyPicks = ({ route, navigation }) => {
             <SafeAreaView />
             <Header
                 title={'MY PICKS'}
-                subTitle={route.params != String && route.params <= 9 ? `0${route.params}` : route.params}
+                subTitle={particularDayPick?.day}
                 titleStyle={{ alignSelf: 'center', fontSize: 22 }}
                 subTitleStyle={{ alignSelf: 'center', color: constants.colors.darkGreen }}
                 rightIcon={constants.icons.shapeBell}
@@ -104,7 +103,7 @@ const MyPicks = ({ route, navigation }) => {
                         }
                         showsVerticalScrollIndicator={false}
                         style={{ marginBottom: 20 }}
-                        data={data?.data?.days?.length > 0 && route?.params == 'All' ? data?.data?.days : route?.params != 'All' && particularDayPick?.length > 0 ? particularDayPick : []}
+                        data={data?.data?.days?.length > 0 && route?.params == 'All' ? data?.data?.days : route?.params != 'All' && [particularDayPick]?.length > 0 ? [particularDayPick] : []}
                         renderItem={renderAllPickData}
                     />
                     : <Loader />

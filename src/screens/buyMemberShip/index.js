@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { FlatList, Image, RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { IMGElement } from "react-native-render-html";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import Snackbar from 'react-native-snackbar';
 import { useSelector } from "react-redux";
@@ -8,6 +9,8 @@ import { utils } from "../../common";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
 import Loader from "../../components/loader";
+import { saveMembershipTournament } from "../../realmLocalStorage/realmFunction";
+import MemberShip from "../membership";
 import membershipStyle from "../membership/style";
 import buyMemberShipStyle from "./style";
 
@@ -15,11 +18,15 @@ const BuyMemberShip = ({ navigation, route }) => {
 
     const [memberShip, setMemberShip] = useState()
     const [isLoading, setIsLoading] = useState(false)
-    const  [refresh,setRefresh]=useState(false)
-    const selectorAuth=useSelector(state=>state.auth)
+    const [refresh, setRefresh] = useState(false)
+    const [id, setId] = useState('')
+    const [membershipArr, setMembershipArr] = useState([])
+    const [checkArr, setCheckArr] = useState([])
+    const [checkArrs, setCheckArrs] = useState([])
 
-     console.log('what is authSelsdsds',selectorAuth?.membershipData[0]?.membershipTournamentData)
-
+    const tempArr = []
+    const selectorAuth = useSelector(state => state.auth)
+    console.log('tem', membershipArr);
 
     const getAllMemberShips = async () => {
         const token = await AsyncStorage.getItem('@Token')
@@ -46,11 +53,6 @@ const BuyMemberShip = ({ navigation, route }) => {
                     text: e.toString(),
                     duration: 1000,
                     backgroundColor: 'red',
-                    // action: {
-                    //   text: 'UNDO',
-                    //   textColor: 'green',
-                    //   onPress: () => { /* Do something. */ },
-                    // },
                 });
                 setRefresh(false)
                 setIsLoading(false)
@@ -58,12 +60,30 @@ const BuyMemberShip = ({ navigation, route }) => {
             })
     }
 
+    const getMembershipDetails = async () => {
+        await AsyncStorage.getItem('@membership').then((data) => {
+            if (data == null) {
+                setMembershipArr([])
+            } else {
+                tempArr.push(data)
+                let removedDuplicates = tempArr.filter((item, index) => {
+                    if (tempArr.indexOf(item) === index) {
+                        return item
+                    }
+                })
+                setMembershipArr(removedDuplicates)
+            }
+        })
+    }
+
     useEffect(() => {
+        getMembershipDetails()
         getAllMemberShips()
     }, [])
 
     useEffect(() => {
         const focusHandler = navigation.addListener('focus', () => {
+            getMembershipDetails()
             getAllMemberShips()
         });
         return focusHandler;
@@ -107,11 +127,25 @@ const BuyMemberShip = ({ navigation, route }) => {
 
     //Render Function For Membership
     const renderMemberShip = (item, index) => {
-        console.log('item.tournament_id',item.tournament_id,'==',selectorAuth?.membershipData[0]?.membershipTournamentData?.tournament_id);
+
+        // console.log('item.tournament_id',item.tournament_id,'==',selectorAuth?.membershipData[0]?.membershipTournamentData?.tournament_id);
         return (
             <TouchableOpacity
-            disabled={selectorAuth?.membershipData[0]?.membershipTournamentData?.tournament_id==item.tournament_id?true:false}
-                onPress={() => utils.navigateTo(navigation, item.title == 'Organize Private Group' || item.title == 'Join Private Group' ? constants.screens.privateGroupDetails : constants.screens.membership, item)}
+                onPress={async () => {
+                    if (item?.membership_type == 1) {
+                        await AsyncStorage.removeItem('@membership')
+                        utils.navigateTo(navigation, item.title == 'Organize Private Group' || item.title == 'Join Private Group' ? constants.screens.privateGroupDetails : constants.screens.membership, {item})
+                    } else {
+                        if (membershipArr.includes(item?.tournament_id.toString()) == true) {
+                            alert('membership Already Added')
+                        } else {
+                            console.log(membershipArr);
+                            const intersection = memberShip.filter(element => membershipArr.includes(element?.tournament_id?.toString()));
+                            utils.navigateTo(navigation, item.title == 'Organize Private Group' || item.title == 'Join Private Group' ? constants.screens.privateGroupDetails : constants.screens.membership, { item, tournamentArr: intersection })
+                        }
+                    }
+                }
+                }
                 style={[buyMemberShipStyle.touchable, { marginRight: index % 2 != 0 ? 0 : 30, paddingHorizontal: 10 }]}>
                 <Image style={{ alignSelf: 'center', height: widthPercentageToDP(18), width: widthPercentageToDP(18) }} source={{ uri: item?.banner_image_url }} />
                 <View>

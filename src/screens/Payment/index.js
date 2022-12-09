@@ -21,11 +21,24 @@ const Payment = ({ route, navigation }) => {
     const [isLoading, setIsLoading] = useState(false)
 
     const dispatch = useDispatch()
+
     const tempObj = route?.params?.item
 
-    const tournamentIdArr = tempObj?.tournaments?tempObj?.tournaments.map((item, index) => {
+    console.log(tempObj.price);
+
+    const tournamentIdArr = tempObj?.tournaments?.length>0?tempObj?.tournaments.map((item, index) => {
         return item.tournament_id
-    }):[tempObj?.tournament_id]
+    }):tempObj?.length>0 ? tempObj.map((item)=>{
+        return item.tournament_id
+    }):[tempObj.tournament_id]
+
+    var count=0
+    var totalPrice= tempObj?.length>0 && tempObj.map((item)=>{
+        count=count+item?.price
+        return count
+    })
+
+    console.log('totalPrice',typeof totalPrice);
 
     const doPayment = async () => {
         setIsLoading(true)
@@ -38,7 +51,7 @@ const Payment = ({ route, navigation }) => {
             CVV_NO: cvc,
         }, true,
             (res, response) => {
-                dispatch(doPaymentFromCard({ dataValue: response?.DATA_VALUE, dataDescriptor: response?.DATA_DESCRIPTOR, amount: tempObj?.price, membership_type: tempObj?.membership_type, tournamentIdArr, navigation,setIsLoading }))
+                dispatch(doPaymentFromCard({ dataValue: response?.DATA_VALUE, dataDescriptor: response?.DATA_DESCRIPTOR, amount:typeof(totalPrice)!='object'?tempObj?.price:totalPrice[totalPrice?.length-1], membership_type:route.params.item?.length>0?1:tempObj?.membership_type, tournamentIdArr, navigation,setIsLoading }))
             }
         )
     }
