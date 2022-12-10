@@ -9,8 +9,6 @@ import { utils } from "../../common";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
 import Loader from "../../components/loader";
-import { saveMembershipTournament } from "../../realmLocalStorage/realmFunction";
-import MemberShip from "../membership";
 import membershipStyle from "../membership/style";
 import buyMemberShipStyle from "./style";
 
@@ -19,14 +17,9 @@ const BuyMemberShip = ({ navigation, route }) => {
     const [memberShip, setMemberShip] = useState()
     const [isLoading, setIsLoading] = useState(false)
     const [refresh, setRefresh] = useState(false)
-    const [id, setId] = useState('')
     const [membershipArr, setMembershipArr] = useState([])
-    const [checkArr, setCheckArr] = useState([])
-    const [checkArrs, setCheckArrs] = useState([])
 
     const tempArr = []
-    const selectorAuth = useSelector(state => state.auth)
-    console.log('tem', membershipArr);
 
     const getAllMemberShips = async () => {
         const token = await AsyncStorage.getItem('@Token')
@@ -135,14 +128,13 @@ const BuyMemberShip = ({ navigation, route }) => {
                     if (item?.membership_type == 1) {
                         await AsyncStorage.removeItem('@membership')
                         utils.navigateTo(navigation, item.title == 'Organize Private Group' || item.title == 'Join Private Group' ? constants.screens.privateGroupDetails : constants.screens.membership, {item})
-                    } else {
-                        if (membershipArr.includes(item?.tournament_id.toString()) == true) {
-                            alert('membership Already Added')
-                        } else {
-                            console.log(membershipArr);
-                            const intersection = memberShip.filter(element => membershipArr.includes(element?.tournament_id?.toString()));
-                            utils.navigateTo(navigation, item.title == 'Organize Private Group' || item.title == 'Join Private Group' ? constants.screens.privateGroupDetails : constants.screens.membership, { item, tournamentArr: intersection })
-                        }
+                    }
+                     else {
+                        if (membershipArr.includes(item?.tournament_id &&item?.tournament_id.toString()) == true) {
+                             alert('membership Already Added')
+                          }
+                                const intersection =memberShip.filter(element => membershipArr.includes(element?.tournament_id?.toString()));
+                                utils.navigateTo(navigation, item.title == 'Organize Private Group' || item.title == 'Join Private Group' ? constants.screens.privateGroupDetails : constants.screens.membership, { item, tournamentArr:item.title == 'Organize Private Group' || item.title == 'Join Private Group'?'':intersection })
                     }
                 }
                 }

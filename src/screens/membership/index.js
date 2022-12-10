@@ -3,27 +3,21 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { useDispatch, useSelector } from "react-redux";
-import { utils } from "../../common";
 import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
 import { Button, Header } from "../../components";
-import { saveMembershipTournament } from "../../realmLocalStorage/realmFunction";
-import { addMembership } from "../../redux/slice/auth";
 import membershipStyle from "./style";
 
 const MemberShip = ({ route, navigation }) => {
 
     const dispatch = useDispatch()
 
-    console.log('route.params', route.params);
     var count = 0;
     const totalPrice = route?.params?.tournamentArr?.length > 0 &&
         route?.params?.tournamentArr.map((item) => {
             count = count + parseInt(item?.price)
             return count
         })
-
-    console.log('tttt', totalPrice[route?.params?.tournamentArr?.length - 1]);
 
     return (
         <View style={membershipStyle.mainContainer}>
@@ -37,7 +31,7 @@ const MemberShip = ({ route, navigation }) => {
                     titleStyle={{ marginTop: 5, marginBottom: -10 }}
                     onPressLeftIcon={() => navigation.goBack()}
                 />
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     onPress={async () => {
                         if (route?.params?.item?.membership_type == 0) {
                             await AsyncStorage.setItem('@membership', JSON.stringify(route.params?.item?.tournament_id))
@@ -50,7 +44,7 @@ const MemberShip = ({ route, navigation }) => {
                         && <View style={{ backgroundColor: 'red', height: 13, width: 13, position: 'absolute', top: 2, right: 0, borderRadius: 5 }} />
                     }
                     <Text style={membershipStyle.plusIcon}>+</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
             <ScrollView
                 bounces={false}
@@ -66,10 +60,6 @@ const MemberShip = ({ route, navigation }) => {
                     <Text style={[membershipStyle.txtDate, { fontSize: 15, color: constants.colors.black }]}>Credit Card</Text>
                 </View>
                 <View style={membershipStyle.border} />
-                {/* <View style={[commonStyle.row, { justifyContent: 'space-between', marginRight: 10 }]}>
-                    <Text style={[membershipStyle.txtDate, { fontSize: 15, color: constants.colors.black }]}>{route?.params?.item?.title} x 1</Text>
-                    <Text style={[membershipStyle.txtDate, { fontSize: 15, color: constants.colors.black }]}>${route?.params?.item?.price}</Text>
-                </View> */}
                 {
                     route?.params?.tournamentArr &&
                     route?.params?.tournamentArr?.length > 0
@@ -100,7 +90,7 @@ const MemberShip = ({ route, navigation }) => {
 
                 }
                 {
-                    route?.params?.item?.tournament_total &&
+                    // route?.params?.item?.tournament_total &&
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 10 }}>
                         <Text style={[membershipStyle.txtDate, { fontSize: 13, color: constants.colors.black }]}>Tournament Total</Text>
                         <Text style={[membershipStyle.txtDate, { fontSize: 13, color: constants.colors.black }]}>${route?.params?.item?.tournament_total}</Text>
@@ -120,7 +110,6 @@ const MemberShip = ({ route, navigation }) => {
                 </View>
                 <Button
                     onPress={() => {
-                        console.log( route.params.item);
                         navigation.navigate('Payment',{item:route?.params?.tournamentArr?.length>0?[...route.params.tournamentArr, route.params.item]:route.params.item})
                     }
                     }
