@@ -132,9 +132,10 @@ const BuyMemberShip = ({ navigation, route }) => {
                      else {
                         if (membershipArr.includes(item?.tournament_id &&item?.tournament_id.toString()) == true) {
                              alert('membership Already Added')
+                          }else{
+                              const intersection =memberShip.filter(element => membershipArr.includes(element?.tournament_id?.toString()));
+                              utils.navigateTo(navigation, item.title == 'Organize Private Group' || item.title == 'Join Private Group' ? constants.screens.privateGroupDetails : constants.screens.membership, { item, tournamentArr:item.title == 'Organize Private Group' || item.title == 'Join Private Group'?'':intersection })
                           }
-                                const intersection =memberShip.filter(element => membershipArr.includes(element?.tournament_id?.toString()));
-                                utils.navigateTo(navigation, item.title == 'Organize Private Group' || item.title == 'Join Private Group' ? constants.screens.privateGroupDetails : constants.screens.membership, { item, tournamentArr:item.title == 'Organize Private Group' || item.title == 'Join Private Group'?'':intersection })
                     }
                 }
                 }

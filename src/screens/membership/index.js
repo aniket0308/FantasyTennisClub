@@ -31,7 +31,7 @@ const MemberShip = ({ route, navigation }) => {
                     titleStyle={{ marginTop: 5, marginBottom: -10 }}
                     onPressLeftIcon={() => navigation.goBack()}
                 />
-                {/* <TouchableOpacity
+                <TouchableOpacity
                     onPress={async () => {
                         if (route?.params?.item?.membership_type == 0) {
                             await AsyncStorage.setItem('@membership', JSON.stringify(route.params?.item?.tournament_id))
@@ -44,7 +44,7 @@ const MemberShip = ({ route, navigation }) => {
                         && <View style={{ backgroundColor: 'red', height: 13, width: 13, position: 'absolute', top: 2, right: 0, borderRadius: 5 }} />
                     }
                     <Text style={membershipStyle.plusIcon}>+</Text>
-                </TouchableOpacity> */}
+                </TouchableOpacity>
             </View>
             <ScrollView
                 bounces={false}
@@ -90,7 +90,7 @@ const MemberShip = ({ route, navigation }) => {
 
                 }
                 {
-                    // route?.params?.item?.tournament_total &&
+                    route?.params?.item?.tournament_total &&
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 10 }}>
                         <Text style={[membershipStyle.txtDate, { fontSize: 13, color: constants.colors.black }]}>Tournament Total</Text>
                         <Text style={[membershipStyle.txtDate, { fontSize: 13, color: constants.colors.black }]}>${route?.params?.item?.tournament_total}</Text>

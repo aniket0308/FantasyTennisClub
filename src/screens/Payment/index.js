@@ -21,10 +21,7 @@ const Payment = ({ route, navigation }) => {
     const [isLoading, setIsLoading] = useState(false)
 
     const dispatch = useDispatch()
-
     const tempObj = route?.params?.item
-
-    console.log(tempObj.price);
 
     const tournamentIdArr = tempObj?.tournaments?.length>0?tempObj?.tournaments.map((item, index) => {
         return item.tournament_id
