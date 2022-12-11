@@ -42,7 +42,7 @@ const Account = ({ navigation }) => {
             }
         } catch (e) {
             // error reading value
-            console.log('Error In Getting Item:', e);
+            console.log('Error In Getting Item: r', e);
         }
     }
 

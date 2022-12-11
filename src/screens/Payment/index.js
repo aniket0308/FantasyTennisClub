@@ -93,6 +93,7 @@ const Payment = ({ route, navigation }) => {
                         value={year}
                         onChangeText={(e) => setYear(e)}
                         keyboardType='phone-pad'
+                        maxLength={4}
                     />
                     <FloatingInput
                         textInputStyle={{ marginTop: 0, width: widthPercentageToDP(23) }}
@@ -101,6 +102,7 @@ const Payment = ({ route, navigation }) => {
                         value={cvc}
                         onChangeText={(e) => setCvc(e)}
                         keyboardType='phone-pad'
+                        maxLength={3}
                     />
                 </View>
                 <FloatingInput

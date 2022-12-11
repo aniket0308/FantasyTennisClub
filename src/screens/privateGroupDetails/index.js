@@ -53,7 +53,12 @@ const PrivateGroupDetails = ({ route, navigation }) => {
                 "Authorization": `Bearer ${token}`
             },
         }).
-            then((response) => response.json()).
+            then(async(response) => {
+                if (response.status == 401) {
+                    await AsyncStorage.clear()
+                }
+                return response.json()
+            }).
             then((json) => {
                 ;
                 if (json.success == true) {

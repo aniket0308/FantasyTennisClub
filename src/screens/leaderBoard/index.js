@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { FlatList, Image, Platform, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, Image, Platform, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
@@ -24,8 +24,20 @@ const LeaderBoard = ({ route, navigation }) => {
 
     }
 
+    
+
 
     useEffect(() => {
+        if(data?.data==null){
+            setIsLoading(false)
+            Alert.alert(
+                "Fantasy Tennis Club",
+                'Leaderboard is not generated yet.',
+                [
+                    { text: "OK", onPress: () => navigation.goBack() }
+                ]
+            );
+        }
         getTournamentLeaderBoards()
     }, [])
 

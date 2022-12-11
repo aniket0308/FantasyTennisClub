@@ -151,8 +151,9 @@ const DayPick = ({ route, navigation }) => {
                                 titleText={'Submit'}
                                 btnStyle={{ width: '100%' }}
                                 onPress={() => {
+                                        console.log('objects===>',objects);
                                     setIsLoading(false)
-                                    dispatch(savePicks({ matches: objects, submit: () => setIsSubmit(true), isLoading: () => setIsLoading(true), day: particularDay?.id, tournament_id: particularDay?.tournament_id }))
+                                    dispatch(savePicks({ matches: objects, setIsSubmit, setIsLoading, day: particularDay?.id, tournament_id: particularDay?.tournament_id }))
                                 }}
                             />}
                     </>

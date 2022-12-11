@@ -1,10 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { FlatList, Image, RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
-import { IMGElement } from "react-native-render-html";
+import {  Image, RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import Snackbar from 'react-native-snackbar';
-import { useSelector } from "react-redux";
 import { utils } from "../../common";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
@@ -32,7 +30,12 @@ const BuyMemberShip = ({ navigation, route }) => {
                 "Authorization": `Bearer ${token}`
             },
         }).
-            then((response) => response.json()).
+            then(async(response) => {
+                if (response.status == 401) {
+                await AsyncStorage.clear()
+            }
+            return response.json()
+            }).
             then((json) => {
                 ;
                 if (json.success == true) {
@@ -56,8 +59,13 @@ const BuyMemberShip = ({ navigation, route }) => {
     const getMembershipDetails = async () => {
         await AsyncStorage.getItem('@membership').then((data) => {
             if (data == null) {
+                while(tempArr.length>0){
+                    tempArr.pop()
+                }
                 setMembershipArr([])
+                console.log('temp Arr 1',tempArr);
             } else {
+                console.log('what isss data',data);
                 tempArr.push(data)
                 let removedDuplicates = tempArr.filter((item, index) => {
                     if (tempArr.indexOf(item) === index) {
@@ -79,7 +87,7 @@ const BuyMemberShip = ({ navigation, route }) => {
             getMembershipDetails()
             getAllMemberShips()
         });
-        return focusHandler;
+          return focusHandler;
     }, [navigation]);
 
     const dataArr = [
@@ -127,15 +135,16 @@ const BuyMemberShip = ({ navigation, route }) => {
                 onPress={async () => {
                     if (item?.membership_type == 1) {
                         await AsyncStorage.removeItem('@membership')
-                        utils.navigateTo(navigation, item.title == 'Organize Private Group' || item.title == 'Join Private Group' ? constants.screens.privateGroupDetails : constants.screens.membership, {item})
+                        utils.navigateTo(navigation,constants.screens.membership, {item})
                     }
                      else {
-                        if (membershipArr.includes(item?.tournament_id &&item?.tournament_id.toString()) == true) {
+                        console.log('membership Arr',membershipArr);
+                        if (membershipArr.includes(item?.tournament_id&&item?.tournament_id.toString()) == true) {
                              alert('membership Already Added')
                           }else{
-                              const intersection =memberShip.filter(element => membershipArr.includes(element?.tournament_id?.toString()));
+                              const intersection = memberShip.filter(element => membershipArr.includes(element?.tournament_id?.toString()));
                               utils.navigateTo(navigation, item.title == 'Organize Private Group' || item.title == 'Join Private Group' ? constants.screens.privateGroupDetails : constants.screens.membership, { item, tournamentArr:item.title == 'Organize Private Group' || item.title == 'Join Private Group'?'':intersection })
-                          }
+                            }
                     }
                 }
                 }
@@ -156,7 +165,7 @@ const BuyMemberShip = ({ navigation, route }) => {
             <Header
                 title='Buy Membership'
                 subTitle='Select from below'
-                titleStyle={{ width: widthPercentageToDP(route?.params?.showBackArrow == true ? 70 : null) }}
+                titleStyle={{ width: widthPercentageToDP(route?.params?.showBackArrow == true ? 70 : widthPercentageToDP(50)) }}
                 mainViewHeaderStyle={{ paddingHorizontal: 10, width: widthPercentageToDP(95) }}
                 showBackArrow={route?.params?.showBackArrow == true ? true : false}
                 rightIcon={constants.icons.cart}

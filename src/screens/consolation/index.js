@@ -30,6 +30,7 @@ const Consolation = ({ route, navigation }) => {
         }
     }
 
+    console.log('what are data==>',data);
 
     useEffect(() => {
         if (route.params == 'Season Ranking') {
@@ -42,7 +43,8 @@ const Consolation = ({ route, navigation }) => {
 
     //renderLeaderboard function
     const leaderBoard = ({ item, index }) => {
-        if (item.data == null) {
+        console.log('what is item',item);
+        if (item.data?.original?.data == null) {
             setIsLoading(false)
             Alert.alert(
                 "Fantasy Tennis Club",
@@ -54,7 +56,7 @@ const Consolation = ({ route, navigation }) => {
         }
         return (
             <View style={{ padding: 5, flexDirection: 'row' }}>
-                {
+                {item.data?.original?.data!=null&&
                     item?.data?.header.map((headerItem, headerIndex) => {
                         return (
                             <View style={{ flexDirection: 'column' }}>

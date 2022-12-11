@@ -317,13 +317,14 @@ export const RegisterFirstTime = () => {
     return (
         <NavigationContainer >
             <stack.Navigator initialRouteName='BuyMemberShip'>
-                {/* <stack.Screen options={{ headerShown: false }} name="Home" component={Home} /> */}
+                <stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
                 <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Dashboard" component={BottomTab} />
                 <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="BuyMemberShip" component={BuyMemberShip} />
                 <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="MyMembership" component={MyMembership} />
                 <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="PrivateGroupDetails" component={PrivateGroupDetails} />
                 <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="MemberShip" component={MemberShip} />
                 <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Payment" component={Payment} />
+                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="PaymentConfirmation" component={PaymentConfirmation} />
             </stack.Navigator>
         </NavigationContainer >
     )

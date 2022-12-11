@@ -3,10 +3,12 @@ import { createSlice } from '@reduxjs/toolkit'
 import { utils } from '../../common';
 
 const initialState = {
-    isLoading:false,
-    membershipData:[],
-  }
-  
+    isLoading: false,
+    membershipData: [],
+    token:null,
+    isRegisteredFirstTime:false
+}
+
 export const authSlice = createSlice({
     name: 'auth',
     initialState,
@@ -22,9 +24,15 @@ export const authSlice = createSlice({
                 navigation: actions.payload.navigation,
                 device_token: actions.payload.deviceToken,
                 platform: actions.payload.platform,
+                checkLogin:actions.payload.checkLogin,
             }
+            console.log('what is register obj', registerObj);
             //calling Api For Login
             utils.callApi('api/register', registerObj, 'Registered', actions.payload.dispatch)
+            return {
+                ...state,
+                checkLogin: registerObj
+            }
 
         },
         login: (state, actions) => {
@@ -63,18 +71,26 @@ export const authSlice = createSlice({
         },
         isLoaderVisible: (state, actions) => {
             console.log('state.isLoading', state.isLoading);
-            state.isLoading = true
-            console.log('state.isLoading', state.isLoading);
-            return state
+            // state.isLoading = true
+            return {
+                ...state,
+                isLoading: true
+            }
         },
         isLoaderNotVisible: (state, actions) => {
-            state.isLoading = false
-            return state
+            // state.isLoading = false
+            return {
+                ...state,
+                isLoading: false
+            }
         },
         logout: (state, actions) => {
             //calling Api For Logout
             utils.callApi('api/v1/logout', { setIsLoading: actions?.payload?.setIsLoading }, 'logout', actions?.payload?.dispatch)
-            return state
+            return {
+                ...state,
+                checkLogin: []
+            }
         },
         sendOtp: (state, actions) => {
             //calling Api For sending Otp
@@ -85,12 +101,13 @@ export const authSlice = createSlice({
             utils.callApi('api/verify-otp', { email: actions.payload.email, otp: actions.payload.otp, navigation: actions.payload.navigation }, 'VerifyOtp', actions?.payload?.dispatch)
         },
         savePicks: async (state, actions) => {
-            const { matches, submit, isLoading, day, tournament_id } = actions.payload
+            const { matches, submit, isLoading, day, tournament_id ,setIsLoading,setIsSubmit} = actions.payload
+            console.log('matches', matches);
             let match = matches
             const token = await AsyncStorage.getItem('@Token')
 
             //calling Api For Saving Picks
-            utils.callApi(`api/v1/tournaments/${tournament_id}/${day}/save-members-picks`, { match, token, submit, isLoading }, 'savePick')
+            utils.callApi(`api/v1/tournaments/${tournament_id}/${day}/save-members-picks`, { match, token, submit, isLoading,setIsLoading,setIsSubmit }, 'savePick')
         },
         getAnnouncements: async (state, actions) => {
             console.log('what is state', actions);
@@ -279,15 +296,20 @@ export const authSlice = createSlice({
             //calling Api For Doing Payment
             utils.callApi(`api/v1/capture-payment`, paymentObj, 'PaymentCapture')
         },
-        checkLoginStep: async (state, actions) => {
-            const token = await AsyncStorage.getItem('@Token')
-            return { ...state, token }
+        checkLoginStep:  (state, actions) => {
+            // const token =  AsyncStorage.getItem('@Token')
+            // console.log('token', actions.payload);
+            return {
+                ...state,
+                token:actions?.payload?.value,
+                isRegisteredFirstTime:actions?.payload?.isRegisteredFirstTime
+            }
         },
         addMembership: (state, action) => {
-            console.log('action.payload',action.payload);
-            let t=[]
+            console.log('action.payload', action.payload);
+            let t = []
             t.push(action.payload)
-            state.membershipData=t
+            state.membershipData = t
             return state
         }
     }
@@ -298,6 +320,6 @@ export const authSlice = createSlice({
 export const { login, logout, registration, joinPrivateGroup, oganizePrivateGroup, isLoaderVisible, isLoaderNotVisible, sendOtp, verifyOtp, savePicks,
     getAnnouncements, getDays, getAllPicksFormApi, getSeasonLeaderBoard, getGroupConsolationLeaderBoard, getConsolationLeaderBoard, getLeaderBoard, getEtiquites,
     getTournamentLeaderBoard, getTournamentParticipants, getNotifications, getMyMembership, getSavedPicks, aboutUs, getRules, getFaq, sendPicksToEmail, doPaymentFromCard,
-    checkLoginStep,addMembership } = authSlice.actions
+    checkLoginStep, addMembership } = authSlice.actions
 
 export default authSlice.reducer

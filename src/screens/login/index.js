@@ -7,10 +7,11 @@ import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
 import { Button, FloatingInput } from "../../components";
 import Loader from "../../components/loader";
-import { isLoaderVisible, login } from "../../redux/slice/auth";
+import { checkLoginStep, isLoaderVisible, login } from "../../redux/slice/auth";
 import loginStyle from "./style";
 import messaging, { firebase } from '@react-native-firebase/messaging';
 import forgotPasswordStyle from "../forgetPassword/style";
+import { store } from "../../redux/store";
 console.log(firebase.app.length);
 
 //Login Screen
@@ -89,7 +90,7 @@ const Login = ({ navigation }) => {
                     btnStyle={{ marginTop: 34 }}
                     onPress={async () => {
                         setIsLoading(true)
-                        dispatch(login({ email, password, deviceToken, platform, dispatch,setIsLoading }))
+                        dispatch(login({ email, password, deviceToken, platform, dispatch,setIsLoading,checkLogin:()=>{} }))
                     }}
                 />
                 <SafeAreaView />

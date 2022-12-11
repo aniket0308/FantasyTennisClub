@@ -90,7 +90,7 @@ const MemberShip = ({ route, navigation }) => {
 
                 }
                 {
-                    route?.params?.item?.tournament_total &&
+                    route?.params?.item?.tournament_total!=''||route?.params?.item?.tournament_total!=null &&
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 10 }}>
                         <Text style={[membershipStyle.txtDate, { fontSize: 13, color: constants.colors.black }]}>Tournament Total</Text>
                         <Text style={[membershipStyle.txtDate, { fontSize: 13, color: constants.colors.black }]}>${route?.params?.item?.tournament_total}</Text>
