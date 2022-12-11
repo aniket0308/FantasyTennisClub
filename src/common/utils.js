@@ -57,7 +57,7 @@ export const callApi = (path, payload, type, dispatch) => {
                 dispatch(isLoaderNotVisibleProfile())
             }
 
-            if (json.error == true) {
+            if (json.error == true && type !='PaymentCapture' ) {
                 Snackbar.show({
                     text: json.message,
                     duration: 1000,

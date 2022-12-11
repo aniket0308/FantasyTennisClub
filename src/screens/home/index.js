@@ -45,16 +45,16 @@ const Home = ({ navigation }) => {
                 setIsMembership(json?.data?.is_member)
             }).
             catch(e => {
-                Snackbar.show({
-                    text: e.toString(),
-                    duration: 1000,
-                    backgroundColor: 'red',
-                    // action: {
-                    //   text: 'UNDO',
-                    //   textColor: 'green',
-                    //   onPress: () => { /* Do something. */ },
-                    // },
-                });
+                // Snackbar.show({
+                //     text: e.toString(),
+                //     duration: 1000,
+                //     backgroundColor: 'red',
+                //     // action: {
+                //     //   text: 'UNDO',
+                //     //   textColor: 'green',
+                //     //   onPress: () => { /* Do something. */ },
+                //     // },
+                // });
                 setIsLoading(false)
                 console.log('What Is Error In Get Api', e)
             })

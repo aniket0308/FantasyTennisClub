@@ -14,6 +14,7 @@ import { store } from './redux/store';
 import messaging from '@react-native-firebase/messaging';
 import PushNotificationService from './pushNotification/pushNotification';
 import Snackbar from 'react-native-snackbar';
+import { checkLoginStep } from './redux/slice/auth';
 
 const App = () => {
 
@@ -24,10 +25,14 @@ const App = () => {
   const [firstTime, setFirstTime] = useState()
   const [isLoading, setIsLoading] = useState(false)
 
+  // const auth=store.getState()
+  // console.log('what is auth',auth);
+
   const getData = async () => {
     try {
       const value = await AsyncStorage.getItem('@Token')
       const isRegisteredFirstTime = await AsyncStorage.getItem('@RegisterFirstTIme')
+      // store.dispatch(checkLoginStep({value,isRegisteredFirstTime}))
       if (value !== null || isRegisteredFirstTime != null) {
         // value previously stored
         setIsAuthentication(true)
@@ -59,22 +64,22 @@ const App = () => {
         "Authorization": `Bearer ${token}`
       },
     }).
-      then((response) => response.json()).
+      then(async(response) => {
+        if (response.status == 401) {
+          await AsyncStorage.clear()
+      }
+      return response.json()
+      }).
       then(async (json) => {
         console.log('what is json', json);
-        if (json['message'] != 'Unauthenticated.') {
           if (json?.success == true) {
             setIsLoading(true)
             await AsyncStorage.removeItem('@RegisterFirstTIme')
             setIsMembership(json?.data?.is_member)
             setRender({})
           } else {
-            setIsAuthentication()
+            setIsAuthentication(false)
           }
-        }else{
-          await AsyncStorage.clear()
-        }
-
       }).
       catch(e => {
         // Snackbar.show({

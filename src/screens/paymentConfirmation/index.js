@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { BackHandler, Image, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { constants } from "../../common/constant";
 import { Button } from "../../components";
@@ -51,6 +51,9 @@ const PaymentConfirmation = ({ route, navigation }) => {
 
     useEffect(() => {
         checkMemberShip()
+        const backHandler = route.params?.success == true
+            && BackHandler.addEventListener('hardwareBackPress', () => {BackHandler.exitApp()})
+        return () => backHandler.remove()
     }, [])
 
     return (
