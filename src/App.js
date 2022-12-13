@@ -9,7 +9,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react'
 import { Provider } from 'react-redux';
-import { AuthNavigator, AuthNavigators, RegisterFirstTime, RootNavigator } from './navigation/navigation';
+import { AuthNavigator, RegisterFirstTime, RootNavigator } from './navigation/navigation';
 import { store } from './redux/store';
 import messaging from '@react-native-firebase/messaging';
 import PushNotificationService from './pushNotification/pushNotification';

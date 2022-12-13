@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import {  Image, RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { Image, RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import Snackbar from 'react-native-snackbar';
 import { utils } from "../../common";
@@ -17,7 +17,7 @@ const BuyMemberShip = ({ navigation, route }) => {
     const [refresh, setRefresh] = useState(false)
     const [membershipArr, setMembershipArr] = useState([])
 
-    const tempArr = []
+    let tempArr = []
 
     const getAllMemberShips = async () => {
         const token = await AsyncStorage.getItem('@Token')
@@ -30,11 +30,11 @@ const BuyMemberShip = ({ navigation, route }) => {
                 "Authorization": `Bearer ${token}`
             },
         }).
-            then(async(response) => {
+            then(async (response) => {
                 if (response.status == 401) {
-                await AsyncStorage.clear()
-            }
-            return response.json()
+                    await AsyncStorage.clear()
+                }
+                return response.json()
             }).
             then((json) => {
                 ;
@@ -58,14 +58,22 @@ const BuyMemberShip = ({ navigation, route }) => {
 
     const getMembershipDetails = async () => {
         await AsyncStorage.getItem('@membership').then((data) => {
+            let cartData = JSON.parse(data)
+            console.log('',cartData);
             if (data == null) {
-                while(tempArr.length>0){
+                while (tempArr?.length > 0) {
                     tempArr.pop()
                 }
                 setMembershipArr([])
-                console.log('temp Arr 1',tempArr);
-            } else {
-                console.log('what isss data',data);
+            }
+
+            if (cartData?.length > 0) {
+                console.log(cartData);
+                tempArr = cartData
+                setMembershipArr(tempArr)
+            }
+            else {
+                console.log('what isss data', data);
                 tempArr.push(data)
                 let removedDuplicates = tempArr.filter((item, index) => {
                     if (tempArr.indexOf(item) === index) {
@@ -87,64 +95,32 @@ const BuyMemberShip = ({ navigation, route }) => {
             getMembershipDetails()
             getAllMemberShips()
         });
-          return focusHandler;
+        return focusHandler;
     }, [navigation]);
-
-    const dataArr = [
-        {
-            icon: constants.icons.calander,
-            text: 'Season$80'
-        },
-        {
-            icon: constants.icons.tennisMembership,
-            text: 'ATP Event$15'
-        },
-        {
-            icon: constants.icons.map,
-            text: 'Australian Open$25'
-        },
-        {
-            icon: constants.icons.effilTower,
-            text: 'Wimbledon$25'
-
-        },
-        {
-            icon: constants.icons.Rackets,
-            text: 'Roland Garros$25'
-        },
-        {
-            icon: constants.icons.elizabeth,
-            text: 'Wimbledon$25'
-        },
-        {
-            icon: constants.icons.profileMembership,
-            text: 'Organize Private Group'
-        },
-        {
-            icon: constants.icons.groupProfile,
-            text: 'Join Private Group'
-        }
-    ]
 
     //Render Function For Membership
     const renderMemberShip = (item, index) => {
-
-        // console.log('item.tournament_id',item.tournament_id,'==',selectorAuth?.membershipData[0]?.membershipTournamentData?.tournament_id);
         return (
             <TouchableOpacity
                 onPress={async () => {
+                    let cartItem = await AsyncStorage.getItem('@cartItem')
+                    let parsedCartItem = JSON.parse(cartItem)
+                    console.log('cart ', parsedCartItem);
                     if (item?.membership_type == 1) {
                         await AsyncStorage.removeItem('@membership')
-                        utils.navigateTo(navigation,constants.screens.membership, {item})
+                        utils.navigateTo(navigation, constants.screens.membership, { item })
                     }
-                     else {
-                        console.log('membership Arr',membershipArr);
-                        if (membershipArr.includes(item?.tournament_id&&item?.tournament_id.toString()) == true) {
-                             alert('membership Already Added')
-                          }else{
-                              const intersection = memberShip.filter(element => membershipArr.includes(element?.tournament_id?.toString()));
-                              utils.navigateTo(navigation, item.title == 'Organize Private Group' || item.title == 'Join Private Group' ? constants.screens.privateGroupDetails : constants.screens.membership, { item, tournamentArr:item.title == 'Organize Private Group' || item.title == 'Join Private Group'?'':intersection })
-                            }
+                    else {
+                        let tempMembershipArr = membershipArr.map((i) => {
+                            return parseInt(i)
+                        })
+                        if (tempMembershipArr.includes(item?.tournament_id && item?.tournament_id) == true) {
+                            alert('membership Already Added')
+                        }
+                        else {
+                            const intersection = memberShip.filter(element => tempMembershipArr.includes(element?.tournament_id));
+                            utils.navigateTo(navigation, item.title == 'Organize Private Group' || item.title == 'Join Private Group' ? constants.screens.privateGroupDetails : constants.screens.membership, { item, tournamentArr: item.title == 'Organize Private Group' || item.title == 'Join Private Group' ? '' : intersection })
+                        }
                     }
                 }
                 }
@@ -170,6 +146,16 @@ const BuyMemberShip = ({ navigation, route }) => {
                 showBackArrow={route?.params?.showBackArrow == true ? true : false}
                 rightIcon={constants.icons.cart}
                 onPressLeftIcon={() => { navigation.goBack() }}
+                isCartHavingThings={membershipArr?.length == 0 ? false : true}
+                onPressRightIcon={async () => {
+                    let tempMembershipArr = membershipArr.map((i) => {
+                        return parseInt(i)
+                    })
+                    const intersection = memberShip.filter(element => tempMembershipArr.includes(element?.tournament_id));
+                    if (intersection?.length > 0) {
+                        utils.navigateTo(navigation, constants.screens.membership, { tournamentArr: intersection, isCart: true })
+                    }
+                }}
             />
             {isLoading == true
                 ? <ScrollView
