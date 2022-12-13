@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { Alert, FlatList, Image, Platform, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, Image, Platform, SafeAreaView, StatusBar, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
@@ -24,11 +24,9 @@ const LeaderBoard = ({ route, navigation }) => {
 
     }
 
-    
-
 
     useEffect(() => {
-        if(data?.data==null){
+        if(data?.error==true){
             setIsLoading(false)
             Alert.alert(
                 "Fantasy Tennis Club",
@@ -99,6 +97,7 @@ const LeaderBoard = ({ route, navigation }) => {
     return (
         <>
             <View style={leaderBoardStyle.mainContainer}>
+            <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />
                 <SafeAreaView />
                 <Header
                     showBackArrow={true}

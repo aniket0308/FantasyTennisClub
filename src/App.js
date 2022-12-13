@@ -15,6 +15,7 @@ import messaging from '@react-native-firebase/messaging';
 import PushNotificationService from './pushNotification/pushNotification';
 import Snackbar from 'react-native-snackbar';
 import { checkLoginStep } from './redux/slice/auth';
+import { Alert } from 'react-native';
 
 const App = () => {
 
@@ -111,7 +112,8 @@ const App = () => {
     notification.createChannel()
     notification.getChannels()
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      console.log('Message handled in the Foregorund!', remoteMessage);
+      notification.localNotification({title:remoteMessage?.notification?.title,body:remoteMessage?.notification.body,image:remoteMessage?.notification.android.imageUrl})
     });
     checkMemberShip()
     return unsubscribe;
