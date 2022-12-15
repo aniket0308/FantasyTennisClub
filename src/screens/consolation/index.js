@@ -29,9 +29,7 @@ const Consolation = ({ route, navigation }) => {
             dispatch(getGroupConsolationLeaderBoard({ setIsLoading, setRefresh, setData, tournamentId }))
         }
     }
-
-    console.log('what are data==>',data);
-
+    
     useEffect(() => {
         if (route.params == 'Season Ranking') {
             getTournamentLeaderBoard()
@@ -43,8 +41,7 @@ const Consolation = ({ route, navigation }) => {
 
     //renderLeaderboard function
     const leaderBoard = ({ item, index }) => {
-        console.log('what is item',item);
-        if (item.data?.original?.data == null) {
+        if (item?.error == true) {
             setIsLoading(false)
             Alert.alert(
                 "Fantasy Tennis Club",
@@ -56,7 +53,7 @@ const Consolation = ({ route, navigation }) => {
         }
         return (
             <View style={{ padding: 5, flexDirection: 'row' }}>
-                {item.data?.original?.data!=null&&
+                {item.data!=null&&
                     item?.data?.header.map((headerItem, headerIndex) => {
                         return (
                             <View style={{ flexDirection: 'column' }}>

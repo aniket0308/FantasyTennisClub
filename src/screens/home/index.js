@@ -7,6 +7,7 @@ import { utils } from "../../common";
 import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
 import homeStyle from "./style";
+import messaging from '@react-native-firebase/messaging';
 
 //Home Screen
 const Home = ({ navigation }) => {

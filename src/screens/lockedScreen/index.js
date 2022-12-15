@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { FlatList, Image, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, Image, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { useDispatch } from "react-redux";
 import { constants } from "../../common/constant";
 import Loader from "../../components/loader";
@@ -23,6 +23,16 @@ const LockedScreen = ({ navigation, route }) => {
     }
 
     const getMemberPickRender = ({ item, index }) => {
+        if (item?.error == true) {
+            setIsLoading(false)
+            Alert.alert(
+                "Fantasy Tennis Club",
+                item?.message,
+                [
+                    { text: "OK", onPress: () => navigation.goBack() }
+                ]
+            );
+        }
         return (
             <View style={{ padding: 5, flexDirection: 'row' }}>
                 {
