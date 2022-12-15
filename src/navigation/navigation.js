@@ -50,7 +50,7 @@ const StackInstideDashBoard = () => {
             <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="JoinWhatsApp" component={JoinWhatsApp} />
             <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Prizes" component={Prizes} />
             <stack.Screen options={{ headerShown: false }} name="Consolation" component={Consolation} />
-            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Notification" component={Notification} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Notifications" component={Notification} />
             <stack.Screen options={{ headerShown: false,orientation:'all' }} name="GroupLeaderBoard" component={GroupLeaderBoard} />
             <stack.Screen options={{ headerShown: false,orientation:'all' }} name="Leaderboard" component={LeaderBoard} />
             <stack.Screen options={{ headerShown: false,orientation:'all' }} name="LockedScreen" component={LockedScreen} />
@@ -64,7 +64,7 @@ const StackInstideSelectionDay = () => {
         <stack.Navigator initialRouteName="SelectionDays">
             <stack.Screen options={{ headerShown: false }} name="SelectionDays" component={SelectionDays} />
             <stack.Screen options={{ headerShown: false }} name="DayPick" component={DayPick} />
-            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Notification" component={Notification} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Notifications" component={Notification} />
             <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="LockedScreen" component={LockedScreen} />
         </stack.Navigator>
     )
@@ -92,7 +92,7 @@ const StackInsideAccount = () => {
             <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="AboutUs" component={AboutUs} />
             <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="MemberShip" component={MemberShip} />
             <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="MyMembership" component={MyMembership} />
-            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Notification" component={Notification} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Notifications" component={Notification} />
             <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="PrivateGroupDetails" component={PrivateGroupDetails} />
         </stack.Navigator>
     )

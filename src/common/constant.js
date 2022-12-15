@@ -17,7 +17,7 @@ export const constants = {
         changePassword: 'ChangePassword',
         aboutUs: 'AboutUs',
         membership: 'MemberShip',
-        notification:'Notification',
+        notification:'Notifications',
         buyMemberShip:"BuyMemberShip",
         privateGroupDetails:"PrivateGroupDetails"
     },

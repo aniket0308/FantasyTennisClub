@@ -62,7 +62,7 @@ const Notification = ({ navigation }) => {
                         showsVerticalScrollIndicator={false}
                         bounces={false}
                         style={notificationStyle.flatListView}
-                        data={data}
+                        data={data?.data}
                         renderItem={renderNotification}
                     />
             }
