@@ -53,7 +53,7 @@ const GroupLeaderBoard = ({ route, navigation }) => {
                                                                 ? dataItem.member
                                                                 : headerIndex == 1
                                                                     ? dataItem.total
-                                                                    : dataItem.days_point[(headerIndex - 1).toString()]
+                                                                    : dataItem.days_point[(headerIndex - 2).toString()]
                                                         }
                                                     </Text>
                                                 )
@@ -67,7 +67,7 @@ const GroupLeaderBoard = ({ route, navigation }) => {
                                                             ? dataItem.member
                                                             : headerIndex == 1
                                                                 ? dataItem.total
-                                                                : dataItem.days_point[(headerIndex - 1).toString()]
+                                                                : dataItem.days_point[(headerIndex - 2).toString()]
                                                     }
                                                 </Text>
                                             )

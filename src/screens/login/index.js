@@ -23,7 +23,7 @@ const Login = ({ navigation }) => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(true)
     const platform = Platform.OS == 'android' ? 'android' : 'ios'
     const dispatch = useDispatch()
-    const [isLoading,setIsLoading]=useState(false)
+    const [isLoading, setIsLoading] = useState(false)
     const requestUserPermission = async () => {
         try {
             const token = await messaging().getToken()
@@ -52,9 +52,12 @@ const Login = ({ navigation }) => {
     return (
         <>
             <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />
+            <View style={{ paddingVertical: 10, backgroundColor: constants.colors.backGroundLight }} >
+            </View>
             <KeyboardAwareScrollView
-                scrollEnabled={false}
-                contentContainerStyle={{ justifyContent: 'center', height: Dimensions.get('screen').height }}
+                showsVerticalScrollIndicator={false}
+                scrollEnabled={true}
+                contentContainerStyle={{ justifyContent: 'center', flex: 1 }}
                 style={[commonStyle.container, loginStyle.container]} >
                 <Image style={forgotPasswordStyle.imgLogo} resizeMode='contain' source={constants.icons.logo} />
                 <FloatingInput
@@ -90,7 +93,7 @@ const Login = ({ navigation }) => {
                     btnStyle={{ marginTop: 34 }}
                     onPress={async () => {
                         setIsLoading(true)
-                        dispatch(login({ email, password, deviceToken, platform, dispatch,setIsLoading,checkLogin:()=>{} }))
+                        dispatch(login({ email, password, deviceToken, platform, dispatch, setIsLoading, checkLogin: () => { } }))
                     }}
                 />
                 <SafeAreaView />
@@ -98,7 +101,7 @@ const Login = ({ navigation }) => {
             <View style={loginStyle.footer}>
                 <Text style={loginStyle.txtNewToFantasy} >New to Fantasy Tennis Club? </Text>
                 <TouchableOpacity onPress={() => isLoading == false ? navigation.navigate(constants.screens.signUp) : ''}>
-                <Text style={loginStyle.txtSignUp}>Sign Up</Text>
+                    <Text style={loginStyle.txtSignUp}>Sign Up</Text>
                 </TouchableOpacity>
             </View>
             {isLoading == true && <Loader />}

@@ -7,10 +7,11 @@ const forgotPasswordStyle=StyleSheet.create({
         backgroundColor:constants.colors.backGroundLight
     },
     imgLogo: {
-        height: widthPercentageToDP(60),
-        width: widthPercentageToDP(60),
+        height: widthPercentageToDP(20),
+        width: widthPercentageToDP(50),
         alignSelf: 'center',
-        marginBottom: 20
+        marginBottom:30,
+        marginTop:10
     },
 })
 

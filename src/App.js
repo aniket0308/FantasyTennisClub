@@ -16,8 +16,12 @@ import PushNotificationService from './pushNotification/pushNotification';
 import Snackbar from 'react-native-snackbar';
 import { checkLoginStep } from './redux/slice/auth';
 import { Alert } from 'react-native';
+import PushNotification from 'react-native-push-notification';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import { utils } from './common';
+import { constants } from './common/constant';
 
-const App = () => {
+const App = ({navigation}) => {
 
   //Variable Used For Authentication
   const [isAuthentication, setIsAuthentication] = useState(true)
@@ -108,7 +112,7 @@ const App = () => {
 
   useEffect(() => {
     const notification = new PushNotificationService()
-    notification.configure()
+    // notification.configure(navigation)
     notification.createChannel()
     notification.getChannels()
     const unsubscribe = messaging().onMessage(async remoteMessage => {
@@ -118,6 +122,12 @@ const App = () => {
     checkMemberShip()
     return unsubscribe;
   }, []);
+
+  useEffect(()=>{
+    messaging().onNotificationOpenedApp((remoteMessage)=>{
+      console.log('remoteMessage remoteMessage',remoteMessage);
+    })
+  })
 
   return (
     <Provider store={store}>

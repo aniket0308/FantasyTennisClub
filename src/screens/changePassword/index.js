@@ -45,12 +45,13 @@ const ChangePassword = ({ route, navigation }) => {
                 scrollEnabled={true}
                 showsVerticalScrollIndicator={false}
                 bounces={false}
+                contentContainerStyle={{justifyContent:'center',flex:1}}
                 style={[commonStyle.container, { backgroundColor: constants.colors.backGroundLight,marginBottom:20 }]} >
                 {route?.params != 'contactUs'
                     && <></>}
                 {route?.params == 'changePassword'
                     ? <>
-                        <Image style={forgotPasswordStyle.imgLogo} resizeMode='contain' source={constants.icons.logo} />
+                        <Image style={[forgotPasswordStyle.imgLogo,{marginBottom:0}]} source={constants.icons.logo} />
                         <FloatingInput
                             textIsEditable={!isLoading}
                             headerText={'Old Password'}
@@ -109,7 +110,7 @@ const ChangePassword = ({ route, navigation }) => {
                         : route?.params == 'contactUs'
                             ? <>
                                 <FloatingInput
-                                    textInputStyle={{ marginTop: 30, flexGrow: 3 }}
+                                    textInputStyle={{ marginTop: 30 }}
                                     headerText={'Subject'}
                                     onChangeText={(subject) => { setSubject(subject) }}
                                     value={subject}

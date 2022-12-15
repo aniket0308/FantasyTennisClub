@@ -9,6 +9,9 @@ import { doPaymentFromCard } from "../../redux/slice/auth";
 import Snackbar from "react-native-snackbar";
 import RNAuthorizeNet from "react-native-reliantid-authorize-net";
 import Loader from '../../components/loader'
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { commonStyle } from "../../common/commonStyle";
+import loginStyle from "../login/style";
 
 
 const Payment = ({ route, navigation }) => {
@@ -24,17 +27,11 @@ const Payment = ({ route, navigation }) => {
     const tempObj = route?.params?.item
     const price = route?.params?.price
 
-    const tournamentIdArr = tempObj?.tournaments?.length>0?tempObj?.tournaments.map((item, index) => {
+    const tournamentIdArr = tempObj?.tournaments?.length > 0 ? tempObj?.tournaments.map((item, index) => {
         return item.tournament_id
-    }):tempObj?.length>0 ? tempObj.map((item)=>{
+    }) : tempObj?.length > 0 ? tempObj.map((item) => {
         return item?.tournament_id
-    }):[tempObj?.tournament_id]
-
-    var count=0
-    var totalPrice= tempObj?.length>0 && tempObj.map((item)=>{
-        count=count+item?.price
-        return count
-    })
+    }) : [tempObj?.tournament_id]
 
 
     const doPayment = async () => {
@@ -48,7 +45,7 @@ const Payment = ({ route, navigation }) => {
             CVV_NO: cvc,
         }, true,
             (res, response) => {
-                dispatch(doPaymentFromCard({ dataValue: response?.DATA_VALUE, dataDescriptor: response?.DATA_DESCRIPTOR, amount:price, membership_type:route.params.item?.length>0?1:tempObj?.membership_type, tournamentIdArr, navigation,setIsLoading }))
+                dispatch(doPaymentFromCard({ dataValue: response?.DATA_VALUE, dataDescriptor: response?.DATA_DESCRIPTOR, amount: price, membership_type: route.params.item?.length > 0 ? 1 : tempObj?.membership_type, tournamentIdArr, navigation, setIsLoading }))
             }
         )
     }
@@ -64,7 +61,11 @@ const Payment = ({ route, navigation }) => {
                 titleStyle={{ marginTop: 5, marginBottom: -10 }}
                 onPressLeftIcon={() => navigation.goBack()}
             />
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <KeyboardAwareScrollView
+                showsVerticalScrollIndicator={false}
+                scrollEnabled={true}
+                contentContainerStyle={{ justifyContent: 'center', flex: 1, alignItems: 'center' }}
+                style={[commonStyle.container, loginStyle.container]} >
                 <Image style={{ width: widthPercentageToDP(50) }} resizeMode='contain' source={constants.icons.cards} />
                 <FloatingInput
                     textInputStyle={{ marginTop: -35 }}
@@ -121,7 +122,7 @@ const Payment = ({ route, navigation }) => {
                         // navigation.navigate('PaymentConfirmation')
                     }}
                 />
-            </View>
+            </KeyboardAwareScrollView>
             {isLoading == true
                 && <Loader />
             }

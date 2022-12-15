@@ -308,6 +308,7 @@ export const AuthNavigator = () => {
                 <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="MyMembership" component={MyMembership} />
                 <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Payment" component={Payment} />
                 <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="PaymentConfirmation" component={PaymentConfirmation} />
+                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Announcements" component={Announcments} />
             </stack.Navigator>
         </NavigationContainer >
     )

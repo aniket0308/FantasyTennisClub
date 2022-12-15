@@ -38,10 +38,10 @@ const MyMembership = ({ navigation, route }) => {
                 onPressLeftIcon={() => navigation.goBack()}
             />
             <ScrollView showsVerticalScrollIndicator={false} bounces={false} style={{ marginBottom: 20 }}>
-                <View style={{ marginHorizontal: 15, marginTop: 20 }}>
+                <View style={{ marginHorizontal: 15, }}>
                     {
                         route?.params == false
-                            ? <Image style={forgotPasswordStyle.imgLogo} resizeMode='contain' source={constants.icons.logo} />
+                            ? <Image style={forgotPasswordStyle.imgLogo} source={constants.icons.logo} />
                             : <View style={{ backgroundColor: constants.colors.lightestBlue, padding: 15, borderRadius: 6, marginBottom: 20 }}>
                                 <Text style={{ alignSelf: 'center', textAlign: 'center', fontFamily: constants.fonts.notoSansRegular, color: 'green', fontWeight: '600', fontSize: 16 }}>Your current membership does not have access to current event</Text>
                                 <Text style={{ alignSelf: 'center', fontFamily: constants.fonts.notoSansRegular, color: 'grey', fontWeight: '400', fontSize: 12, marginTop: 10 }}>•	Access to the Platform will be granted during the dates when your membership is active</Text>
