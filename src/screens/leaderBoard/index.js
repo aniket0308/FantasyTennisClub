@@ -20,22 +20,10 @@ const LeaderBoard = ({ route, navigation }) => {
 
     const getTournamentLeaderBoards = async () => {
         const tournamentId = await AsyncStorage.getItem('@TournamentId')
-        dispatch(getTournamentLeaderBoard({ setData, setIsLoading, tournamentId }))
-
+        dispatch(getTournamentLeaderBoard({ setData, setIsLoading, tournamentId,navigation }))
     }
 
-
     useEffect(() => {
-        if(data?.error==true){
-            setIsLoading(false)
-            Alert.alert(
-                "Fantasy Tennis Club",
-                'Leaderboard is not generated yet.',
-                [
-                    { text: "OK", onPress: () => navigation.goBack() }
-                ]
-            );
-        }
         getTournamentLeaderBoards()
     }, [])
 

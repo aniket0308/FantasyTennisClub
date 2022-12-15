@@ -188,7 +188,7 @@ export const callApi = (path, payload, type, dispatch) => {
 }
 
 //calling apis for get
-export const callApiGet = async (path, payload) => {
+export const callApiGet = async (path, payload,type) => {
     const urlPath = `${URL}${path}`
     try {
         fetch(urlPath, {
@@ -217,6 +217,15 @@ export const callApiGet = async (path, payload) => {
             }
             if (payload.setFaq) {
                 payload.setFaq(json)
+            }
+            if(type=='Leaderboard'&&json.error==true){
+                Alert.alert(
+                    "Fantasy Tennis Club",
+                    'Leaderboard is not generated yet.',
+                    [
+                        { text: "OK", onPress: () => payload?.navigation.goBack() }
+                    ]
+                );
             }
             payload.setIsLoading(true)
             return json

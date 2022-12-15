@@ -43,7 +43,7 @@ const DayPick = ({ route, navigation }) => {
         return (
             <>
                 <View style={dayPickStyle.txtViewSelectionStyle}>
-                    <Text style={dayPickStyle.selectionTxtStyle}>{particularDay?.is_last_day == true ? `Day 14 Match 0${index + 1}` : `${item?.title ? item?.title : item?.match_title}`}</Text>
+                    <Text style={dayPickStyle.selectionTxtStyle}>{particularDay?.is_last_day == true ? `${particularDay?.tournament_day} ${particularDay?.matches[index]?.match_title}` : `${item?.title ? item?.title : item?.match_title}`}</Text>
                 </View>
                 <SelectDropdown
                     buttonStyle={dayPickStyle.selectionButtonStyle}

@@ -74,10 +74,10 @@ const SelectionDays = ({ route, navigation }) => {
                                             }
                                         ]}>
                                         {
-                                            item.tournament_day.split(' ')[1] == '14'
+                                            item?.is_last_day == true
                                                 ? <>
                                                     <Image style={{ marginBottom: Platform.OS == "android" ? 10 : 0, height: widthPercentageToDP(10), width: widthPercentageToDP(12) }} source={constants.icons.winnerCup} resizeMode='contain' />
-                                                    <Text style={[selectionDayStyle.TxtDay]}>Day 14</Text>
+                                                    <Text style={[selectionDayStyle.TxtDay]}>{item?.tournament_day}</Text>
                                                 </> : <>
                                                     <Text style={[selectionDayStyle.txtWhichDay, { color: item.is_consolation_day == true && myPicks !== 'MY PICKS' ? constants.colors.white : constants.colors.darkGreen }]} >{item.tournament_day.split(' ')[1]}</Text>
                                                     <Text style={[selectionDayStyle.TxtDay, { color: item.is_consolation_day == true && myPicks !== 'MY PICKS' ? constants.colors.white : constants.colors.darkGreen }]}>Day</Text>

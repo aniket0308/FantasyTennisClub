@@ -176,7 +176,7 @@ export const authSlice = createSlice({
                 token: await AsyncStorage.getItem('@Token'),
                 setIsLoading: actions.payload?.setIsLoading,
                 setRefresh: actions.payload?.setRefresh,
-                setData: actions.payload.setData
+                setData: actions.payload.setData,
             }
             //calling Api For Getting groupLeaderboard
             utils.callApiGet(`api/v1/tournaments/${actions.payload.tournamentId}/group/leaderboard`, seasonObj)
@@ -186,10 +186,11 @@ export const authSlice = createSlice({
                 token: await AsyncStorage.getItem('@Token'),
                 setIsLoading: actions.payload?.setIsLoading,
                 setRefresh: actions.payload?.setRefresh,
-                setData: actions.payload.setData
+                setData: actions.payload.setData,
+                navigation:actions?.payload?.navigation
             }
             //calling Api For Getting leaderboard
-            utils.callApiGet(`api/v1/tournaments/${actions.payload.tournamentId}/leaderboard`, seasonObj)
+            utils.callApiGet(`api/v1/tournaments/${actions.payload.tournamentId}/leaderboard`, seasonObj,'Leaderboard')
         },
         getEtiquites: async (state, actions) => {
             const seasonObj = {
@@ -239,7 +240,7 @@ export const authSlice = createSlice({
                 setData: actions.payload.setData
             }
             //calling Api For Getting getMyMembership
-            utils.callApiGet(`api/v1/tournaments/${tournamentId}/${actions?.payload?.tournament_day}/members-picks`, seasonObj)
+            utils.callApiGet(`api/v1/tournaments/${actions?.payload?.tournament_id}/${actions?.payload?.id}/members-picks`, seasonObj)
         },
         aboutUs: async (state, actions) => {
             const seasonObj = {

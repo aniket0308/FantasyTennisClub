@@ -19,8 +19,7 @@ const LockedScreen = ({ navigation, route }) => {
 
     //function for getting save member picks
     const getSaveMemberPicks = async () => {
-        const tournamentId = await AsyncStorage.getItem('@TournamentId')
-        dispatch(getSavedPicks({setData,setIsLoading,tournamentId,tournament_day:route?.params?.tournament_day}))
+        dispatch(getSavedPicks({setData,setIsLoading,tournament_id:route?.params?.item?.tournament_id,id:route?.params?.item?.id}))
     }
 
     const getMemberPickRender = ({ item, index }) => {
