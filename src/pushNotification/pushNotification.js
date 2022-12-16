@@ -70,7 +70,7 @@ class PushNotificationService {
                 channelId: "Fantasy-Tennis-Club-id", // (required)
                 channelName: "Fantasy Tennis Club channel", // (required)
                 channelDescription: "A channel to categorise your notifications", // (optional) default: undefined.
-                playSound: false, // (optional) default: true
+                playSound: true, // (optional) default: true
                 soundName: "default", // (optional) See `soundName` parameter of `localNotification` function
                 importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
                 vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
@@ -87,7 +87,6 @@ class PushNotificationService {
 
     localNotification = (payload) => {
         if (Platform.OS == 'android') {
-            console.log('aaaaaaaa');
             PushNotification.localNotification({
                 channelId: "Fantasy-Tennis-Club-id",
                 largeIcon: "ic_launcher",
@@ -103,7 +102,8 @@ class PushNotificationService {
                 message: payload?.body, // (required)
                 picture: payload?.image,
                 soundName:'default',
-                bigPictureUrl:payload?.image
+                bigPictureUrl:payload?.image,
+                userInfo:{notification_type:this.state.id%2==0?'MEMBER':'NOMEMBER',state:payload.state!=undefined?payload.state:''}
             })
         }else{
             let tempId=this.state.id++

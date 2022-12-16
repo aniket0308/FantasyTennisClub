@@ -67,7 +67,7 @@ const LockedScreen = ({ navigation, route }) => {
                                                     {
                                                         headerIndex == 0
                                                             ? dataItem.member
-                                                            : dataItem[route?.params?.item?.matches[headerIndex - 2]?.id]
+                                                            : dataItem[route?.params?.item?.matches[headerIndex - 1]?.id]
                                                     }
                                                 </Text>
                                             )

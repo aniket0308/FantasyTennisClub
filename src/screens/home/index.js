@@ -10,6 +10,7 @@ import homeStyle from "./style";
 import messaging from '@react-native-firebase/messaging';
 import PushNotification from "react-native-push-notification";
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
+import PushNotificationService from "../../pushNotification/pushNotification";
 
 //Home Screen
 const Home = ({ navigation }) => {
@@ -29,7 +30,14 @@ const Home = ({ navigation }) => {
                 onNotification: function (notification) {
                     console.log("NOTIFICATION:sss", notification);
                     // process the notification
-                    utils.navigateTo(navigation,constants.screens.announcements)
+                    // Handle notification click
+                    if (notification.userInteraction) {
+                        if (notification?.data?.notification_type == 'MEMBER') {
+                            utils.navigateTo(navigation, constants.screens.announcements)
+                        } else {
+                            utils.navigateTo(navigation, constants.screens.notification)
+                        }
+                    }
                     // (required) Called when a remote is received or opened, or local notification is opened
                     notification.finish(PushNotificationIOS.FetchResult.NoData);
                 },
@@ -74,11 +82,18 @@ const Home = ({ navigation }) => {
 
 
     useEffect(() => {
+        const notification = new PushNotificationService()
         configure()
+        notification.createChannel()
         checkMemberShip()
         setTimeout(() => {
             SplashScreen.hide();
         }, 1000)
+        const unsubscribe = messaging().onMessage(async remoteMessage => {
+            console.log('Message handled in the Foregorund!', remoteMessage);
+            notification.localNotification({ title: remoteMessage?.notification?.title, body: remoteMessage?.notification.body, image: remoteMessage?.notification.android.imageUrl })
+        });
+        return unsubscribe
     }, [])
 
     const checkMemberShip = async () => {
@@ -92,7 +107,7 @@ const Home = ({ navigation }) => {
                 "Authorization": `Bearer ${token}`
             },
         }).
-            then(async(response) => {
+            then(async (response) => {
                 if (response.status == 401) {
                     await AsyncStorage.clear()
                 }
@@ -127,10 +142,10 @@ const Home = ({ navigation }) => {
                 <Image source={constants.icons.logo} resizeMode='contain' style={{ width: widthPercentageToDP(60), height: widthPercentageToDP(60) }} />
                 <Text style={homeStyle.textReadyPlay}>Ready?? Play!!!</Text>
                 <Text style={homeStyle.textTapEnter}>tap here to enter</Text>
-                <Image source={constants.icons.downArrow} style={{height:widthPercentageToDP(20)}} resizeMode='contain' />
+                <Image source={constants.icons.downArrow} style={{ height: widthPercentageToDP(20) }} resizeMode='contain' />
                 <TouchableOpacity
                     disabled={isLoading == false ? true : false}
-                    onPress={() => { utils.navigateTo(navigation,isMembership==true?'Dashboard':'MyMembership') }}
+                    onPress={() => { utils.navigateTo(navigation, isMembership == true ? 'Dashboard' : 'MyMembership') }}
                     activeOpacity={1}
                     style={homeStyle.tennisBall}>
                     <Image resizeMode="contain" style={{ height: widthPercentageToDP(15), width: widthPercentageToDP(15) }} source={constants.icons.tennisBall} />

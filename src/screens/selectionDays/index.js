@@ -1,6 +1,5 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { Image, Platform, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Image, Platform, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { useDispatch } from "react-redux";
 import { utils } from "../../common";
@@ -55,7 +54,10 @@ const SelectionDays = ({ route, navigation }) => {
                                 return (
                                     <TouchableOpacity
                                         onPress={() => item?.alert_message
-                                            ? alert(item?.alert_message)
+                                            ? Alert.alert(
+                                                "Fantasy Tennis Club",
+                                                item?.alert_message,
+                                            )
                                             : utils.navigateTo(navigation, item?.is_lock_form == 1
                                                 ? 'LockedScreen'
                                                 : route.params == undefined

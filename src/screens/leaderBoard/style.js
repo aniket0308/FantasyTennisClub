@@ -35,11 +35,14 @@ const leaderBoardStyle = StyleSheet.create({
         color: constants.colors.black,
         fontFamily: constants.fonts.notoSansRegular,
         fontSize: 12,
-        alignSelf:"flex-start"
+        alignSelf:"flex-start",
+        paddingRight:5,
+        paddingBottom:5
     },
     mainViewScore: {
         flex: 1,
-        backgroundColor: constants.colors.white
+        backgroundColor: constants.colors.white,
+        marginBottom:25
     },
     txtName: {
         marginBottom: 10,

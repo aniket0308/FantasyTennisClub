@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { URL } from "../configuration";
-import { checkLoginStep, isLoaderNotVisible } from "../redux/slice/auth";
+import { checkLoginStep, isLoaderNotVisible, login } from "../redux/slice/auth";
 import Snackbar from 'react-native-snackbar';
 import { utils } from ".";
 import { constants } from "./constant";
@@ -142,7 +142,10 @@ export const callApi = (path, payload, type, dispatch) => {
             }
             else if (type == 'organizePrivateGroup' || type == 'privateGroup' || type == 'sendPickEmail' || type == 'savePick') {
                 if (json.error == false && type != 'sendPickEmail' && type != 'PaymentCapture' && type != 'savePick') {
-                    Alert.alert(json?.message)
+                    Alert.alert(
+                        "Fantasy Tennis Club",
+                        json?.message,
+                    )
                 }
                 else if (type == 'PaymentCapture') {
                     payload.setIsLoading(false)

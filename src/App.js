@@ -111,24 +111,23 @@ const App = ({navigation}) => {
   })
 
   useEffect(() => {
-    const notification = new PushNotificationService()
+    // const notification = new PushNotificationService()
     // notification.configure(navigation)
-    notification.createChannel()
-    notification.getChannels()
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      console.log('Message handled in the Foregorund!', remoteMessage);
-      notification.localNotification({title:remoteMessage?.notification?.title,body:remoteMessage?.notification.body,image:remoteMessage?.notification.android.imageUrl})
-    });
+    // notification.createChannel()
+    // notification.getChannels()
+    // const unsubscribe = messaging().onMessage(async remoteMessage => {
+    //   console.log('Message handled in the Foregorund!', remoteMessage);
+    //   notification.localNotification({title:remoteMessage?.notification?.title,body:remoteMessage?.notification.body,image:remoteMessage?.notification.android.imageUrl})
+    // });
     checkMemberShip()
-    return unsubscribe;
+    // return unsubscribe;
   }, []);
 
   useEffect(()=>{
     messaging().onNotificationOpenedApp((remoteMessage)=>{
       console.log('remoteMessage remoteMessage',remoteMessage);
     })
-  })
-
+  },[])
   return (
     <Provider store={store}>
       {
