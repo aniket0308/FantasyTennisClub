@@ -95,7 +95,6 @@ const PrivateGroupDetails = ({ route, navigation }) => {
         setGroupEvents('')
         setGroupParticipant('')
     }
-
     return (
         <View style={privateGroupDetailsStyle.mainContainer}>
             <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />
@@ -109,7 +108,7 @@ const PrivateGroupDetails = ({ route, navigation }) => {
                 mainViewHeaderStyle={{ paddingHorizontal: 10 }}
                 showBackArrow={false}
             />
-            {route.params?.title != 'Organize Private Group'
+            {route.params?.item?.action == 'join_group'
                 ? <View style={{ marginVertical: 50 }}>
                     <CardWithImage
                         containerStyle={{ backgroundColor: constants.colors.labelColor, width: widthPercentageToDP(85), alignSelf: 'center' }}

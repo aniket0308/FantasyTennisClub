@@ -119,7 +119,7 @@ const BuyMemberShip = ({ navigation, route }) => {
                         }
                         else {
                             const intersection = memberShip.filter(element => tempMembershipArr.includes(element?.tournament_id));
-                            utils.navigateTo(navigation, item.title == 'Organize Private Group' || item.title == 'Join Private Group' ? constants.screens.privateGroupDetails : constants.screens.membership, { item, tournamentArr: item.title == 'Organize Private Group' || item.title == 'Join Private Group' ? '' : intersection })
+                            utils.navigateTo(navigation, item?.action == 'create_group' || item?.action == 'join_group' ? constants.screens.privateGroupDetails : constants.screens.membership, { item, tournamentArr: item?.action == 'create_group' || item?.action == 'join_group' ? '' : intersection })
                         }
                     }
                 }
