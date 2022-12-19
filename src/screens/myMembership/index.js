@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { Image, SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
 import { useDispatch } from "react-redux";
@@ -18,7 +19,13 @@ const MyMembership = ({ navigation, route }) => {
     const dispatch = useDispatch()
 
     const getAllMemberShips = async () => {
-        dispatch(getMyMembership({ setIsLoading, setData }))
+        const seasonObj = {
+            token: await AsyncStorage.getItem('@Token'),
+            setIsLoading: setIsLoading,
+            setData: setData
+        }
+        //calling Api For Getting getMyMembership
+        utils.callApiGet(`api/v1/user/my-membership`, seasonObj)
     }
 
     useEffect(() => {
@@ -74,7 +81,7 @@ const MyMembership = ({ navigation, route }) => {
                                 btnStyle={{ width: '100%', marginTop: 10 }}
                                 onPress={() => {
                                     setIsLoading(true)
-                                    dispatch(logout({setIsLoading}))
+                                    utils.callApi('api/v1/logout', { setIsLoading: setIsLoading }, 'logout')
                                 }}
                             />
                         </>

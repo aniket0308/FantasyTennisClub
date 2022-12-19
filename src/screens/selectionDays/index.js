@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { Alert, Image, Platform, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
@@ -16,9 +17,23 @@ const SelectionDays = ({ route, navigation }) => {
     const [days, setDays] = useState()
     const [isLoading, setIsLoading] = useState(false)
     const dispatch = useDispatch()
-    console.log('what are days', days?.data?.days.reverse());
+
+    function reverseArr() {
+        var ret = new Array;
+        for(var i =  days?.data?.days.length-1; i >= 0; i--) {
+            ret.push(days?.data?.days[i]);
+        }
+        return ret;
+    }
+const reverseDays=reverseArr()
+
+    const getDays=async()=>{
+        const token=await AsyncStorage.getItem('@Token')
+        utils.callApiGet(`api/v1/member-dashboard`,{ setIsLoading, setDays ,token})
+    }
+
     useEffect(() => {
-        dispatch(getDays({ setIsLoading, setDays }))
+        getDays()
     }, [])
 
     useEffect(() => {
@@ -47,13 +62,14 @@ const SelectionDays = ({ route, navigation }) => {
             />
             {isLoading == false
                 ? <Loader />
-                : <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 25 }} bounces={false}>
+                : <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{flex:1,justifyContent:'center'}} style={{ marginBottom: 25 }} bounces={false}>
                     <View style={selectionDayStyle.touchableMainView}>
                         {days?.data?.days?.length > 0
-                            && days?.data?.days.reverse().map((item, index) => {
+                            && reverseDays?.map((item, index) => {
                                 return (
                                     <TouchableOpacity
-                                        onPress={() => item?.alert_message
+                                        onPress={() => 
+                                            item?.alert_message
                                             ? Alert.alert(
                                                 "Fantasy Tennis Club",
                                                 item?.alert_message,
@@ -64,8 +80,9 @@ const SelectionDays = ({ route, navigation }) => {
                                                     ? constants.screens.dayPick
                                                     : constants.screens.myPicks,
                                                 item?.is_lock_form == 1
-                                                    ? { item, tournament_day: item.tournament_day.split(' ')[1] }
-                                                    : item?.id)}
+                                                    ? { item, tournament_day: item?.id }
+                                                    : item?.id)
+                                                }
                                         style={[
                                             selectionDayStyle.touchItem,
                                             {
@@ -79,7 +96,7 @@ const SelectionDays = ({ route, navigation }) => {
                                             item?.is_last_day == true
                                                 ? <>
                                                     <Image style={{ marginBottom: Platform.OS == "android" ? 10 : 0, height: widthPercentageToDP(10), width: widthPercentageToDP(12) }} source={constants.icons.winnerCup} resizeMode='contain' />
-                                                    <Text style={[selectionDayStyle.TxtDay]}>{item?.tournament_day}</Text>
+                                                    <Text style={[selectionDayStyle.TxtDay]}>{item?.tournament_champ}</Text>
                                                 </> : <>
                                                     <Text style={[selectionDayStyle.txtWhichDay, { color: item.is_consolation_day == true && myPicks !== 'MY PICKS' ? constants.colors.white : constants.colors.darkGreen }]} >{item.tournament_day.split(' ')[1]}</Text>
                                                     <Text style={[selectionDayStyle.TxtDay, { color: item.is_consolation_day == true && myPicks !== 'MY PICKS' ? constants.colors.white : constants.colors.darkGreen }]}>Day</Text>

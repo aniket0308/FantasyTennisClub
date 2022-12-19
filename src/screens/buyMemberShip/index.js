@@ -7,6 +7,8 @@ import { utils } from "../../common";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
 import Loader from "../../components/loader";
+import { checkAuthentication, logout } from "../../redux/slice/auth";
+import { store } from "../../redux/store";
 import membershipStyle from "../membership/style";
 import buyMemberShipStyle from "./style";
 
@@ -33,23 +35,24 @@ const BuyMemberShip = ({ navigation, route }) => {
             then(async (response) => {
                 if (response.status == 401) {
                     await AsyncStorage.clear()
+                    store.dispatch(logout())
                 }
                 return response.json()
             }).
             then((json) => {
-                ;
                 if (json.success == true) {
                     setIsLoading(true)
                 }
                 setRefresh(false)
                 setMemberShip(json?.data)
+                store.dispatch(checkAuthentication({data:json.data,token,isRegisteredFirstTime:false}))
             }).
             catch(e => {
-                Snackbar.show({
-                    text: e.toString(),
-                    duration: 1000,
-                    backgroundColor: 'red',
-                });
+                // Snackbar.show({
+                //     text: e.toString(),
+                //     duration: 1000,
+                //     backgroundColor: 'red',
+                // });
                 setRefresh(false)
                 setIsLoading(false)
                 console.log('What Is Error In Get Api', e)

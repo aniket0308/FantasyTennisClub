@@ -19,7 +19,8 @@ const leaderBoardStyle = StyleSheet.create({
         bottom: 0,
         padding: 10,
         right: 0,
-        width: '100%'
+        width: '100%',
+        marginBottom:-25    
     },
     txtTitle: {
         fontSize: 15,

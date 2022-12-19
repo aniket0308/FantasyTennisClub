@@ -14,49 +14,20 @@ import { store } from './redux/store';
 import messaging from '@react-native-firebase/messaging';
 import PushNotificationService from './pushNotification/pushNotification';
 import Snackbar from 'react-native-snackbar';
-import { checkLoginStep } from './redux/slice/auth';
-import { Alert } from 'react-native';
+import { checkAuthentication, checkLoginStep } from './redux/slice/auth';
+import { Alert, Text, View } from 'react-native';
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import { utils } from './common';
 import { constants } from './common/constant';
+import Routes from './navigation/route';
 
-const App = ({navigation}) => {
+const App = ({ navigation }) => {
 
   //Variable Used For Authentication
-  const [isAuthentication, setIsAuthentication] = useState(true)
   const [, setRender] = useState()
   const [isMembership, setIsMembership] = useState()
-  const [firstTime, setFirstTime] = useState()
   const [isLoading, setIsLoading] = useState(false)
-
-  // const auth=store.getState()
-  // console.log('what is auth',auth);
-
-  const getData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('@Token')
-      const isRegisteredFirstTime = await AsyncStorage.getItem('@RegisterFirstTIme')
-      // store.dispatch(checkLoginStep({value,isRegisteredFirstTime}))
-      if (value !== null || isRegisteredFirstTime != null) {
-        // value previously stored
-        setIsAuthentication(true)
-        setFirstTime(isRegisteredFirstTime)
-        setRender({})
-      } else if (value !== null && isRegisteredFirstTime == null) {
-        setIsAuthentication(true)
-        setFirstTime(isRegisteredFirstTime)
-        setRender({})
-      }
-      else {
-        setIsAuthentication(false)
-        setRender({})
-      }
-    } catch (e) {
-      // error reading value
-      console.log('Error In Getting Item:', e);
-    }
-  }
 
   const checkMemberShip = async () => {
     const token = await AsyncStorage.getItem('@Token')
@@ -71,16 +42,18 @@ const App = ({navigation}) => {
     }).
       then(async(response) => {
         if (response.status == 401) {
+                    await AsyncStorage.clear()
+                    store.dispatch(logout())
           await AsyncStorage.clear()
       }
       return response.json()
       }).
       then(async (json) => {
-        console.log('what is json', json);
           if (json?.success == true) {
             setIsLoading(true)
-            await AsyncStorage.removeItem('@RegisterFirstTIme')
+            await AsyncStorage.removeItem('@registerFirstTime')
             setIsMembership(json?.data?.is_member)
+            store.dispatch(checkAuthentication({data:json.data,token}))
             setRender({})
           } else {
             setIsAuthentication(false)
@@ -93,50 +66,20 @@ const App = ({navigation}) => {
         //   backgroundColor: 'red',
         // });
         setIsLoading(false)
+        store.dispatch(checkAuthentication({data:null,token}))
         console.log('What Is Error In Get Api', e)
       })
   }
 
   useEffect(() => {
-    getData()
-    checkMemberShip()
+    async function checkAuthentication() {
+      checkMemberShip()
+    }
+    checkAuthentication()
   }, [])
-
-  useEffect(() => {
-    checkMemberShip()
-  }, [isMembership])
-
-  useEffect(() => {
-    getData()
-  })
-
-  useEffect(() => {
-    // const notification = new PushNotificationService()
-    // notification.configure(navigation)
-    // notification.createChannel()
-    // notification.getChannels()
-    // const unsubscribe = messaging().onMessage(async remoteMessage => {
-    //   console.log('Message handled in the Foregorund!', remoteMessage);
-    //   notification.localNotification({title:remoteMessage?.notification?.title,body:remoteMessage?.notification.body,image:remoteMessage?.notification.android.imageUrl})
-    // });
-    checkMemberShip()
-    // return unsubscribe;
-  }, []);
-
-  useEffect(()=>{
-    messaging().onNotificationOpenedApp((remoteMessage)=>{
-      console.log('remoteMessage remoteMessage',remoteMessage);
-    })
-  },[])
   return (
     <Provider store={store}>
-      {
-        isAuthentication == true && firstTime == 'true'
-          ? <RegisterFirstTime />
-          : isAuthentication == true && firstTime == null
-            ? <AuthNavigator />
-            : isAuthentication == false && <RootNavigator />
-      }
+      <Routes/>
     </Provider>
   );
 }

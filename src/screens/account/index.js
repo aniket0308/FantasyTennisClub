@@ -99,7 +99,7 @@ const Account = ({ navigation }) => {
 
                                         if (item == 'Logout') {
                                             setIsLoading(true)
-                                            dispatch(logout(setIsLoading))
+                                            utils.callApi('api/v1/logout', { setIsLoading: setIsLoading }, 'logout')
                                         }
                                     }}
                                     containerStyle={{ marginBottom: 10, backgroundColor: item == 'Logout' ? constants.colors.darkBlue : constants.colors.cardColor }}

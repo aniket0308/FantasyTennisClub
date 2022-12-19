@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { Image, RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
@@ -30,8 +31,9 @@ const DayPick = ({ route, navigation }) => {
         });
     }
     //get Particular Day Match
-    const getAllMatchesOfParticulatDay = () => {
-        dispatch(getDays({ setIsLoading, setRefresh, setDays }))
+    const getAllMatchesOfParticulatDay = async () => {
+        const token = await AsyncStorage.getItem('@Token')
+        utils.callApiGet(`api/v1/member-dashboard`, { setIsLoading, setDays, setRefresh, token })
     }
 
     useEffect(() => {
@@ -98,8 +100,8 @@ const DayPick = ({ route, navigation }) => {
             </TouchableOpacity>
             <Text style={dayPickStyle.txtDay}>{particularDay?.tournament_day}</Text>
             {
-                route.params == 14
-                && <Text style={{ color: 'black', fontFamily: constants.fonts.notoSansBold, fontSize: 20, marginTop: -10, marginBottom: 5 }}>Tournament Champions</Text>
+                particularDay?.is_last_day == true
+                && <Text style={{ color: 'black', fontFamily: constants.fonts.notoSansBold, fontSize: 20, marginTop: 0, marginBottom: 5 }}>Tournament Champions</Text>
             }
             <Text style={dayPickStyle.txtSubmit}>{isSubmit == false ? 'Submit your picks below' : '‌‌Your Picks have been entered successfully!'}</Text>
             <ScrollView
@@ -127,7 +129,6 @@ const DayPick = ({ route, navigation }) => {
                         <View style={{ marginVertical: 30 }}>
                             {
                                 particularDay?.matches.map((item, index) => {
-                                    console.log('item?.is_last_day',);
                                     return (
                                         <CardWithImage
                                             containerStyle={{ backgroundColor: constants.colors.labelColor, marginBottom: 10 }}
@@ -150,10 +151,12 @@ const DayPick = ({ route, navigation }) => {
                                 // disabled={}
                                 titleText={'Submit'}
                                 btnStyle={{ width: '100%' }}
-                                onPress={() => {
-                                        console.log('objects===>',objects);
+                                onPress={async() => {
+                                    console.log('objects===>', objects);
                                     setIsLoading(false)
-                                    dispatch(savePicks({ matches: objects, setIsSubmit, setIsLoading, day: particularDay?.id, tournament_id: particularDay?.tournament_id }))
+                                    const token = await AsyncStorage.getItem('@Token')
+                                    //calling Api For Saving Picks
+                                    utils.callApi(`api/v1/tournaments/${particularDay?.tournament_id}/${particularDay?.id}/save-members-picks`, { match:objects, token, isLoading, setIsLoading, setIsSubmit }, 'savePick')
                                 }}
                             />}
                     </>
@@ -176,9 +179,17 @@ const DayPick = ({ route, navigation }) => {
                                 // disabled={}
                                 titleText={'Send to email'}
                                 btnStyle={{ width: '100%' }}
-                                onPress={() => {
+                                onPress={async() => {
                                     setIsLoading(false)
-                                    dispatch(sendPicksToEmail({ tournament_id: particularDay?.tournament_id, day_id: particularDay?.id, navigation }))
+                                    // dispatch(sendPicksToEmail({ tournament_id: particularDay?.tournament_id, day_id: particularDay?.id, navigation }))
+                                    const sendEmailObj = {
+                                        token: await AsyncStorage.getItem('@Token'),
+                                        tournament_id: particularDay?.tournament_id,
+                                        day_id: particularDay?.id,
+                                        navigation: navigation
+                                    }
+                                    //calling Api For Sending Email
+                                    utils.callApi(`api/v1/send-picks-mail`, sendEmailObj, 'sendPickEmail')
                                 }}
                             />}
                     </>

@@ -26,7 +26,14 @@ const MyPicks = ({ route, navigation }) => {
 
     const getAllPickFromAPi = async () => {
         let tournamentId=await AsyncStorage.getItem('@TournamentId')
-        dispatch(getAllPicksFormApi({setIsLoading,setRefresh,setData,tournamentId}))
+        const pickObj = {
+            token: await AsyncStorage.getItem('@Token'),
+            setIsLoading: setIsLoading,
+            setRefresh: setRefresh,
+            setData: setData
+        }
+        //calling Api For Getting picks
+        utils.callApiGet(`api/v1/tournaments/${tournamentId}/my-picks`, pickObj)
     }
 
     useEffect(() => {

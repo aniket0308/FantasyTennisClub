@@ -160,7 +160,7 @@ const ChangePassword = ({ route, navigation }) => {
                             dispatch(editProfile({ fullName, mobileNumber,email, navigation, dispatch,setIsLoading }))
                         } else if (route?.params == 'contactUs') {
                             setIsLoading(true)
-                            dispatch(sendInquiry({ subject, text, dispatch, clearAllData ,setIsLoading}))
+                            dispatch(sendInquiry({ subject, text, dispatch, clearAllData ,setIsLoading,navigation}))
                             setIsLoading(true)
                         } else if (route?.params?.name == 'forgotPassword') {
                             setIsLoading(true)

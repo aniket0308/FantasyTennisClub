@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { URL } from "../configuration";
-import { checkLoginStep, isLoaderNotVisible, login } from "../redux/slice/auth";
+import { checkAuthentication, checkLoginStep, isLoaderNotVisible, login, loginAuthentication, logout, registerAuthentication } from "../redux/slice/auth";
 import Snackbar from 'react-native-snackbar';
 import { utils } from ".";
 import { constants } from "./constant";
@@ -10,7 +10,6 @@ import { store } from "../redux/store";
 
 //Storing Data In Local Storage
 const storeData = async (payload, isLogin) => {
-    console.log('payload', payload);
     try {
         if (isLogin == true) {
             await AsyncStorage.mergeItem('@Token', payload.token),
@@ -22,7 +21,7 @@ const storeData = async (payload, isLogin) => {
                 await AsyncStorage.setItem('@Token', payload?.token),
                 await AsyncStorage.setItem('@Email', payload?.email),
                 await AsyncStorage.setItem('@MobileNumber', payload?.mobile_number)
-            await AsyncStorage.setItem('@RegisterFirstTIme', 'true')
+            await AsyncStorage.setItem('@registerFirstTime', 'true')
 
         }
     } catch (e) {
@@ -57,7 +56,7 @@ export const callApi = (path, payload, type, dispatch) => {
                 dispatch(isLoaderNotVisibleProfile())
             }
 
-            if (json.error == true && type !='PaymentCapture' ) {
+            if (json.error == true && type != 'PaymentCapture') {
                 Snackbar.show({
                     text: json.message,
                     duration: 1000,
@@ -87,15 +86,22 @@ export const callApi = (path, payload, type, dispatch) => {
                     storeData(json.data, true)
                     const value = await AsyncStorage.getItem('@Token')
                     const isRegisteredFirstTime = await AsyncStorage.getItem('@RegisterFirstTIme')
-                    store.dispatch(checkLoginStep({value,isRegisteredFirstTime}))
+                    store.dispatch(loginAuthentication({ data: json?.data }))
+                    store.dispatch(checkAuthentication({ data: json?.data, token: value, isRegisteredFirstTime: false }))
                 }
             } else if (type == 'logout') {
                 await AsyncStorage.clear()
+                store.dispatch(logout())
             } else if (type == 'Registered') {
                 if (json.error == false) {
                     if (json.data != null) {
-                        console.log('what is json', json.data);
+                        console.log('what is json fdfdfdfdfdfd', json.data.token);
                         storeData(json.data, false)
+                        const value = await AsyncStorage.getItem('@Token')
+                        const isRegisteredFirstTime = await AsyncStorage.getItem('@RegisterFirstTIme')
+                        console.log('isRegisteredFirstTime  isRegisteredFirstTime', isRegisteredFirstTime,value);
+                        store.dispatch(registerAuthentication({ data: json?.data, token: json?.data?.token, isRegisteredFirstTime }))
+                        // store.dispatch(checkAuthentication({ data: json?.data, token: json?.data?.token, isRegisteredFirstTime }))
                     }
                 }
             } else if (type == 'editProfile') {
@@ -113,12 +119,8 @@ export const callApi = (path, payload, type, dispatch) => {
                 if (json?.error == false) {
                     if (payload?.clearAllData != undefined) {
                         payload.clearAllData()
+                        payload.navigation?.navigate('Dashboard')
                     }
-                    Snackbar.show({
-                        text: json.message,
-                        duration: 1000,
-                        backgroundColor: 'green',
-                    });
                 }
             } else if (type == 'sendOtp') {
                 if (json.error == false) {
@@ -191,7 +193,7 @@ export const callApi = (path, payload, type, dispatch) => {
 }
 
 //calling apis for get
-export const callApiGet = async (path, payload,type) => {
+export const callApiGet = async (path, payload, type) => {
     const urlPath = `${URL}${path}`
     try {
         fetch(urlPath, {
@@ -204,11 +206,15 @@ export const callApiGet = async (path, payload,type) => {
         }).then(async (response) => {
             if (response.status == 401) {
                 await AsyncStorage.clear()
+                store.dispatch(logout())
             }
             return response.json()
         }
         ).then(async (json) => {
+            console.log('what is json', payload);
+            store.dispatch(checkAuthentication({ data: json.data, token: payload?.token, isRegisteredFirstTime: false }))
             if (payload?.setDays) {
+                console.log('what is json for set days', json);
                 await AsyncStorage.setItem('@TournamentId', `${json?.data?.id}`)
                 payload.setDays(json)
             }
@@ -221,7 +227,7 @@ export const callApiGet = async (path, payload,type) => {
             if (payload.setFaq) {
                 payload.setFaq(json)
             }
-            if(type=='Leaderboard'&&json.error==true){
+            if (type == 'Leaderboard' && json.error == true) {
                 Alert.alert(
                     "Fantasy Tennis Club",
                     'Leaderboard is not generated yet.',
@@ -241,6 +247,7 @@ export const callApiGet = async (path, payload,type) => {
             payload.setRefresh(false)
         })
     } catch (error) {
+        store.dispatch(checkAuthentication({ data: null, token: payload?.token, isRegisteredFirstTime: false }))
         console.log('What Is Error In Get Api', error.toString())
     }
 }

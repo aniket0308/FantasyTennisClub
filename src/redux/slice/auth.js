@@ -6,32 +6,23 @@ const initialState = {
     isLoading: false,
     membershipData: [],
     token:null,
-    isRegisteredFirstTime:false
+    isRegisteredFirstTime:false,
+    auth:null,
+    logedIn:false
 }
 
 export const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        registration: (state, actions) => {
-            const registerObj = {
-                name: actions.payload.fullName,
-                email: actions.payload.email,
-                mobile_number: actions.payload.mobileNumber,
-                password: actions.payload.password,
-                confirm_password: actions.payload.confirmPassword,
-                referral: actions.payload.referral,
-                navigation: actions.payload.navigation,
-                device_token: actions.payload.deviceToken,
-                platform: actions.payload.platform,
-                checkLogin:actions.payload.checkLogin,
-            }
-            console.log('what is register obj', registerObj);
-            //calling Api For Login
-            utils.callApi('api/register', registerObj, 'Registered', actions.payload.dispatch)
+        registerAuthentication: (state, actions) => {
+           console.log('hiii');
             return {
                 ...state,
-                checkLogin: registerObj
+                auth:actions.payload?.data,
+                token:actions.payload?.token,
+                isRegisteredFirstTime:true,
+                logedIn:true
             }
 
         },
@@ -86,11 +77,8 @@ export const authSlice = createSlice({
         },
         logout: (state, actions) => {
             //calling Api For Logout
-            utils.callApi('api/v1/logout', { setIsLoading: actions?.payload?.setIsLoading }, 'logout', actions?.payload?.dispatch)
-            return {
-                ...state,
-                checkLogin: []
-            }
+            // utils.callApi('api/v1/logout', { setIsLoading: actions?.payload?.setIsLoading }, 'logout', actions?.payload?.dispatch)
+            return {...initialState,logedIn:true}
         },
         sendOtp: (state, actions) => {
             //calling Api For sending Otp
@@ -312,15 +300,34 @@ export const authSlice = createSlice({
             t.push(action.payload)
             state.membershipData = t
             return state
+        },
+        loginAuthentication:(state,actions)=>{
+            console.log('state',state,'  Actions',actions);
+            return {
+                ...state,
+                auth:actions.payload?.data,
+                logedIn:true
+            }
+
+        },
+        checkAuthentication:(state,actions)=>{
+            console.log('state',state,'  Actions',actions);
+            return {
+                ...state,
+                auth:actions.payload?.data,
+                token:actions.payload?.token,
+                logedIn:true
+                // isRegisteredFirstTime:actions.payload.isRegisteredFirstTime,
+            }
         }
     }
 
 })
 
 // Action creators are generated for each case reducer function
-export const { login, logout, registration, joinPrivateGroup, oganizePrivateGroup, isLoaderVisible, isLoaderNotVisible, sendOtp, verifyOtp, savePicks,
+export const { login, logout, registerAuthentication, joinPrivateGroup, oganizePrivateGroup, isLoaderVisible, isLoaderNotVisible, sendOtp, verifyOtp, savePicks,
     getAnnouncements, getDays, getAllPicksFormApi, getSeasonLeaderBoard, getGroupConsolationLeaderBoard, getConsolationLeaderBoard, getLeaderBoard, getEtiquites,
     getTournamentLeaderBoard, getTournamentParticipants, getNotifications, getMyMembership, getSavedPicks, aboutUs, getRules, getFaq, sendPicksToEmail, doPaymentFromCard,
-    checkLoginStep, addMembership } = authSlice.actions
+    checkLoginStep, addMembership,loginAuthentication,checkAuthentication } = authSlice.actions
 
 export default authSlice.reducer

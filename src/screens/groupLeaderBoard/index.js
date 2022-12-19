@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { FlatList, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
@@ -20,8 +20,11 @@ const GroupLeaderBoard = ({ route, navigation }) => {
 
     const getTournamentLeaderBoard = async () => {
         const tournamentId = await AsyncStorage.getItem('@TournamentId')
-        dispatch(getLeaderBoard({ setData, setIsLoading, tournamentId }))
+        const token=await AsyncStorage.getItem('@Token')
+        utils.callApiGet(`api/v1/tournaments/${tournamentId}/group/leaderboard`, { setData, setIsLoading,token })
     }
+
+    console.log('dadada',data);
 
     useEffect(() => {
         getTournamentLeaderBoard()
@@ -29,6 +32,16 @@ const GroupLeaderBoard = ({ route, navigation }) => {
 
     //renderLeaderboard function
     const leaderBoard = ({ item, index }) => {
+        if (item?.error == true) {
+            setIsLoading(false)
+            Alert.alert(
+                "Fantasy Tennis Club",
+                item?.message,
+                [
+                    { text: "OK", onPress: () => navigation.goBack() }
+                ]
+            );
+        }
         return (
             <View style={{ padding: 5, flexDirection: 'row' }}>
                 {
@@ -47,7 +60,7 @@ const GroupLeaderBoard = ({ route, navigation }) => {
                                             if (dataItem.member.toLowerCase().includes(searchResult)) {
                                                 return (
                                                     <Text
-                                                        style={[groupLeaderBoardStyle.txtScore, { marginLeft: headerItem == 'Contact' ? 0 : 10 }]}>
+                                                        style={[groupLeaderBoardStyle.txtScore, { marginLeft: headerItem == 'Contact' ? 0 : 10,fontWeight: dataItem?.highlight == true ? '900' : 'normal' }]}>
                                                         {
                                                             headerIndex == 0
                                                                 ? dataItem.member
@@ -61,7 +74,7 @@ const GroupLeaderBoard = ({ route, navigation }) => {
                                         } else {
                                             return (
                                                 <Text
-                                                    style={[groupLeaderBoardStyle.txtScore, { marginLeft: headerItem == 'Contact' ? 0 : 10 }]}>
+                                                    style={[groupLeaderBoardStyle.txtScore, { marginLeft: headerItem == 'Contact' ? 0 : 10,fontWeight: dataItem?.highlight == true ? '900' : 'normal' }]}>
                                                     {
                                                         headerIndex == 0
                                                             ? dataItem.member

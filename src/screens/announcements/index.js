@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react"
 import { FlatList, RefreshControl, SafeAreaView, StatusBar, Text, View } from "react-native"
 import { widthPercentageToDP } from "react-native-responsive-screen";
@@ -16,8 +17,18 @@ const Announcments = ({ navigation }) => {
     const [data, setData] = useState()
     const dispatch = useDispatch()
 
+    const getAnnouncement=async(filter)=>{
+        const announcementObj = {
+            token: await AsyncStorage.getItem('@Token'),
+            setIsLoading: setIsLoading,
+            setRefresh: setRefresh,
+            setData: setData,
+        }
+        utils.callApiGet(`api/v1/announcements/general${filter == true ? '/all' : ''}`, announcementObj)
+    }
+
     useEffect(() => {
-        dispatch(getAnnouncements({setIsLoading, setRefresh, setData,filter:'all'}))
+        getAnnouncement(true)
     }, [])
 
     //rendering Announcements
@@ -60,7 +71,7 @@ const Announcments = ({ navigation }) => {
                             refreshing={refresh}
                             onRefresh={() => {
                                 setRefresh(true)
-                                dispatch(getAnnouncements({setIsLoading, setRefresh, setData,filter:'all'}))
+                                getAnnouncement(true)
                             }} />}
                     style={{ marginBottom: 20 }}
                     showsVerticalScrollIndicator={false}

@@ -4,6 +4,7 @@ import { SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
 import RenderHTML from "react-native-render-html";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { useDispatch } from "react-redux";
+import { utils } from "../../common";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
 import Loader from "../../components/loader";
@@ -21,7 +22,8 @@ const Prizes = ({ navigation,route }) => {
 
     const getAllTournamentParticipants = async () => {
         const tournamentId = await AsyncStorage.getItem('@TournamentId')
-        dispatch(getTournamentParticipants({setIsLoading,setData,tournamentId}))
+        const token = await AsyncStorage.getItem('@Token')
+        utils.callApiGet(`api/v1/tournaments/${tournamentId}/participations`, {setIsLoading,setData,token})
     }
 
     useEffect(() => {
@@ -43,12 +45,12 @@ const Prizes = ({ navigation,route }) => {
             />
             <View style={{ backgroundColor: constants.colors.white, flex: 1, marginBottom: 25 }}>
                 <ScrollView bounces={false} showsVerticalScrollIndicator={false} >
-                    <Text style={prizeStyle.txtMemberParticipate}>Members Participating</Text>
+                    {/* <Text style={prizeStyle.txtMemberParticipate}>Members Participating</Text>
                     <SearchBar
                     onChangeText={(search)=>setSearchResult(search)}
-                    />
+                    /> */}
                     <View style={{ marginTop: 10, marginLeft: 10 }}>
-                        {
+                        {/* {
                             data?.data?.length > 0
                             && data?.data.map((item) => {
                                 if (searchResult != '') {
@@ -59,7 +61,7 @@ const Prizes = ({ navigation,route }) => {
                                     return <Text style={prizeStyle.txtName}>{item?.name}</Text>
                                 }
                             })
-                        }
+                        } */}
                         {
                             description && isLoading==true
                             && <RenderHTML

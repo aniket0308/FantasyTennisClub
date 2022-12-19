@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { Image, RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
@@ -7,8 +8,6 @@ import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
 import Loader from "../../components/loader";
-import PushNotificationService from "../../pushNotification/pushNotification";
-import { getAnnouncements, getDays } from "../../redux/slice/auth";
 import dashboardStyle from "./style";
 
 //Dashboard Of Screen Or Say Home Screen
@@ -20,12 +19,36 @@ const DashBoardHome = ({ navigation }) => {
     const [data, setData] = useState()
     const dispatch = useDispatch()
 
-    let notification = new PushNotificationService()
+    const getDays=async()=>{
+        const getDaysObj = {
+            token: await AsyncStorage.getItem('@Token'),
+            setIsLoading: setIsLoading,
+            setRefresh: setRefresh,
+            setDays: setDays
+        }
+        //calling Api For Getting Days
+        utils.callApiGet(`api/v1/member-dashboard`, getDaysObj)
+    }
+
+     const getAnnouncement=async(filter)=>{
+        const announcementObj = {
+            token: await AsyncStorage.getItem('@Token'),
+            setIsLoading: setIsLoading,
+            setRefresh: setRefresh,
+            setData: setData,
+        }
+        utils.callApiGet(`api/v1/announcements/general${filter == true ? '/all' : ''}`, announcementObj)
+    }
 
     useEffect(() => {
-        dispatch(getDays({ setIsLoading, setRefresh, setDays }))
-        dispatch(getAnnouncements({ setIsLoading, setRefresh, setData }))
+        getDays()
+        getAnnouncement(false)
     }, [refresh])
+
+    useEffect(() => {
+        getDays()
+        getAnnouncement(false)
+    }, [])
 
     const tempData = [
         {
@@ -131,8 +154,8 @@ const DashBoardHome = ({ navigation }) => {
                                 refreshing={refresh}
                                 onRefresh={() => {
                                     setRefresh(true)
-                                    dispatch(getDays({ setIsLoading, setRefresh, setDays }))
-                                    dispatch(getAnnouncements({ setIsLoading, setRefresh, setData }))
+                                    getDays()
+                                    getAnnouncement(false)
                                 }}
                                 title='Loading...'
                                 tintColor={constants.colors.darkBlue}

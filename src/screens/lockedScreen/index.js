@@ -2,6 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { Alert, FlatList, Image, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { useDispatch } from "react-redux";
+import { utils } from "../../common";
 import { constants } from "../../common/constant";
 import Loader from "../../components/loader";
 import SearchBar from "../../components/searchBar";
@@ -19,7 +20,9 @@ const LockedScreen = ({ navigation, route }) => {
 
     //function for getting save member picks
     const getSaveMemberPicks = async () => {
-        dispatch(getSavedPicks({setData,setIsLoading,tournament_id:route?.params?.item?.tournament_id,id:route?.params?.item?.id}))
+        // dispatch(getSavedPicks({setData,setIsLoading}))
+        const token=await AsyncStorage.getItem('@Token')
+        utils.callApiGet(`api/v1/tournaments/${route?.params?.item?.tournament_id}/${route?.params?.item?.id}/members-picks`, {setData,setIsLoading,token})
     }
 
     const getMemberPickRender = ({ item, index }) => {
@@ -51,7 +54,7 @@ const LockedScreen = ({ navigation, route }) => {
                                             if (dataItem.member.toLowerCase().includes(searchResult)) {
                                                 return (
                                                     <Text
-                                                        style={[leaderBoardStyle.txtScore, { marginLeft: headerItem == 'Contact' ? 0 : 10, fontWeight: dataItem?.highlight == true ? '900' : null }]}>
+                                                        style={[leaderBoardStyle.txtScore, { marginLeft: headerItem == 'Contact' ? 0 : 10, fontWeight: dataItem?.highlight == true ? '900' : 'normal' }]}>
                                                         {
                                                             headerIndex == 0
                                                                 ? dataItem.member
@@ -63,7 +66,7 @@ const LockedScreen = ({ navigation, route }) => {
                                         } else {
                                             return (
                                                 <Text
-                                                    style={[leaderBoardStyle.txtScore]}>
+                                                    style={[leaderBoardStyle.txtScore,{fontWeight: dataItem?.highlight == true ? '900' : 'normal'}]}>
                                                     {
                                                         headerIndex == 0
                                                             ? dataItem.member
@@ -93,7 +96,7 @@ const LockedScreen = ({ navigation, route }) => {
             <TouchableOpacity onPress={() => navigation.goBack()} style={{ padding: 5, marginTop: 10, marginLeft: -5 }}>
                 <Image style={{ height: 20, width: 20, tintColor: constants.colors.darkGreen }} source={constants.icons.backArrow} />
             </TouchableOpacity>
-            <Text style={dayPickStyle.txtDay}>Day {route.params.tournament_day <= 9 ? `0${route.params.tournament_day}` : route.params.tournament_day}</Text>
+            <Text style={dayPickStyle.txtDay}>{route.params.item?.tournament_day}</Text>
             <Text style={dayPickStyle.txtSubmit}>Member Picks</Text>
             <View style={[leaderBoardStyle.mainViewScore, { marginHorizontal: -10 }]}>
                 <SearchBar

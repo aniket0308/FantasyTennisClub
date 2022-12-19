@@ -9,6 +9,7 @@ import Loader from "../../components/loader";
 import consolationStyle from "./style";
 import { useDispatch } from "react-redux";
 import { getConsolationLeaderBoard, getGroupConsolationLeaderBoard, getSeasonLeaderBoard } from "../../redux/slice/auth";
+import { utils } from "../../common";
 
 //Leaderboard Screen
 const Consolation = ({ route, navigation }) => {
@@ -19,14 +20,15 @@ const Consolation = ({ route, navigation }) => {
     const dispatch = useDispatch()
 
     const getTournamentLeaderBoard = async () => {
+        const token= await AsyncStorage.getItem('@Token')
         const tournamentId = await AsyncStorage.getItem('@TournamentId')
         if (route.params == 'Season Ranking') {
-            dispatch(getSeasonLeaderBoard({ setIsLoading, setRefresh, setData }))
+            utils.callApiGet(`api/v1/season-leaderboard`, { setIsLoading, setRefresh, setData,token })
         } else if (route.params == 'Consolation') {
-            dispatch(getConsolationLeaderBoard({ setIsLoading, setRefresh, setData, tournamentId }))
+            utils.callApiGet(`api/v1/tournaments/${tournamentId}/consolation-leaderboard`, { setIsLoading, setRefresh, setData,token })
         }
         else {
-            dispatch(getGroupConsolationLeaderBoard({ setIsLoading, setRefresh, setData, tournamentId }))
+            utils.callApiGet(`api/v1/tournaments/${tournamentId}/group/consolation-leaderboard`, { setIsLoading, setRefresh, setData,token })
         }
     }
     
@@ -71,7 +73,7 @@ const Consolation = ({ route, navigation }) => {
                                                 if (dataItem.member.toLowerCase().includes(searchResult)) {
                                                     return (
                                                         <Text
-                                                            style={[consolationStyle.txtScore, { alignSelf: 'flex-start', marginLeft: headerIndex != 0 ? 5 : 0, maxWidth: 150 }]}>
+                                                            style={[consolationStyle.txtScore, { alignSelf: 'flex-start', marginLeft: headerIndex != 0 ? 5 : 0, maxWidth: 150,fontWeight: dataItem?.highlight == true ? '900' : 'normal' }]}>
                                                             {
                                                                 headerIndex == 0
                                                                     ? dataItem.member
@@ -87,7 +89,7 @@ const Consolation = ({ route, navigation }) => {
                                             } else {
                                                 return (
                                                     <Text
-                                                        style={[consolationStyle.txtScore, { alignSelf: 'flex-start', marginLeft: headerIndex != 0 ? 5 : 0, maxWidth: 150 }]}>
+                                                        style={[consolationStyle.txtScore, { alignSelf: 'flex-start', marginLeft: headerIndex != 0 ? 5 : 0, maxWidth: 150,fontWeight: dataItem?.highlight == true ? '900' : 'normal' }]}>
                                                         {
                                                             headerIndex == 0
                                                                 ? dataItem.member
@@ -105,7 +107,7 @@ const Consolation = ({ route, navigation }) => {
                                         item?.data?.data.map((dataItem, dataIndex) => {
                                             return (
                                                 <Text
-                                                    style={[consolationStyle.txtScore, { marginLeft: headerItem == 'Contact' ? 0 : 10 }]}>
+                                                    style={[consolationStyle.txtScore, { marginLeft: headerItem == 'Contact' ? 0 : 10,fontWeight: dataItem?.highlight == true ? '900' : 'normal' }]}>
                                                     {
                                                         headerIndex == 0
                                                             ? dataItem.member

@@ -6,13 +6,15 @@ import { widthPercentageToDP } from "react-native-responsive-screen";
 import SelectDropdown from "react-native-select-dropdown";
 import Snackbar from "react-native-snackbar";
 import { useDispatch, useSelector } from "react-redux";
+import { utils } from "../../common";
 import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
 import { Button, FloatingInput, Header } from "../../components";
 import CardWithImage from "../../components/cardWithImage";
 import Loader from "../../components/loader";
-import { joinPrivateGroup, oganizePrivateGroup } from "../../redux/slice/auth";
+import { checkAuthentication, joinPrivateGroup, oganizePrivateGroup } from "../../redux/slice/auth";
 import { isLoaderNotVisibleProfile, isLoaderVisibleProfile } from "../../redux/slice/profile";
+import { store } from "../../redux/store";
 import privateGroupDetailsStyle from "./style";
 
 const PrivateGroupDetails = ({ route, navigation }) => {
@@ -56,27 +58,28 @@ const PrivateGroupDetails = ({ route, navigation }) => {
             then(async(response) => {
                 if (response.status == 401) {
                     await AsyncStorage.clear()
+                    store.dispatch(logout())
                 }
                 return response.json()
             }).
             then((json) => {
-                ;
                 if (json.success == true) {
                     dispatch(isLoaderNotVisibleProfile())
                 }
                 setMemberShip(json?.data[0].tournaments)
+                store.dispatch(checkAuthentication({data:json.data,token,isRegisteredFirstTime:false}))
             }).
             catch(e => {
-                Snackbar.show({
-                    text: e.toString(),
-                    duration: 1000,
-                    backgroundColor: 'red',
-                    // action: {
-                    //   text: 'UNDO',
-                    //   textColor: 'green',
-                    //   onPress: () => { /* Do something. */ },
-                    // },
-                });
+                // Snackbar.show({
+                //     text: e.toString(),
+                //     duration: 1000,
+                //     backgroundColor: 'red',
+                //     // action: {
+                //     //   text: 'UNDO',
+                //     //   textColor: 'green',
+                //     //   onPress: () => { /* Do something. */ },
+                //     // },
+                // });
                 dispatch(isLoaderNotVisibleProfile())
                 console.log('What Is Error In Get Api', e)
             })
@@ -103,7 +106,7 @@ const PrivateGroupDetails = ({ route, navigation }) => {
                 <Image style={{ height: 20, width: 20, tintColor: constants.colors.darkGreen }} source={constants.icons.backArrow} />
             </TouchableOpacity>
             <Header
-                title={route.params?.title == 'Organize Private Group' ? 'Private Group Details' : 'Join Private Group'}
+                title={route.params?.item?.action == 'create_group' ? 'Private Group Details' : 'Join Private Group'}
                 subTitle='Complete your details below'
                 mainViewHeaderStyle={{ paddingHorizontal: 10 }}
                 showBackArrow={false}
@@ -186,17 +189,35 @@ const PrivateGroupDetails = ({ route, navigation }) => {
                 </KeyboardAwareScrollView>
             }
             <Button
-                onPress={() => {
-                    if (route.params?.title != 'Organize Private Group') {
+                onPress={async() => {
+                    if (route.params?.item?.action == 'join_group') {
                         dispatch(isLoaderVisibleProfile())
-                        dispatch(joinPrivateGroup({ groupFullName, dispatch, clearAllData }))
+                        // dispatch(joinPrivateGroup({ groupFullName, dispatch, clearAllData }))
+                        const privateGroupObj = {
+                            group_name: groupFullName,
+                            clearAllData: clearAllData,
+                            token: await AsyncStorage.getItem('@Token'),
+                        }
+                        //calling Api For Joining Private Group
+                        utils.callApi('api/v1/private-group/join-private-group', privateGroupObj, 'privateGroup', dispatch)
                     } else {
                         dispatch(isLoaderVisibleProfile())
-                        dispatch(oganizePrivateGroup({ fullName, groupEmail, groupContact, groupEvents, groupParticipant, dispatch, clearAllData }))
+                        // dispatch(oganizePrivateGroup({ fullName, groupEmail, groupContact, groupEvents, groupParticipant, dispatch, clearAllData }))
+                        const organizePrivateGroupObj = {
+                            admin_name: fullName,
+                            admin_email: groupEmail,
+                            admin_mobile_number: groupContact,
+                            tournament_id: groupEvents,
+                            number_of_participants: groupParticipant,
+                            clearAllData: clearAllData,
+                            token: await AsyncStorage.getItem('@Token'),
+                        }
+                        //calling Api For Organise Private Group
+                        utils.callApi('api/v1/private-group/create', organizePrivateGroupObj, 'organizePrivateGroup', dispatch)
                     }
 
                 }}
-                titleText={route.params?.title != 'Organize Private Group' ? 'Join Group' : 'Submit'}
+                titleText={route.params?.item?.action == 'join_group' ? 'Join Group' : 'Submit'}
                 btnStyle={{ width: '90%', marginBottom: 15, marginTop: 30 }}
             />
             {/* {

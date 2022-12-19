@@ -11,6 +11,8 @@ import messaging from '@react-native-firebase/messaging';
 import PushNotification from "react-native-push-notification";
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
 import PushNotificationService from "../../pushNotification/pushNotification";
+import { checkAuthentication } from "../../redux/slice/auth";
+import { store } from "../../redux/store";
 
 //Home Screen
 const Home = ({ navigation }) => {
@@ -110,12 +112,14 @@ const Home = ({ navigation }) => {
             then(async (response) => {
                 if (response.status == 401) {
                     await AsyncStorage.clear()
+                    store.dispatch(logout())
                 }
                 return response.json()
             }).
             then((json) => {
                 if (json.success == true) {
                     setIsLoading(true)
+                    store.dispatch(checkAuthentication({data:json.data,token,isRegisteredFirstTime:false}))
                 }
                 setIsMembership(json?.data?.is_member)
             }).
@@ -131,6 +135,7 @@ const Home = ({ navigation }) => {
                 //     // },
                 // });
                 setIsLoading(false)
+                store.dispatch(checkAuthentication({data:null,token,isRegisteredFirstTime:false}))
                 console.log('What Is Error In Get Api', e)
             })
     }
@@ -145,7 +150,9 @@ const Home = ({ navigation }) => {
                 <Image source={constants.icons.downArrow} style={{ height: widthPercentageToDP(20) }} resizeMode='contain' />
                 <TouchableOpacity
                     disabled={isLoading == false ? true : false}
-                    onPress={() => { utils.navigateTo(navigation, isMembership == true ? 'Dashboard' : 'MyMembership') }}
+                    onPress={() => { 
+                        utils.navigateTo(navigation, isMembership == true ? 'Dashboard' : 'MyMembership')
+                     }}
                     activeOpacity={1}
                     style={homeStyle.tennisBall}>
                     <Image resizeMode="contain" style={{ height: widthPercentageToDP(15), width: widthPercentageToDP(15) }} source={constants.icons.tennisBall} />

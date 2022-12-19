@@ -12,6 +12,7 @@ import signUpStyle from "./style";
 import messaging, { firebase } from '@react-native-firebase/messaging';
 import Snackbar from "react-native-snackbar";
 import { widthPercentageToDP } from "react-native-responsive-screen";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //SignUp (Registration) Screen
 const SignUp = ({ navigation }) => {
@@ -24,8 +25,9 @@ const SignUp = ({ navigation }) => {
     const [mobileNumber, setMobileNumber] = useState('')
     const [deviceToken, setDeviceToken] = useState('')
     const dispatch = useDispatch()
+    const [isLoading,setIsLoading]=useState(false)
     const platform = Platform.OS == 'android' ? 'android' : 'ios'
-    const isLoading = useSelector((state) => state?.auth?.isLoading)
+    // const isLoading = useSelector((state) => state?.auth?.isLoading)
 
     const validateForm = () => {
         let obj = {}
@@ -148,9 +150,22 @@ const SignUp = ({ navigation }) => {
                     disabled={isLoading == true ? true : false}
                     titleText='Sign Up'
                     btnStyle={{ marginTop: 50 }}
-                    onPress={() => {
-                        dispatch(isLoaderVisible())
-                        dispatch(registration({ fullName, email, password, confirmPassword, mobileNumber, referral, deviceToken, navigation, platform, dispatch }))
+                    onPress={async() => {
+                        setIsLoading(true)
+                        const registerObj = {
+                            name: fullName,
+                            email: email,
+                            mobile_number: mobileNumber,
+                            password: password,
+                            confirm_password: confirmPassword,
+                            referral: referral,
+                            navigation: navigation,
+                            device_token: deviceToken,
+                            platform: platform,
+                            setIsLoading,
+                        }
+                        //calling Api For Login
+                        utils.callApi('api/register', registerObj, 'Registered')
                     }}
                 />
             </KeyboardAwareScrollView>

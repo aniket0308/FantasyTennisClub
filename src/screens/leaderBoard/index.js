@@ -20,7 +20,8 @@ const LeaderBoard = ({ route, navigation }) => {
 
     const getTournamentLeaderBoards = async () => {
         const tournamentId = await AsyncStorage.getItem('@TournamentId')
-        dispatch(getTournamentLeaderBoard({ setData, setIsLoading, tournamentId,navigation }))
+        const token =await AsyncStorage.getItem('@Token')
+        utils.callApiGet(`api/v1/tournaments/${tournamentId}/leaderboard`, { setData, setIsLoading,navigation,token },'Leaderboard')
     }
 
     useEffect(() => {
@@ -29,6 +30,16 @@ const LeaderBoard = ({ route, navigation }) => {
 
     //renderLeaderboard function
     const leaderBoard = ({ item, index }) => {
+        if (item?.error == true) {
+            setIsLoading(false)
+            Alert.alert(
+                "Fantasy Tennis Club",
+                item?.message,
+                [
+                    { text: "OK", onPress: () => navigation.goBack() }
+                ]
+            );
+        }
         return (
             <View style={{ padding: 5, flexDirection: 'row' }}>
                 {
@@ -47,7 +58,7 @@ const LeaderBoard = ({ route, navigation }) => {
                                             if (dataItem.member.toLowerCase().includes(searchResult)) {
                                                 return (
                                                     <Text
-                                                        style={[leaderBoardStyle.txtScore, { marginLeft: headerItem == 'Contact' ? 0 : 10, fontWeight: dataItem?.highlight == true ? '900' : null }]}>
+                                                        style={[leaderBoardStyle.txtScore, { marginLeft: headerItem == 'Contact' ? 0 : 10, fontWeight: dataItem?.highlight == true ? '900' : 'normal' }]}>
                                                         {
                                                             headerIndex == 0
                                                                 ? dataItem.member
@@ -59,6 +70,7 @@ const LeaderBoard = ({ route, navigation }) => {
                                                 )
                                             }
                                         } else {
+                                            console.log('dataItem',dataItem);
                                             return (
                                                 <Text
                                                     style={[leaderBoardStyle.txtScore, { marginLeft: headerItem == 'Contact' ? 0 : 10, fontWeight: dataItem?.highlight == true ? '900' : null }]}>

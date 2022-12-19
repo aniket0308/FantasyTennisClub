@@ -20,7 +20,7 @@ const JoinWhatsApp = ({ navigation,route }) => {
     const dispatch=useDispatch()
 
     const getEtiquete = async () => {
-        dispatch(getEtiquites({setIsLoading,setData}))
+        utils.callApiGet(`api/v1/page/whatsapp-group`, {setIsLoading,setData,token:await AsyncStorage.getItem('@Token')})
     }
 
     useEffect(() => {
@@ -50,7 +50,7 @@ const JoinWhatsApp = ({ navigation,route }) => {
                             />
                         </View>
                         <View style={joinWhatsAppStyle.viewAgreeEtiquites}>
-                            <Text style={joinWhatsAppStyle.txtAgree}>I agree to the etiquete</Text>
+                            <Text style={joinWhatsAppStyle.txtAgree}>I agree to the etiquette</Text>
                             <Button
                             onPress={async()=>{
                                 if(joinWhatsApp==''||joinWhatsApp==null||joinWhatsApp==undefined){

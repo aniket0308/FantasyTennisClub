@@ -12,6 +12,8 @@ import Loader from '../../components/loader'
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { commonStyle } from "../../common/commonStyle";
 import loginStyle from "../login/style";
+import { utils } from "../../common";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const Payment = ({ route, navigation }) => {
@@ -44,8 +46,10 @@ const Payment = ({ route, navigation }) => {
             EXPIRATION_YEAR: year,
             CVV_NO: cvc,
         }, true,
-            (res, response) => {
-                dispatch(doPaymentFromCard({ dataValue: response?.DATA_VALUE, dataDescriptor: response?.DATA_DESCRIPTOR, amount: price, membership_type: route.params.item?.length > 0 ? 1 : tempObj?.membership_type, tournamentIdArr, navigation, setIsLoading }))
+            async(res, response) => {
+                const token= await AsyncStorage.getItem('@Token')
+                //calling Api For Doing Payment
+                utils.callApi(`api/v1/capture-payment`,  { dataValue: response?.DATA_VALUE, dataDescriptor: response?.DATA_DESCRIPTOR, amount: price, membership_type: route.params.item?.length > 0 ? 1 : tempObj?.membership_type, tournamentIdArr, navigation, setIsLoading,token }, 'PaymentCapture')
             }
         )
     }

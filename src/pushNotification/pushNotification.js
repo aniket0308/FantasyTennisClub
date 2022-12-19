@@ -103,7 +103,6 @@ class PushNotificationService {
                 picture: payload?.image,
                 soundName:'default',
                 bigPictureUrl:payload?.image,
-                userInfo:{notification_type:this.state.id%2==0?'MEMBER':'NOMEMBER',state:payload.state!=undefined?payload.state:''}
             })
         }else{
             let tempId=this.state.id++

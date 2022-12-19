@@ -7,6 +7,8 @@ import aboutUsStyle from "./style";
 import RenderHtml from 'react-native-render-html';
 import { useDispatch } from "react-redux";
 import { aboutUs } from "../../redux/slice/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { utils } from "../../common";
 
 const AboutUs = ({ navigation }) => {
 
@@ -17,7 +19,14 @@ const AboutUs = ({ navigation }) => {
 
     //get AboutUs From API
     const getAboutUsFromApi = async () => {
-        dispatch(aboutUs({setRefresh,setData,setIsLoading}))
+        const seasonObj = {
+            token: await AsyncStorage.getItem('@Token'),
+            setIsLoading: setIsLoading,
+            setRefresh: setRefresh,
+            setData: setData
+        }
+        //calling Api For Getting about
+        utils.callApiGet(`api/v1/page/about`, seasonObj)
     }
 
     useEffect(() => {

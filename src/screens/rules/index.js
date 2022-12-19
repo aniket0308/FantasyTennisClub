@@ -9,6 +9,7 @@ import RenderHtml from 'react-native-render-html';
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { useDispatch } from "react-redux";
 import { getFaq, getRules } from "../../redux/slice/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //Rules Screen
 const Rules = ({ navigation }) => {
@@ -21,12 +22,25 @@ const Rules = ({ navigation }) => {
 
     //Function For Getting Rules From Api
     const getRulesFromApi = async () => {
-        dispatch(getRules({setIsLoading,setData,setRefresh}))
+        const seasonObj = {
+            token: await AsyncStorage.getItem('@Token'),
+            setIsLoading: setIsLoading,
+            setRefresh: setRefresh,
+            setData: setData
+        }
+        //calling Api For Getting about
+        utils.callApiGet(`api/v1/page/rules`, seasonObj)
     }
 
     //get Faq From Api
     const getFaqFromApi = async () => {
-        dispatch(getFaq({setIsLoading,setFaq,setRefresh}))
+        const seasonObj = {
+            token: await AsyncStorage.getItem('@Token'),
+            setIsLoading: setIsLoading,
+            setRefresh: setRefresh,
+            setFaq:setFaq
+        }
+        utils.callApiGet(`api/v1/page/faqs`, seasonObj)
     }
 
     useEffect(() => {
@@ -88,8 +102,14 @@ const Rules = ({ navigation }) => {
                         />
                     }
                     style={{ marginBottom: 25 }}>
-                    <RenderRules />
-                    <RenderFaq />
+                        {
+                            data!=undefined
+                            &&<RenderRules />
+                        }
+                        {
+                            faq!=undefined
+                            &&<RenderFaq />
+                        }
                 </ScrollView>
                 : <Loader />
             }

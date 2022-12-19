@@ -13,6 +13,8 @@ import messaging, { firebase } from '@react-native-firebase/messaging';
 import forgotPasswordStyle from "../forgetPassword/style";
 import { store } from "../../redux/store";
 import PushNotificationService from "../../pushNotification/pushNotification";
+import { utils } from "../../common";
+import PushNotification from "react-native-push-notification";
 console.log(firebase.app.length);
 
 //Login Screen
@@ -165,7 +167,15 @@ const Login = ({ navigation }) => {
                     btnStyle={{ marginTop: 34 }}
                     onPress={async () => {
                         setIsLoading(true)
-                        dispatch(login({ email, password, deviceToken, platform, dispatch, setIsLoading, checkLogin: () => { } }))
+                        const loginObj = {
+                            email: email,
+                            password: password,
+                            device_token: deviceToken,
+                            platform: Platform,
+                            setIsLoading: setIsLoading
+                        }
+                        //calling Api For Login
+                        utils.callApi('api/login', loginObj, 'login', dispatch)
                     }}
                 />
                 <SafeAreaView />

@@ -1,6 +1,8 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { FlatList, SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
 import { useDispatch } from "react-redux";
+import { utils } from "../../common";
 import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
@@ -15,8 +17,9 @@ const Notification = ({ navigation }) => {
     const dispatch=useDispatch()
 
     //function for getting notification
-    const getNotification = () => {
-        dispatch(getNotifications({setIsLoading,setData}))
+    const getNotification = async() => {
+        const token= await AsyncStorage.getItem('@Token')
+        utils.callApiGet(`api/v1/announcements/member`, {setIsLoading,setData,token})
     }
 
     useEffect(() => {
@@ -46,9 +49,9 @@ const Notification = ({ navigation }) => {
             <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />
             <SafeAreaView />
             <Header
-                viewHeaderStyle={{ width: '68%' }}
+                viewHeaderStyle={{ width: '85%' }}
                 showBackArrow={true}
-                title={'Notifications'}
+                title={'Member Notifications'}
                 titleStyle={{ marginTop: 5, marginBottom: -3 }}
                 onPressLeftIcon={() => navigation.goBack()}
             />

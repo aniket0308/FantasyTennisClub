@@ -60,6 +60,7 @@ export const profileSlice = createSlice({
                 clearAllData:actions.payload.clearAllData,
                 token: await AsyncStorage.getItem('@Token'),
                 setIsLoading:actions.payload.setIsLoading,
+                navigation:actions.payload.navigation
             }
             //calling Api For sending Inquiry
             utils.callApi('api/v1/inquiry', sendInquiryObj, 'inquiry', actions.payload.dispatch)

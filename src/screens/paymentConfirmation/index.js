@@ -4,6 +4,8 @@ import { BackHandler, Image, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { constants } from "../../common/constant";
 import { Button } from "../../components";
+import { checkAuthentication } from "../../redux/slice/auth";
+import { store } from "../../redux/store";
 
 const PaymentConfirmation = ({ route, navigation }) => {
     const [isLoading, setIsLoading] = useState(false)
@@ -25,14 +27,16 @@ const PaymentConfirmation = ({ route, navigation }) => {
             then(async (response) => {
                 if (response.status == 401) {
                     await AsyncStorage.clear()
+                    store.dispatch(logout())
                 }
                 return response.json()
             }).
             then(async (json) => {
                 if (json?.success == true) {
                     setIsLoading(true)
-                    await AsyncStorage.removeItem('@RegisterFirstTIme')
+                    await AsyncStorage.removeItem('@registerFirstTime')
                     setIsMembership(json?.data?.is_member)
+                    store.dispatch(checkAuthentication({data:json.data,token,isRegisteredFirstTime:false}))
                     setRender({})
                 } else {
                     setIsAuthentication()
@@ -45,6 +49,7 @@ const PaymentConfirmation = ({ route, navigation }) => {
                 //   backgroundColor: 'red',
                 // });
                 setIsLoading(false)
+                store.dispatch(checkAuthentication({data:null,token,isRegisteredFirstTime:false}))
                 console.log('What Is Error In Get Api', e)
             })
     }
