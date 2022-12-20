@@ -36,9 +36,11 @@ const JoinWhatsApp = ({ navigation,route }) => {
                 title={'Join WhatsApp Group'}
                 titleStyle={{ marginTop: 5, marginBottom: -10 }}
                 rightIcon={constants.icons.shapeBell}
+                checkLength={true}
                 rightIconStyle={{height:widthPercentageToDP(6),width:widthPercentageToDP(6)}}
                 onPressRightIcon={() => utils.navigateTo(navigation, constants.screens.notification)}
                 onPressLeftIcon={() => navigation.goBack()}
+                lengthStyle={{top:5}}
             />
             {
                 isLoading == true

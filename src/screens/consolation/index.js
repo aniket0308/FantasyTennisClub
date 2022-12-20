@@ -20,18 +20,18 @@ const Consolation = ({ route, navigation }) => {
     const dispatch = useDispatch()
 
     const getTournamentLeaderBoard = async () => {
-        const token= await AsyncStorage.getItem('@Token')
+        const token = await AsyncStorage.getItem('@Token')
         const tournamentId = await AsyncStorage.getItem('@TournamentId')
         if (route.params == 'Season Ranking') {
-            utils.callApiGet(`api/v1/season-leaderboard`, { setIsLoading, setRefresh, setData,token })
+            utils.callApiGet(`api/v1/season-leaderboard`, { setIsLoading, setRefresh, setData, token })
         } else if (route.params == 'Consolation') {
-            utils.callApiGet(`api/v1/tournaments/${tournamentId}/consolation-leaderboard`, { setIsLoading, setRefresh, setData,token })
+            utils.callApiGet(`api/v1/tournaments/${tournamentId}/consolation-leaderboard`, { setIsLoading, setRefresh, setData, token })
         }
         else {
-            utils.callApiGet(`api/v1/tournaments/${tournamentId}/group/consolation-leaderboard`, { setIsLoading, setRefresh, setData,token })
+            utils.callApiGet(`api/v1/tournaments/${tournamentId}/group/consolation-leaderboard`, { setIsLoading, setRefresh, setData, token })
         }
     }
-    
+
     useEffect(() => {
         if (route.params == 'Season Ranking') {
             getTournamentLeaderBoard()
@@ -55,7 +55,7 @@ const Consolation = ({ route, navigation }) => {
         }
         return (
             <View style={{ padding: 5, flexDirection: 'row' }}>
-                {item.data!=null&&
+                {item.data != null &&
                     item?.data?.header.map((headerItem, headerIndex) => {
                         return (
                             <View style={{ flexDirection: 'column' }}>
@@ -73,7 +73,8 @@ const Consolation = ({ route, navigation }) => {
                                                 if (dataItem.member.toLowerCase().includes(searchResult)) {
                                                     return (
                                                         <Text
-                                                            style={[consolationStyle.txtScore, { alignSelf: 'flex-start', marginLeft: headerIndex != 0 ? 5 : 0, maxWidth: 150,fontWeight: dataItem?.highlight == true ? '900' : 'normal' }]}>
+                                                            numberOfLines={1}
+                                                            style={[consolationStyle.txtScore, { alignSelf: 'flex-start', marginLeft: headerIndex != 0 ? 5 : 0, maxWidth: 150, fontWeight: dataItem?.highlight == true ? '900' : 'normal',maxWidth:'100%' }]}>
                                                             {
                                                                 headerIndex == 0
                                                                     ? dataItem.member
@@ -89,7 +90,8 @@ const Consolation = ({ route, navigation }) => {
                                             } else {
                                                 return (
                                                     <Text
-                                                        style={[consolationStyle.txtScore, { alignSelf: 'flex-start', marginLeft: headerIndex != 0 ? 5 : 0, maxWidth: 150,fontWeight: dataItem?.highlight == true ? '900' : 'normal' }]}>
+                                                        numberOfLines={1}
+                                                        style={[consolationStyle.txtScore, { alignSelf: 'flex-start', marginLeft: headerIndex != 0 ? 5 : 0, maxWidth: 150, fontWeight: dataItem?.highlight == true ? '900' : 'normal',maxWidth:'100%' }]}>
                                                         {
                                                             headerIndex == 0
                                                                 ? dataItem.member
@@ -105,18 +107,37 @@ const Consolation = ({ route, navigation }) => {
                                         })
                                         :
                                         item?.data?.leaderboard_data.map((dataItem, dataIndex) => {
-                                            return (
-                                                <Text
-                                                    style={[consolationStyle.txtScore, { marginLeft: headerItem == 'Contact' ? 0 : 10,fontWeight: dataItem?.highlight == true ? '900' : 'normal' }]}>
-                                                    {
-                                                        headerIndex == 0
-                                                            ? dataItem.member
-                                                            : headerIndex == 1
-                                                                ? dataItem.total
-                                                                : dataItem.days_point[(headerIndex - 2).toString()]
-                                                    }
-                                                </Text>
-                                            )
+                                            if (searchResult != '') {
+                                                if (dataItem.member.toLowerCase().includes(searchResult)) {
+                                                    return (
+                                                        <Text
+                                                            numberOfLines={1}
+                                                            style={[consolationStyle.txtScore, { marginLeft: headerItem == 'Contact' ? 0 : 10, fontWeight: dataItem?.highlight == true ? '900' : 'normal',maxWidth:'100%' }]}>
+                                                            {
+                                                                headerIndex == 0
+                                                                    ? dataItem.member
+                                                                    : headerIndex == 1
+                                                                        ? dataItem.total
+                                                                        : dataItem.days_point[(headerIndex - 2).toString()]
+                                                            }
+                                                        </Text>
+                                                    )
+                                                }
+                                            } else {
+                                                return (
+                                                    <Text
+                                                        numberOfLines={1}
+                                                        style={[consolationStyle.txtScore, { marginLeft: headerItem == 'Contact' ? 0 : 10, fontWeight: dataItem?.highlight == true ? '900' : 'normal',maxWidth:'100%' }]}>
+                                                        {
+                                                            headerIndex == 0
+                                                                ? dataItem.member
+                                                                : headerIndex == 1
+                                                                    ? dataItem.total
+                                                                    : dataItem.days_point[(headerIndex - 2).toString()]
+                                                        }
+                                                    </Text>
+                                                )
+                                            }
                                         })
                                 }
                             </View>

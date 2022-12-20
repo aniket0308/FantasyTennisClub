@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react"
 import { BackHandler, FlatList, RefreshControl, SafeAreaView, StatusBar, Text, View } from "react-native"
+import RenderHTML from "react-native-render-html";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { useDispatch } from "react-redux";
 import { utils } from "../../common";
@@ -40,10 +41,8 @@ const Announcments = ({ navigation, route }) => {
         return (
             <View style={[announcementStyle.viewInsights, { backgroundColor: index == 0 ? '#F5F8FA' : constants.colors.white, marginTop: index != 0 ? 10 : 0 }]}>
                 <Text style={announcementStyle.txtInsights} >{item?.title}</Text>
-                <Text
-                    style={announcementStyle.txtText} >
-                    {item.description}
-                </Text>
+                <RenderHTML
+                    source={{ html: `${item?.description}` }}/>
             </View>
         )
     }
@@ -58,9 +57,11 @@ const Announcments = ({ navigation, route }) => {
                 titleStyle={{ marginTop: 5, marginBottom: -10 }}
                 viewHeaderStyle={{ width: '100%' }}
                 rightIcon={constants.icons.shapeBell}
+                checkLength={true}
                 onPressRightIcon={() => utils.navigateTo(navigation, constants.screens.notification)}
                 onPressLeftIcon={() => navigation.goBack()}
                 rightIconStyle={{ height: widthPercentageToDP(6), width: widthPercentageToDP(6) }}
+                lengthStyle={{top:5}}
             />
             {
                 isLoading == true

@@ -1,12 +1,26 @@
-import React from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity } from 'react-native'
+import { utils } from "../../common";
 import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
 import headerStyle from "./style";
 
 const Header = ({ title, subTitle, showBackArrow, titleStyle, onPressLeftIcon, subTitleStyle, rightIcon, viewHeaderStyle, rightIconStyle,
-    mainViewHeaderStyle, resizeMode, onPressRightIcon, rightIconTitle, rightIconTitleStyle,isCartHavingThings
+    mainViewHeaderStyle, resizeMode, onPressRightIcon, rightIconTitle, rightIconTitleStyle, isCartHavingThings, lengthStyle, checkLength
 }) => {
+    const [data, setData] = useState()
+    const [isLoading, setIsLoading] = useState(false)
+
+    const getNotification = async () => {
+        const token = await AsyncStorage.getItem('@Token')
+        utils.callApiGet(`api/v1/announcements/member`, { setIsLoading, setData, token })
+    }
+
+    useEffect(() => {
+        getNotification()
+    }, [])
+
     return (
         <View style={[headerStyle.headerView, mainViewHeaderStyle]}>
             {showBackArrow == true
@@ -24,6 +38,7 @@ const Header = ({ title, subTitle, showBackArrow, titleStyle, onPressLeftIcon, s
                     {
                         rightIcon
                         && <TouchableOpacity style={headerStyle.rightIconTouchableShow} activeOpacity={1} onPress={onPressRightIcon}>
+                            {data?.data?.length > 0 && checkLength == true && <View style={[{ backgroundColor: 'red', height: 10, width: 10, borderRadius: 10, position: 'absolute', right: 6, top: -6 }, lengthStyle]} />}
                             <Image
                                 style={[headerStyle.imgBack, { tintColor: constants.colors.black }, rightIconStyle]}
                                 source={rightIcon}
@@ -45,6 +60,7 @@ const Header = ({ title, subTitle, showBackArrow, titleStyle, onPressLeftIcon, s
                     {
                         rightIcon
                         && <TouchableOpacity style={headerStyle.rightIconTouchable} activeOpacity={1} onPress={onPressRightIcon}>
+                            {data?.data?.length > 0 && checkLength == true && <View style={[{ backgroundColor: 'red', height: 10, width: 10, borderRadius: 10, position: 'absolute', right: 10 }, lengthStyle]} />}
                             <Image
                                 style={[headerStyle.imgBack, { tintColor: constants.colors.black }, rightIconStyle]}
                                 source={rightIcon}

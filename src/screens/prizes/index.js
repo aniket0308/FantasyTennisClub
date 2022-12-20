@@ -39,9 +39,11 @@ const Prizes = ({ navigation,route }) => {
                 title={'Event Details'}
                 titleStyle={{ marginTop: 5, marginBottom: -10 }}
                 rightIcon={constants.icons.shapeBell}
+                checkLength={true}
                 rightIconStyle={{height:widthPercentageToDP(6),width:widthPercentageToDP(6)}}
                 onPressRightIcon={() => utils.navigateTo(navigation, constants.screens.notification)}
                 onPressLeftIcon={() => navigation.goBack()}
+                lengthStyle={{top:5}}
             />
             <View style={{ backgroundColor: constants.colors.white, flex: 1, marginBottom: 25 }}>
                 <ScrollView bounces={false} showsVerticalScrollIndicator={false} >

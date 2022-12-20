@@ -56,6 +56,7 @@ const reverseDays=reverseArr()
                 titleStyle={{ fontSize: 22, marginTop: 10 }}
                 viewHeaderStyle={{ width: '100%' }}
                 rightIcon={constants.icons.shapeBell}
+                checkLength={true}
                 rightIconStyle={{ height: widthPercentageToDP(6), width: widthPercentageToDP(6), marginTop: -10 }}
                 onPressRightIcon={() => utils.navigateTo(navigation, constants.screens.notification)}
                 onPressLeftIcon={() => navigation.goBack()}

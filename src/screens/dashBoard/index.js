@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { Image, RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { Image, Platform, RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import RenderHTML from "react-native-render-html";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { useDispatch } from "react-redux";
 import { utils } from "../../common";
@@ -19,7 +20,7 @@ const DashBoardHome = ({ navigation }) => {
     const [data, setData] = useState()
     const dispatch = useDispatch()
 
-    const getDays=async()=>{
+    const getDays = async () => {
         const getDaysObj = {
             token: await AsyncStorage.getItem('@Token'),
             setIsLoading: setIsLoading,
@@ -30,7 +31,7 @@ const DashBoardHome = ({ navigation }) => {
         utils.callApiGet(`api/v1/member-dashboard`, getDaysObj)
     }
 
-     const getAnnouncement=async(filter)=>{
+    const getAnnouncement = async (filter) => {
         const announcementObj = {
             token: await AsyncStorage.getItem('@Token'),
             setIsLoading: setIsLoading,
@@ -121,12 +122,11 @@ const DashBoardHome = ({ navigation }) => {
     const renderInsightData = (item, index) => {
         return (
             <TouchableOpacity
-                onPress={() => utils.navigateTo(navigation, constants.screens.announcements)}
                 style={[dashboardStyle.viewInsights, { backgroundColor: index == 0 ? '#F5F8FA' : constants.colors.white, marginTop: index != 0 ? 10 : 0 }]}>
                 <Text style={dashboardStyle.txtInsights} >{item.title}</Text>
-                <Text
-                    numberOfLines={index != 0 ? 3 : 10}
-                    style={dashboardStyle.txtText} >{item.description}</Text>
+                <RenderHTML
+                    source={{ html: `${item?.description}` }}
+                />
             </TouchableOpacity>
         )
     }
@@ -142,6 +142,7 @@ const DashBoardHome = ({ navigation }) => {
                     titleStyle={{ alignSelf: 'center', fontSize: 22 }}
                     subTitleStyle={{ alignSelf: 'center', color: constants.colors.darkGreen }}
                     rightIcon={constants.icons.shapeBell}
+                checkLength={true}
                     onPressRightIcon={() => utils.navigateTo(navigation, constants.screens.notification)}
                     mainViewHeaderStyle={{ paddingBottom: 10, paddingTop: 10 }}
                     resizeMode='contain'
@@ -180,7 +181,7 @@ const DashBoardHome = ({ navigation }) => {
                             </View>
                             <View style={[commonStyle.row, { justifyContent: 'space-between', marginVertical: 20, alignItems: 'center' }]}>
                                 <Text style={dashboardStyle.txtGeneral}>General Anouncements:</Text>
-                                <TouchableOpacity onPress={() => utils.navigateTo(navigation, constants.screens.announcements,{initial:false})}>
+                                <TouchableOpacity onPress={() => utils.navigateTo(navigation, constants.screens.announcements, { initial: false })}>
                                     <Text style={[dashboardStyle.txtGeneral, { fontSize: 16 }]}>See All</Text>
                                 </TouchableOpacity>
                             </View>

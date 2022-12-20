@@ -27,24 +27,22 @@ const SignUp = ({ navigation }) => {
     const dispatch = useDispatch()
     const [isLoading,setIsLoading]=useState(false)
     const platform = Platform.OS == 'android' ? 'android' : 'ios'
+    const platform_info={
+        version:Platform.Version,
+        device:Platform.OS=='android'?Platform.constants.Model:''
+    }
     // const isLoading = useSelector((state) => state?.auth?.isLoading)
 
     const validateForm = () => {
         let obj = {}
-        if (mobileNumber.length > 15) {
+        if (mobileNumber.length < 4) {
             obj.error = true
             Snackbar.show({
-                text: 'Maximum 15 characters allowed in phone number',
+                text: 'Minimum 4 characters required',
                 duration: 1000,
                 backgroundColor: 'red',
             })
-        } else if (password.length < 4) {
-            obj.error = true
-            Snackbar.show({
-                text: 'Minimmum 4 character required for password',
-                duration: 1000,
-                backgroundColor: 'red',
-            })
+            setIsLoading(false)
         } else {
             obj.error = false
         }
@@ -152,20 +150,24 @@ const SignUp = ({ navigation }) => {
                     btnStyle={{ marginTop: 50 }}
                     onPress={async() => {
                         setIsLoading(true)
-                        const registerObj = {
-                            name: fullName,
-                            email: email,
-                            mobile_number: mobileNumber,
-                            password: password,
-                            confirm_password: confirmPassword,
-                            referral: referral,
-                            navigation: navigation,
-                            device_token: deviceToken,
-                            platform: platform,
-                            setIsLoading,
+                        const isValidate=validateForm()
+                        if(isValidate.error==false){
+                            const registerObj = {
+                                name: fullName,
+                                email: email,
+                                mobile_number: mobileNumber,
+                                password: password,
+                                confirm_password: confirmPassword,
+                                referral: referral,
+                                navigation: navigation,
+                                device_token: deviceToken,
+                                platform: platform,
+                                setIsLoading,
+                                platform_info
+                            }
+                            //calling Api For Login
+                            utils.callApi('api/register', registerObj, 'Registered')
                         }
-                        //calling Api For Login
-                        utils.callApi('api/register', registerObj, 'Registered')
                     }}
                 />
             </KeyboardAwareScrollView>

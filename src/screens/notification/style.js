@@ -26,7 +26,7 @@ const notificationStyle = StyleSheet.create({
         backgroundColor: constants.colors.white,
         marginBottom: 25,
         marginHorizontal: -10,
-        paddingHorizontal: 20
+        paddingHorizontal: 10
     }
 })
 

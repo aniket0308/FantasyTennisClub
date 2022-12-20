@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { Alert, BackHandler, FlatList, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { widthPercentageToDP } from "react-native-responsive-screen";
 import { useDispatch } from "react-redux";
 import { utils } from "../../common";
 import { commonStyle } from "../../common/commonStyle";
@@ -38,14 +39,14 @@ const Notification = ({ navigation,route }) => {
                     "Fantasy Tennis Club",
                     `To send a message go to 'Account' then 'Contact us'.`,
                 )
-            }} style={[commonStyle.row, { justifyContent: 'space-between', marginTop: 40 }]}>
+            }} style={[commonStyle.row, { marginTop: 40,justifyContent:'space-between' }]}>
                 <View style={commonStyle.row}>
                     <View style={notificationStyle.viewCircle}>
                         <Text style={notificationStyle.txtFtc}>FTC</Text>
                     </View>
                     <View style={[commonStyle.column, { justifyContent: 'center', marginLeft: 20 }]}>
                         <Text style={[notificationStyle.txtFtc, { color: constants.colors.darkBlue, fontWeight: '600' }]}>{item?.title}</Text>
-                        <Text style={[notificationStyle.txtFtc, { color: constants.colors.labelColor, fontWeight: '400', fontSize: 12, marginTop: 5 }]}>{item?.description}</Text>
+                        <Text style={[notificationStyle.txtFtc, { color: constants.colors.labelColor, fontWeight: '400', fontSize: 12, marginTop: 5,width:widthPercentageToDP(60) }]}>{item?.description}</Text>
                     </View>
                 </View>
                 <Text style={[notificationStyle.txtFtc, { color: constants.colors.black, fontWeight: '400', fontSize: 12, marginTop: 5, alignSelf: 'center' }]}>{item?.time_ago}</Text>

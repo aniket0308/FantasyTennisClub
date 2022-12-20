@@ -84,6 +84,7 @@ const MyPicks = ({ route, navigation }) => {
                 titleStyle={{ alignSelf: 'center', fontSize: 22 }}
                 subTitleStyle={{ alignSelf: 'center', color: constants.colors.darkGreen }}
                 rightIcon={constants.icons.shapeBell}
+                checkLength={true}
                 onPressRightIcon={() => utils.navigateTo(navigation, constants.screens.notification)}
                 mainViewHeaderStyle={{ paddingBottom: 10, paddingTop: 10 }}
                 resizeMode='stretch'

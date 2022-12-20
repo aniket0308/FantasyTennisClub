@@ -58,7 +58,8 @@ const LeaderBoard = ({ route, navigation }) => {
                                             if (dataItem.member.toLowerCase().includes(searchResult)) {
                                                 return (
                                                     <Text
-                                                        style={[leaderBoardStyle.txtScore, { marginLeft: headerItem == 'Contact' ? 0 : 10, fontWeight: dataItem?.highlight == true ? '900' : 'normal' }]}>
+                                                    numberOfLines={1}
+                                                        style={[leaderBoardStyle.txtScore, { marginLeft: headerItem == 'Contact' ? 0 : 10, fontWeight: dataItem?.highlight == true ? '900' : 'normal' ,maxWidth:'100%'}]}>
                                                         {
                                                             headerIndex == 0
                                                                 ? dataItem.member
@@ -70,10 +71,10 @@ const LeaderBoard = ({ route, navigation }) => {
                                                 )
                                             }
                                         } else {
-                                            console.log('dataItem',dataItem);
                                             return (
                                                 <Text
-                                                    style={[leaderBoardStyle.txtScore, { marginLeft: headerItem == 'Contact' ? 0 : 10, fontWeight: dataItem?.highlight == true ? '900' : null }]}>
+                                                numberOfLines={1}
+                                                    style={[leaderBoardStyle.txtScore, { marginLeft: headerItem == 'Contact' ? 0 : 10, fontWeight: dataItem?.highlight == true ? '900' : 'normal',maxWidth:'100%' }]}>
                                                     {
                                                         headerIndex == 0
                                                             ? dataItem.member

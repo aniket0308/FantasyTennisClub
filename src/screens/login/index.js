@@ -27,6 +27,10 @@ const Login = ({ navigation }) => {
     const platform = Platform.OS == 'android' ? 'android' : 'ios'
     const dispatch = useDispatch()
     const [isLoading, setIsLoading] = useState(false)
+    const platform_info={
+        version:Platform.Version,
+        device:Platform.OS=='android'?Platform.constants.Model:''
+    }
 
     const configure = () => {
         try {
@@ -171,7 +175,8 @@ const Login = ({ navigation }) => {
                             password: password,
                             device_token: deviceToken,
                             platform: platform,
-                            setIsLoading: setIsLoading
+                            setIsLoading: setIsLoading,
+                            platform_info
                         }
                         //calling Api For Login
                         utils.callApi('api/login', loginObj, 'login', dispatch)

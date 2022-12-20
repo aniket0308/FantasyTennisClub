@@ -9,7 +9,6 @@ import groupLeaderBoardStyle from "./style";
 import { utils } from "../../common";
 import SearchBar from "../../components/searchBar";
 import { useDispatch } from "react-redux";
-import { getLeaderBoard } from "../../redux/slice/auth";
 
 //GroupLeaderBoard Screen
 const GroupLeaderBoard = ({ route, navigation }) => {
@@ -20,11 +19,10 @@ const GroupLeaderBoard = ({ route, navigation }) => {
 
     const getTournamentLeaderBoard = async () => {
         const tournamentId = await AsyncStorage.getItem('@TournamentId')
-        const token=await AsyncStorage.getItem('@Token')
-        utils.callApiGet(`api/v1/tournaments/${tournamentId}/group/leaderboard`, { setData, setIsLoading,token })
+        const token = await AsyncStorage.getItem('@Token')
+        utils.callApiGet(`api/v1/tournaments/${tournamentId}/group/leaderboard`, { setData, setIsLoading, token })
     }
 
-    console.log('dadada',data);
 
     useEffect(() => {
         getTournamentLeaderBoard()
@@ -60,7 +58,8 @@ const GroupLeaderBoard = ({ route, navigation }) => {
                                             if (dataItem.member.toLowerCase().includes(searchResult)) {
                                                 return (
                                                     <Text
-                                                        style={[groupLeaderBoardStyle.txtScore, { marginLeft: headerItem == 'Contact' ? 0 : 10,fontWeight: dataItem?.highlight == true ? '900' : 'normal' }]}>
+                                                        numberOfLines={1}
+                                                        style={[groupLeaderBoardStyle.txtScore, { marginLeft: headerItem == 'Contact' ? 0 : 10, fontWeight: dataItem?.highlight == true ? '900' : 'normal', maxWidth: '100%' }]}>
                                                         {
                                                             headerIndex == 0
                                                                 ? dataItem.member
@@ -74,7 +73,8 @@ const GroupLeaderBoard = ({ route, navigation }) => {
                                         } else {
                                             return (
                                                 <Text
-                                                    style={[groupLeaderBoardStyle.txtScore, { marginLeft: headerItem == 'Contact' ? 0 : 10,fontWeight: dataItem?.highlight == true ? '900' : 'normal' }]}>
+                                                    numberOfLines={1}
+                                                    style={[groupLeaderBoardStyle.txtScore, { marginLeft: headerItem == 'Contact' ? 0 : 10, fontWeight: dataItem?.highlight == true ? '900' : 'normal', maxWidth: '100%' }]}>
                                                     {
                                                         headerIndex == 0
                                                             ? dataItem.member
