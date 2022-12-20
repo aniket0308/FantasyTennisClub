@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { Alert, FlatList, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { Alert, BackHandler, FlatList, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { useDispatch } from "react-redux";
 import { utils } from "../../common";
 import { commonStyle } from "../../common/commonStyle";
@@ -10,7 +10,7 @@ import Loader from "../../components/loader";
 import { getNotifications } from "../../redux/slice/auth";
 import notificationStyle from "./style";
 
-const Notification = ({ navigation }) => {
+const Notification = ({ navigation,route }) => {
 
     const [isLoading, setIsLoading] = useState(false)
     const [data,setData]=useState()
@@ -24,6 +24,10 @@ const Notification = ({ navigation }) => {
 
     useEffect(() => {
         getNotification()
+        if(route?.params?.exit==true){
+            const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {BackHandler.exitApp()})
+        return () => backHandler.remove()
+        }
     }, [])
 
     //Render Notification Function

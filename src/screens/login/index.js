@@ -170,7 +170,7 @@ const Login = ({ navigation }) => {
                             email: email,
                             password: password,
                             device_token: deviceToken,
-                            platform: Platform,
+                            platform: platform,
                             setIsLoading: setIsLoading
                         }
                         //calling Api For Login

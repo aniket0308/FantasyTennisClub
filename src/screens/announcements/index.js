@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react"
-import { FlatList, RefreshControl, SafeAreaView, StatusBar, Text, View } from "react-native"
+import { BackHandler, FlatList, RefreshControl, SafeAreaView, StatusBar, Text, View } from "react-native"
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { useDispatch } from "react-redux";
 import { utils } from "../../common";
@@ -10,14 +10,14 @@ import Loader from "../../components/loader"
 import { getAnnouncements } from "../../redux/slice/auth";
 import announcementStyle from "./style"
 
-const Announcments = ({ navigation }) => {
+const Announcments = ({ navigation, route }) => {
 
     const [isLoading, setIsLoading] = useState(false)
     const [refresh, setRefresh] = useState(false)
     const [data, setData] = useState()
     const dispatch = useDispatch()
 
-    const getAnnouncement=async(filter)=>{
+    const getAnnouncement = async (filter) => {
         const announcementObj = {
             token: await AsyncStorage.getItem('@Token'),
             setIsLoading: setIsLoading,
@@ -29,6 +29,10 @@ const Announcments = ({ navigation }) => {
 
     useEffect(() => {
         getAnnouncement(true)
+        if (route?.params?.exit == true) {
+            const backHandler = BackHandler.addEventListener('hardwareBackPress', () => { BackHandler.exitApp() })
+            return () => backHandler.remove()
+        }
     }, [])
 
     //rendering Announcements

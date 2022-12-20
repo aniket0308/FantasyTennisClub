@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, StatusBar, TouchableOpacity } from 'react-native'
+import { View, Text, Image, StatusBar, TouchableOpacity, BackHandler } from 'react-native'
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import SplashScreen from "react-native-splash-screen";
 import { utils } from "../../common";
@@ -35,9 +35,9 @@ const Home = ({ navigation }) => {
                     // Handle notification click
                     if (notification.userInteraction) {
                         if (notification?.data?.notification_type == 'MEMBER') {
-                            utils.navigateTo(navigation, constants.screens.notification)
+                            utils.navigateTo(navigation, constants.screens.notification, { exit: true })
                         } else {
-                            utils.navigateTo(navigation, constants.screens.announcements)
+                            utils.navigateTo(navigation, constants.screens.announcements, { exit: true })
                         }
                     }
                     // (required) Called when a remote is received or opened, or local notification is opened
@@ -119,7 +119,7 @@ const Home = ({ navigation }) => {
             then((json) => {
                 if (json.success == true) {
                     setIsLoading(true)
-                    store.dispatch(checkAuthentication({data:json.data,token,isRegisteredFirstTime:false}))
+                    store.dispatch(checkAuthentication({ data: json.data, token, isRegisteredFirstTime: false }))
                 }
                 setIsMembership(json?.data?.is_member)
             }).
@@ -135,7 +135,7 @@ const Home = ({ navigation }) => {
                 //     // },
                 // });
                 setIsLoading(false)
-                store.dispatch(checkAuthentication({data:null,token,isRegisteredFirstTime:false}))
+                store.dispatch(checkAuthentication({ data: null, token, isRegisteredFirstTime: false }))
                 console.log('What Is Error In Get Api', e)
             })
     }
@@ -150,9 +150,9 @@ const Home = ({ navigation }) => {
                 <Image source={constants.icons.downArrow} style={{ height: widthPercentageToDP(20) }} resizeMode='contain' />
                 <TouchableOpacity
                     disabled={isLoading == false ? true : false}
-                    onPress={() => { 
+                    onPress={() => {
                         utils.navigateTo(navigation, isMembership == true ? 'Dashboard' : 'MyMembership')
-                     }}
+                    }}
                     activeOpacity={1}
                     style={homeStyle.tennisBall}>
                     <Image resizeMode="contain" style={{ height: widthPercentageToDP(15), width: widthPercentageToDP(15) }} source={constants.icons.tennisBall} />
