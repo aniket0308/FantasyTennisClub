@@ -20,7 +20,7 @@ const Account = ({ navigation }) => {
     const [, setRender] = useState({})
     const dispatch = useDispatch()
     const [isLoading, setIsLoading] = useState(false)
-    const tempArr = ['My Memberships', 'Change password', 'Contact us', 'Notifications', 'About us', 'Logout']
+    const tempArr = ['My Memberships', 'Change password', 'Contact us', 'Member Notifications', 'About us', 'Logout']
 
     useEffect(() => {
         const willFocusSubscription = navigation.addListener("focus", () => setRender({}));
@@ -91,7 +91,7 @@ const Account = ({ navigation }) => {
                                                 ? utils.navigateTo(navigation, constants.screens.aboutUs)
                                                 : item == 'My Memberships'
                                                     ? utils.navigateTo(navigation, 'MyMembership', false)
-                                                    : item == 'Notifications'
+                                                    : item == 'Member Notifications'
                                                         ? utils.navigateTo(navigation, constants.screens.notification)
                                                         : item == 'Contact us'
                                                             ? utils.navigateTo(navigation, constants.screens.changePassword, 'contactUs')

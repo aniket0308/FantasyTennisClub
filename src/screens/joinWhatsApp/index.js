@@ -44,7 +44,7 @@ const JoinWhatsApp = ({ navigation,route }) => {
                 isLoading == true
                     ? <>
                         <View style={[joinWhatsAppStyle.viewEtiquites, { backgroundColor: '#F5F8FA' }]}>
-                            <Text style={joinWhatsAppStyle.txtEtiquite} >Etiquete:</Text>
+                            <Text style={joinWhatsAppStyle.txtEtiquite} >{data?.data && data?.data?.title}:</Text>
                             <RenderHTML
                             source={{ html:`${data?.data&&data?.data?.content}`}}
                             />

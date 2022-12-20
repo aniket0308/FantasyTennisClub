@@ -104,7 +104,7 @@ const Consolation = ({ route, navigation }) => {
                                             }
                                         })
                                         :
-                                        item?.data?.data.map((dataItem, dataIndex) => {
+                                        item?.data?.leaderboard_data.map((dataItem, dataIndex) => {
                                             return (
                                                 <Text
                                                     style={[consolationStyle.txtScore, { marginLeft: headerItem == 'Contact' ? 0 : 10,fontWeight: dataItem?.highlight == true ? '900' : 'normal' }]}>
@@ -143,6 +143,7 @@ const Consolation = ({ route, navigation }) => {
                     resizeMode='stretch'
                     rightIconStyle={{ tintColor: '#23587B', height: widthPercentageToDP(16), width: widthPercentageToDP(16), alignSelf: 'center', marginTop: 10 }}
                     rightIconTitleStyle={{ color: '#23587B', fontFamily: constants.fonts.nuntinoRegular, fontSize: 10, fontWeight: '600' }}
+                    onPressRightIcon={() => utils.navigateTo(navigation, 'GroupLeaderBoard')}
                 />
             </View>
             <View style={consolationStyle.mainViewScore}>

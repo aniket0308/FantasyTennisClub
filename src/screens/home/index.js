@@ -35,9 +35,9 @@ const Home = ({ navigation }) => {
                     // Handle notification click
                     if (notification.userInteraction) {
                         if (notification?.data?.notification_type == 'MEMBER') {
-                            utils.navigateTo(navigation, constants.screens.announcements)
-                        } else {
                             utils.navigateTo(navigation, constants.screens.notification)
+                        } else {
+                            utils.navigateTo(navigation, constants.screens.announcements)
                         }
                     }
                     // (required) Called when a remote is received or opened, or local notification is opened

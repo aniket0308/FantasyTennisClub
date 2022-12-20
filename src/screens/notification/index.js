@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { FlatList, SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
+import { Alert, FlatList, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { useDispatch } from "react-redux";
 import { utils } from "../../common";
 import { commonStyle } from "../../common/commonStyle";
@@ -29,7 +29,12 @@ const Notification = ({ navigation }) => {
     //Render Notification Function
     const renderNotification = ({ item, index }) => {
         return (
-            <View style={[commonStyle.row, { justifyContent: 'space-between', marginTop: 40 }]}>
+            <TouchableOpacity onPress={()=>{
+                Alert.alert(
+                    "Fantasy Tennis Club",
+                    `To send a message go to 'Account' then 'Contact us'.`,
+                )
+            }} style={[commonStyle.row, { justifyContent: 'space-between', marginTop: 40 }]}>
                 <View style={commonStyle.row}>
                     <View style={notificationStyle.viewCircle}>
                         <Text style={notificationStyle.txtFtc}>FTC</Text>
@@ -40,7 +45,7 @@ const Notification = ({ navigation }) => {
                     </View>
                 </View>
                 <Text style={[notificationStyle.txtFtc, { color: constants.colors.black, fontWeight: '400', fontSize: 12, marginTop: 5, alignSelf: 'center' }]}>{item?.time_ago}</Text>
-            </View>
+            </TouchableOpacity>
         )
     }
 

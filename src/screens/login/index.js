@@ -38,14 +38,13 @@ const Login = ({ navigation }) => {
 
                 // (required) Called when a remote is received or opened, or local notification is opened
                 onNotification: function (notification) {
-                    console.log("NOTIFICATION:sss", notification);
                     // process the notification
                     // Handle notification click
                     if (notification.userInteraction) {
-                         if(notification?.data?.notification_type=='MEMBER'){
-                            utils.navigateTo(navigation,constants.screens.announcements)
-                        }else{
+                         if(notification?.data?.notification_type == 'MEMBER') {
                             utils.navigateTo(navigation,constants.screens.notification)
+                        }else{
+                            utils.navigateTo(navigation,constants.screens.announcements)
                         }
                       }
                     // (required) Called when a remote is received or opened, or local notification is opened
@@ -55,7 +54,7 @@ const Login = ({ navigation }) => {
                 // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
                 onAction: function (notification) {
                     console.log("ACTION:", notification.action);
-                    console.log("NOTIFICATION: vvv", notification);
+                    console.log("NOTIFICATION: ", notification);
 
                     // process the action
                 },
