@@ -15,6 +15,7 @@ import { store } from "../../redux/store";
 import PushNotificationService from "../../pushNotification/pushNotification";
 import { utils } from "../../common";
 import PushNotification from "react-native-push-notification";
+import PushNotificationIOS from "@react-native-community/push-notification-ios";
 console.log(firebase.app.length);
 
 //Login Screen
@@ -121,7 +122,9 @@ const Login = ({ navigation }) => {
         }, 1000)
         const unsubscribe = messaging().onMessage(async remoteMessage => {
             console.log('Message handled in the Foregorund!', remoteMessage);
-            notification.localNotification({ title: remoteMessage?.notification?.title, body: remoteMessage?.notification.body, image: remoteMessage?.notification.android.imageUrl })
+            notification.localNotification({ title: remoteMessage?.notification?.title, body: remoteMessage?.notification.body, 
+                // image: remoteMessage?.notification.android.imageUrl
+             })
         });
         return unsubscribe
     }, [])

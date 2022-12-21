@@ -31,6 +31,10 @@ const Home = ({ navigation }) => {
                 // (required) Called when a remote is received or opened, or local notification is opened
                 onNotification: function (notification) {
                     console.log("NOTIFICATION:sss", notification);
+                    PushNotificationIOS.getApplicationIconBadgeNumber((n)=>{
+                        console.log('PushNotificationIOS.getApplicationIconBadgeNumber()',n)
+                        PushNotificationIOS.setApplicationIconBadgeNumber(n)
+                    })
                     // process the notification
                     // Handle notification click
                     if (notification.userInteraction) {
@@ -93,7 +97,10 @@ const Home = ({ navigation }) => {
         }, 1000)
         const unsubscribe = messaging().onMessage(async remoteMessage => {
             console.log('Message handled in the Foregorund!', remoteMessage);
-            notification.localNotification({ title: remoteMessage?.notification?.title, body: remoteMessage?.notification.body, image: remoteMessage?.notification.android.imageUrl })
+            console.log('PushNotificationIOS.getApplicationIconBadgeNumber()',)
+            notification.localNotification({ title: remoteMessage?.notification?.title, body: remoteMessage?.notification.body,
+                //  image: remoteMessage?.notification.android.imageUrl
+                 })
         });
         return unsubscribe
     }, [])

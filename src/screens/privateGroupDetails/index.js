@@ -211,6 +211,7 @@ const PrivateGroupDetails = ({ route, navigation }) => {
                             number_of_participants: groupParticipant,
                             clearAllData: clearAllData,
                             token: await AsyncStorage.getItem('@Token'),
+                            navigation
                         }
                         //calling Api For Organise Private Group
                         utils.callApi('api/v1/private-group/create', organizePrivateGroupObj, 'organizePrivateGroup', dispatch)

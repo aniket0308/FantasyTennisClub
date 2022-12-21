@@ -32,7 +32,8 @@ const accountStyle = StyleSheet.create({
     },
     touchableEditPro: {
         backgroundColor: constants.colors.darkBlue,
-        width: '50%',
+        // width: '50%',
+        maxWidth:'90%',
         padding: 2,
         marginTop: 15,
         borderRadius: 4

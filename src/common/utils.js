@@ -142,7 +142,7 @@ export const callApi = (path, payload, type, dispatch) => {
                     }
                 }
             }
-            else if (type == 'organizePrivateGroup' || type == 'privateGroup' || type == 'sendPickEmail' || type == 'savePick') {
+            else if (type == 'privateGroup' || type == 'sendPickEmail' || type == 'savePick') {
                 if (json.error == false && type != 'sendPickEmail' && type != 'PaymentCapture' && type != 'savePick') {
                     Alert.alert(
                         "Fantasy Tennis Club",
@@ -157,6 +157,10 @@ export const callApi = (path, payload, type, dispatch) => {
                     if (payload.navigation != undefined) {
                         utils.navigateTo(payload.navigation, constants.screens.dashBoard)
                     }
+                }
+            }else if(type == 'organizePrivateGroup' && json.error == false){
+                if (payload.navigation != undefined) {
+                    utils.navigateTo(payload.navigation, constants.screens.home)
                 }
             }
             else {
