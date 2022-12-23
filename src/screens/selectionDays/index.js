@@ -20,16 +20,16 @@ const SelectionDays = ({ route, navigation }) => {
 
     function reverseArr() {
         var ret = new Array;
-        for(var i =  days?.data?.days.length-1; i >= 0; i--) {
+        for (var i = days?.data?.days.length - 1; i >= 0; i--) {
             ret.push(days?.data?.days[i]);
         }
         return ret;
     }
-const reverseDays=reverseArr()
+    const reverseDays = reverseArr()
 
-    const getDays=async()=>{
-        const token=await AsyncStorage.getItem('@Token')
-        utils.callApiGet(`api/v1/member-dashboard`,{ setIsLoading, setDays ,token})
+    const getDays = async () => {
+        const token = await AsyncStorage.getItem('@Token')
+        utils.callApiGet(`api/v1/member-dashboard`, { setIsLoading, setDays, token })
     }
 
     useEffect(() => {
@@ -63,27 +63,27 @@ const reverseDays=reverseArr()
             />
             {isLoading == false
                 ? <Loader />
-                : <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{flex:1,justifyContent:'center'}} style={{ marginBottom: 25 }} bounces={false}>
+                : <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flex: 1, justifyContent: 'center' }} style={{ marginBottom: 25 }} bounces={false}>
                     <View style={selectionDayStyle.touchableMainView}>
                         {days?.data?.days?.length > 0
                             && reverseDays?.map((item, index) => {
                                 return (
                                     <TouchableOpacity
-                                        onPress={() => 
-                                            item?.alert_message
-                                            ? Alert.alert(
-                                                "Fantasy Tennis Club",
-                                                item?.alert_message,
-                                            )
-                                            : utils.navigateTo(navigation, item?.is_lock_form == 1
-                                                ? 'LockedScreen'
-                                                : route.params == undefined
-                                                    ? constants.screens.dayPick
-                                                    : constants.screens.myPicks,
-                                                item?.is_lock_form == 1
-                                                    ? { item, tournament_day: item?.id }
-                                                    : item?.id)
-                                                }
+                                        onPress={() =>
+                                            item?.alert_message && myPicks != 'MY PICKS'
+                                                ? Alert.alert(
+                                                    "Fantasy Tennis Club",
+                                                    item?.alert_message,
+                                                )
+                                                : utils.navigateTo(navigation, item?.is_lock_form == 1 && myPicks != 'MY PICKS'
+                                                    ? 'LockedScreen'
+                                                    : route.params == undefined
+                                                        ? constants.screens.dayPick
+                                                        : constants.screens.myPicks,
+                                                    item?.is_lock_form == 1
+                                                        ? { item, tournament_day: item?.id }
+                                                        : item?.id)
+                                        }
                                         style={[
                                             selectionDayStyle.touchItem,
                                             {
