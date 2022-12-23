@@ -14,18 +14,18 @@ const MyPicks = ({ route, navigation }) => {
 
     const [isLoading, setIsLoading] = useState(false)
     const [refresh, setRefresh] = useState(false)
-    const [data,setData]=useState()
-    const dispatch=useDispatch()
+    const [data, setData] = useState()
+    const dispatch = useDispatch()
 
     const particularDayPick = data?.data?.days.find((i) => {
-        if (route.params == i.id) {
+        if (route?.params?.item ? route.params?.item?.id : route?.params == i.id) {
             return i
         }
     })
 
 
     const getAllPickFromAPi = async () => {
-        let tournamentId=await AsyncStorage.getItem('@TournamentId')
+        let tournamentId = await AsyncStorage.getItem('@TournamentId')
         const pickObj = {
             token: await AsyncStorage.getItem('@Token'),
             setIsLoading: setIsLoading,
@@ -37,7 +37,7 @@ const MyPicks = ({ route, navigation }) => {
     }
 
     useEffect(() => {
-            getAllPickFromAPi()
+        getAllPickFromAPi()
     }, [])
 
     const renderAllPickData = ({ item, index }) => {
@@ -88,7 +88,7 @@ const MyPicks = ({ route, navigation }) => {
                 onPressRightIcon={() => utils.navigateTo(navigation, constants.screens.notification)}
                 mainViewHeaderStyle={{ paddingBottom: 10, paddingTop: 10 }}
                 resizeMode='stretch'
-                rightIconStyle={{height:widthPercentageToDP(6),width:widthPercentageToDP(6) ,marginTop:-10}}
+                rightIconStyle={{ height: widthPercentageToDP(6), width: widthPercentageToDP(6), marginTop: -10 }}
                 showBackArrow={true}
                 onPressLeftIcon={() => navigation.goBack()}
             />
