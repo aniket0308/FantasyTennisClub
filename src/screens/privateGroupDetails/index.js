@@ -29,6 +29,7 @@ const PrivateGroupDetails = ({ route, navigation }) => {
     const [membership, setMemberShip] = useState()
     const isLoading = useSelector(state => state?.profile?.isLoading)
     const dispatch = useDispatch()
+    const filteredMembership = membership?.filter(i => i?.action != 'join_group' && i?.action != 'create_group')
 
     const getDetails = async () => {
         const name = await AsyncStorage.getItem('@Name')
@@ -55,7 +56,7 @@ const PrivateGroupDetails = ({ route, navigation }) => {
                 "Authorization": `Bearer ${token}`
             },
         }).
-            then(async(response) => {
+            then(async (response) => {
                 if (response.status == 401) {
                     await AsyncStorage.clear()
                     store.dispatch(logout())
@@ -66,8 +67,8 @@ const PrivateGroupDetails = ({ route, navigation }) => {
                 if (json.success == true) {
                     dispatch(isLoaderNotVisibleProfile())
                 }
-                setMemberShip(json?.data[0].tournaments)
-                store.dispatch(checkAuthentication({data:json.data,token,isRegisteredFirstTime:false}))
+                setMemberShip(json?.data)
+                store.dispatch(checkAuthentication({ data: json.data, token, isRegisteredFirstTime: false }))
             }).
             catch(e => {
                 // Snackbar.show({
@@ -133,12 +134,14 @@ const PrivateGroupDetails = ({ route, navigation }) => {
                     showsVerticalScrollIndicator={false}
                     bounces={false} >
                     <FloatingInput
+                        mandatoryField={true}
                         textInputStyle={{ width: '85%', marginTop: 10, }}
                         headerText={'Group Admin Full Name'}
                         onChangeText={(nameTxt) => { setFullName(nameTxt) }}
                         value={fullName}
                     />
                     <FloatingInput
+                        mandatoryField={true}
                         headerText={'Group Admin E-mail'}
                         textInputStyle={{ marginTop: 15 }}
                         onChangeText={(emailTxt) => { setGroupEmail(emailTxt) }}
@@ -146,6 +149,7 @@ const PrivateGroupDetails = ({ route, navigation }) => {
                         autoCapitalize='none'
                     />
                     <FloatingInput
+                        mandatoryField={true}
                         headerText={'Group Admin Mobile number'}
                         textInputStyle={{ marginTop: 15 }}
                         onChangeText={(groupContact) => { setGroupContact(groupContact) }}
@@ -154,7 +158,7 @@ const PrivateGroupDetails = ({ route, navigation }) => {
                     />
                     <SelectDropdown
                         buttonStyle={privateGroupDetailsStyle.selectionButtonStyle}
-                        data={membership}
+                        data={filteredMembership}
                         onSelect={(selectedItem, index) => {
                             console.log(selectedItem, index)
                         }}
@@ -167,29 +171,31 @@ const PrivateGroupDetails = ({ route, navigation }) => {
                             // text represented after item is selected
                             // if data array is an array of objects then return selectedItem.property to render after item is selected
                             if (groupEvents == '') {
-                                return membership[0]?.tournament
+                                return membership[0]?.title
                             } else {
-                                return selectedItem?.tournament
+                                return selectedItem?.title
                             }
                         }}
                         rowTextForSelection={(item, index) => {
                             // text represented for each item in dropdown
                             // if data array is an array of objects then return item.property to represent item in dropdown
-                            return item?.tournament
+                            return item?.title
                         }}
                     />
                     <FloatingInput
+                        mandatoryField={true}
                         headerText={'Number of Participants'}
                         textInputStyle={{ marginTop: 15 }}
                         onChangeText={(groupParticipant) => { setGroupParticipant(groupParticipant) }}
                         value={groupParticipant}
                         autoCapitalize='none'
                     />
+                    <Text style={{ marginVertical: 5, color: 'red', fontWeight: '600', marginLeft: widthPercentageToDP(10),fontSize:10,marginTop:10 }}>*Mandatory Field</Text>
                     <Text style={privateGroupDetailsStyle.txt}>Minimum Charge for a Private group is $50</Text>
                 </KeyboardAwareScrollView>
             }
             <Button
-                onPress={async() => {
+                onPress={async () => {
                     if (route.params?.item?.action == 'join_group') {
                         dispatch(isLoaderVisibleProfile())
                         // dispatch(joinPrivateGroup({ groupFullName, dispatch, clearAllData }))
