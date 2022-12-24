@@ -29,6 +29,8 @@ const Payment = ({ route, navigation }) => {
     const tempObj = route?.params?.item
     const price = route?.params?.price
 
+    console.log('fsffhfghg',tempObj);
+
     const tournamentIdArr = tempObj?.tournaments?.length > 0 ? tempObj?.tournaments.map((item, index) => {
         return item.tournament_id
     }) : tempObj?.length > 0 ? tempObj.map((item) => {
@@ -49,7 +51,7 @@ const Payment = ({ route, navigation }) => {
             async(res, response) => {
                 const token= await AsyncStorage.getItem('@Token')
                 //calling Api For Doing Payment
-                utils.callApi(`api/v1/capture-payment`,  { dataValue: response?.DATA_VALUE, dataDescriptor: response?.DATA_DESCRIPTOR, amount: price, membership_type: route.params.item?.length > 0 ? 1 : tempObj?.membership_type, tournamentIdArr, navigation, setIsLoading,token }, 'PaymentCapture')
+                utils.callApi(`api/v1/capture-payment`,  { dataValue: response?.DATA_VALUE, dataDescriptor: response?.DATA_DESCRIPTOR, amount: price, membership_type: route.params.item?.length > 0 ? 1 : tempObj?.membership_type, membership_items: tournamentIdArr, navigation, setIsLoading,token }, 'PaymentCapture')
             }
         )
     }

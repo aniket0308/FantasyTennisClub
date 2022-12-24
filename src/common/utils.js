@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { URL } from "../configuration";
-import { checkAuthentication, checkLoginStep, isLoaderNotVisible, login, loginAuthentication, logout, registerAuthentication } from "../redux/slice/auth";
+import { checkAuthentication, checkLoginStep, getNotifications, isLoaderNotVisible, login, loginAuthentication, logout, registerAuthentication } from "../redux/slice/auth";
 import Snackbar from 'react-native-snackbar';
 import { utils } from ".";
 import { constants } from "./constant";
@@ -159,9 +159,13 @@ export const callApi = (path, payload, type, dispatch) => {
                     }
                 }
             }else if(type == 'organizePrivateGroup' && json.error == false){
-                if (payload.navigation != undefined) {
-                    utils.navigateTo(payload.navigation, constants.screens.home)
-                }
+                Alert.alert(
+                    "Fantasy Tennis Club",
+                    json?.message,
+                    [
+                        { text: "OK", onPress: () => utils.navigateTo(payload.navigation, constants.screens.home) }
+                    ]
+                );
             }
             else {
                 if (type == 'PaymentCapture') {
@@ -217,6 +221,9 @@ export const callApiGet = async (path, payload, type) => {
         ).then(async (json) => {
             console.log('what is json', payload);
             store.dispatch(checkAuthentication({ data: json.data, token: payload?.token, isRegisteredFirstTime: false }))
+            // if(type=='getNotification'){
+            //     store.dispatch(getNotifications())
+            // }
             if (payload?.setDays) {
                 console.log('what is json for set days', json);
                 await AsyncStorage.setItem('@TournamentId', `${json?.data?.id}`)
@@ -230,6 +237,9 @@ export const callApiGet = async (path, payload, type) => {
             }
             if (payload.setFaq) {
                 payload.setFaq(json)
+            }
+            if(payload.setRender){
+                payload.setRender({})
             }
             if (type == 'Leaderboard' && json.error == true) {
                 Alert.alert(

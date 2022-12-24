@@ -19,6 +19,16 @@ const Home = ({ navigation }) => {
 
     const [isLoading, setIsLoading] = useState(false)
     const [isMembership, setIsMembership] = useState(false)
+    const [data, setData] = useState()
+
+    const getNotification = async () => {
+        const token = await AsyncStorage.getItem('@Token')
+        utils.callApiGet(`api/v1/announcements/member`, { setIsLoading, setData,token },'getNotification')
+    }
+
+    useEffect(()=>{
+        getNotification()
+    },[])
 
     const configure = () => {
         try {
@@ -29,20 +39,35 @@ const Home = ({ navigation }) => {
                 },
 
                 // (required) Called when a remote is received or opened, or local notification is opened
-                onNotification: function (notification) {
-                    console.log("NOTIFICATION:sss", notification);
-                    PushNotificationIOS.getApplicationIconBadgeNumber((n)=>{
-                        console.log('PushNotificationIOS.getApplicationIconBadgeNumber()',n)
-                        PushNotificationIOS.setApplicationIconBadgeNumber(n)
-                    })
+                onNotification: async function (notification) {
+                    getNotification()
+                    console.log("NOTIFICATION:sss", notification ,'what is data',JSON.stringify(data));
+
+                    // PushNotificationIOS.getApplicationIconBadgeNumber((n)=>{
+                    //     console.log('PushNotificationIOS.getApplicationIconBadgeNumber()',n)
+                    //     PushNotificationIOS.setApplicationIconBadgeNumber(n)
+                    // })
                     // process the notification
                     // Handle notification click
-                    if (notification.userInteraction) {
+                    if (notification.userInteraction == true) {
+                        if(data?.data?.notifications!=undefined||data?.data?.notifications?.length>0||data!=undefined||data?.data?.notifications!='')
+                    {
+                        data?.data?.notifications.map((i)=>{
+                            if(i?.title==notification?.title){
+                                console.log('i?.id',i?.id)
+                            }
+                        })
+                    }
                         if (notification?.data?.notification_type == 'MEMBER') {
+                            // utils.callApi(`api/v1/announcements/read/${item?.id}`,{token})
                             utils.navigateTo(navigation, constants.screens.notification, { exit: true })
                         } else {
                             utils.navigateTo(navigation, constants.screens.announcements, { exit: true })
                         }
+                    } else {
+                        const token = await AsyncStorage.getItem('@Token')
+                        utils.callApiGet(`api/v1/announcements/member`, { setIsLoading, setData, token },'getNotification')
+                        utils.navigateTo(navigation, constants.screens.dashBoard, { exit: true })
                     }
                     // (required) Called when a remote is received or opened, or local notification is opened
                     notification.finish(PushNotificationIOS.FetchResult.NoData);
@@ -98,9 +123,10 @@ const Home = ({ navigation }) => {
         const unsubscribe = messaging().onMessage(async remoteMessage => {
             console.log('Message handled in the Foregorund!', remoteMessage);
             console.log('PushNotificationIOS.getApplicationIconBadgeNumber()',)
-            notification.localNotification({ title: remoteMessage?.notification?.title, body: remoteMessage?.notification.body,
+            notification.localNotification({
+                title: remoteMessage?.notification?.title, body: remoteMessage?.notification.body,
                 //  image: remoteMessage?.notification.android.imageUrl
-                 })
+            })
         });
         return unsubscribe
     }, [])

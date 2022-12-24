@@ -18,7 +18,6 @@ const DashBoardHome = ({ navigation }) => {
     const [refresh, setRefresh] = useState(false)
     const [days, setDays] = useState()
     const [data, setData] = useState()
-    const dispatch = useDispatch()
 
     const getDays = async () => {
         const getDaysObj = {
@@ -45,7 +44,13 @@ const DashBoardHome = ({ navigation }) => {
         getDays()
         getAnnouncement(false)
     }, [refresh])
-
+    useEffect(() => {
+        const focusHandler = navigation.addListener('focus', () => {
+            getDays()
+            getAnnouncement(false)
+        });
+        return focusHandler;
+    }, [navigation]);
     useEffect(() => {
         getDays()
         getAnnouncement(false)
@@ -82,19 +87,19 @@ const DashBoardHome = ({ navigation }) => {
         return (
             <TouchableOpacity
                 onPress={() => {
-                    if(item.icon){
-                        utils.navigateTo(navigation,constants.screens.joinWhatsApp,days.data.whatsapp_group_link)
-                    }else{
+                    if (item.icon) {
+                        utils.navigateTo(navigation, constants.screens.joinWhatsApp, days.data.whatsapp_group_link)
+                    } else {
                         utils.navigateTo(
                             navigation,
                             item.title == 'MY PICKS'
                                 ? constants.screens.selectionDays
-                                    : item.title == 'PRIZES'
-                                        ? constants.screens.prizes
-                                        : item.title == 'Leaderboard'
-                                            ? 'Leaderboard'
-                                            : 'Consolation',
-                            item.title=='PRIZES'?days.data.description:item.title
+                                : item.title == 'PRIZES'
+                                    ? constants.screens.prizes
+                                    : item.title == 'Leaderboard'
+                                        ? 'Leaderboard'
+                                        : 'Consolation',
+                            item.title == 'PRIZES' ? days.data.description : item.title
                         )
                     }
                     // notification.localNotification()
@@ -106,7 +111,7 @@ const DashBoardHome = ({ navigation }) => {
                 }]}
             >
                 {
-                    item?.score 
+                    item?.score
                     && <Text style={dashboardStyle.txtScore}>{days?.data[item?.title == 'Leaderboard' ? 'leaderboard' : item?.title == 'Consolation' ? 'consolation' : 'season_ranking']}</Text>
                 }
                 {
@@ -142,11 +147,12 @@ const DashBoardHome = ({ navigation }) => {
                     titleStyle={{ alignSelf: 'center', fontSize: 22 }}
                     subTitleStyle={{ alignSelf: 'center', color: constants.colors.darkGreen }}
                     rightIcon={constants.icons.shapeBell}
-                checkLength={true}
+                    checkLength={true}
                     onPressRightIcon={() => utils.navigateTo(navigation, constants.screens.notification)}
                     mainViewHeaderStyle={{ paddingBottom: 10, paddingTop: 10 }}
                     resizeMode='contain'
                     rightIconStyle={{ height: widthPercentageToDP(6), width: widthPercentageToDP(6), marginTop: -10 }}
+                    navigation={navigation.addListner}
                 />
                 {isLoading == true
                     && <ScrollView

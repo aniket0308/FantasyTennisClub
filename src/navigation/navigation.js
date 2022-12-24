@@ -94,6 +94,8 @@ const StackInsideAccount = () => {
             <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="MyMembership" component={MyMembership} />
             <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Notifications" component={Notification} />
             <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="PrivateGroupDetails" component={PrivateGroupDetails} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Payment" component={Payment} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="PaymentConfirmation" component={PaymentConfirmation} />
         </stack.Navigator>
     )
 }

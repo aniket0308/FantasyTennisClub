@@ -40,7 +40,7 @@ const MemberShip = ({ route, navigation }) => {
                         navigation.goBack()
                     }}
                 />
-                {route.params.isCart != true
+                {route?.params?.isCart != true && route.params?.isLoggedIn != true
                     && <TouchableOpacity
                         onPress={async () => {
                             if (route?.params?.item?.membership_type == 0) {
@@ -50,7 +50,7 @@ const MemberShip = ({ route, navigation }) => {
                         }}
                         style={membershipStyle.addButtonView}>
                         {
-                            route.params.tournamentArr?.length > 0
+                            route?.params?.tournamentArr?.length > 0
                             && <View style={{ backgroundColor: 'red', height: 13, width: 13, position: 'absolute', top: 2, right: 0, borderRadius: 5 }} />
                         }
                         <Text style={membershipStyle.plusIcon}>+</Text>
@@ -76,7 +76,7 @@ const MemberShip = ({ route, navigation }) => {
                     tempArr?.length > 0
                     && tempArr.map((item, index) => {
                         return (
-                            <View style={[commonStyle.row, { justifyContent: 'space-between', marginRight: 10,alignItems:'center' }]}>
+                            <View style={[commonStyle.row, { justifyContent: 'space-between', marginRight: 10, alignItems: 'center' }]}>
                                 <Text numberOfLines={1} style={[membershipStyle.txtDate, { width: widthPercentageToDP(route.params.isCart == true ? 70 : 80), fontSize: 15, color: constants.colors.black }]}>{item?.title} x 1</Text>
                                 <Text style={[membershipStyle.txtDate, { width: widthPercentageToDP(10), fontSize: 15, color: constants.colors.black }]}>${item?.price}</Text>
                                 {route.params.isCart == true &&
@@ -89,9 +89,9 @@ const MemberShip = ({ route, navigation }) => {
                                             }
                                             setRender({})
                                         }}
-                                        style={{padding:5,marginTop:-3}}
+                                        style={{ padding: 5, marginTop: -3 }}
                                     >
-                                        <Image resizeMode="contain" style={{height:widthPercentageToDP(4),width:widthPercentageToDP(4),tintColor:"red"}} source={constants.icons.delete} />
+                                        <Image resizeMode="contain" style={{ height: widthPercentageToDP(4), width: widthPercentageToDP(4), tintColor: "red" }} source={constants.icons.delete} />
                                         {/* <Text style={[membershipStyle.txtDate, { fontSize: 15, color: constants.colors.black }]}>-</Text> */}
                                     </TouchableOpacity>
                                 }
@@ -116,18 +116,22 @@ const MemberShip = ({ route, navigation }) => {
                 <Text style={[membershipStyle.txtDate, { marginBottom: 16 }]}>2023 Season</Text>
                 {
                     route?.params?.item?.tournaments?.length > 0
-                    && route?.params?.item?.tournaments.map((item) => {
-                        return (
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 10 }}>
-                                <Text style={[membershipStyle.txtDate, { fontSize: 13, color: constants.colors.black }]}>{item?.title}</Text>
-                                <Text style={[membershipStyle.txtDate, { fontSize: 13, color: constants.colors.black }]}>${item?.price}</Text>
-                            </View>
-                        )
-                    })
+                        ? route?.params?.item?.tournaments.map((item) => {
+                            return (
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 10 }}>
+                                    <Text style={[membershipStyle.txtDate, { fontSize: 13, color: constants.colors.black }]}>{item?.title ? item?.title : item?.tournament}</Text>
+                                    <Text style={[membershipStyle.txtDate, { fontSize: 13, color: constants.colors.black }]}>${item?.price}</Text>
+                                </View>
+                            )
+                        })
+                        : <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 10 }}>
+                            <Text style={[membershipStyle.txtDate, { fontSize: 13, color: constants.colors.black }]}>{route?.params?.item?.tournament}</Text>
+                            <Text style={[membershipStyle.txtDate, { fontSize: 13, color: constants.colors.black }]}>${route?.params?.item?.price}</Text>
+                        </View>
 
                 }
                 {
-                    route?.params?.item?.tournament_total != '' || route?.params?.item?.tournament_total != null &&
+                    route?.params?.item?.tournament_total &&
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 10 }}>
                         <Text style={[membershipStyle.txtDate, { fontSize: 13, color: constants.colors.black }]}>Tournament Total</Text>
                         <Text style={[membershipStyle.txtDate, { fontSize: 13, color: constants.colors.black }]}>${route?.params?.item?.tournament_total}</Text>
@@ -143,11 +147,11 @@ const MemberShip = ({ route, navigation }) => {
                 <View style={membershipStyle.border} />
                 <View style={[commonStyle.row, { justifyContent: 'space-between', marginRight: 10 }]}>
                     <Text style={[membershipStyle.txtDate, { fontSize: 18, color: constants.colors.black, fontWeight: '700' }]}>Total</Text>
-                    <Text style={[membershipStyle.txtDate, { fontSize: 18, color: constants.colors.black, fontWeight: '700' }]}>${route.params.tournamentArr?.length > 0 ? route.params?.item ? totalPrice[tempArr?.length - 1] + route.params?.item?.price : totalPrice[tempArr?.length - 1] : route?.params?.item?.price}</Text>
+                    <Text style={[membershipStyle.txtDate, { fontSize: 18, color: constants.colors.black, fontWeight: '700' }]}>${route?.params?.tournamentArr?.length > 0 ? route.params?.item ? totalPrice[tempArr?.length - 1] + route.params?.item?.price : totalPrice[tempArr?.length - 1] : route?.params?.item?.price}</Text>
                 </View>
                 <Button
                     onPress={() => {
-                        navigation.navigate('Payment', { item: tempArr?.length > 0 ? [...route.params.tournamentArr, route.params.item] : route.params.item ,price:route.params.tournamentArr?.length > 0 ? route.params?.item ? totalPrice[tempArr?.length - 1] + route.params?.item?.price : totalPrice[tempArr?.length - 1] : route?.params?.item?.price})
+                        navigation.navigate('Payment', { item: tempArr?.length > 0 ? [...route?.params?.tournamentArr, route?.params?.item] : route?.params.item, price: route?.params?.tournamentArr?.length > 0 ? route.params?.item ? totalPrice[tempArr?.length - 1] + route.params?.item?.price : totalPrice[tempArr?.length - 1] : route?.params?.item?.price })
                     }
                     }
                     titleText={'Place Order'}

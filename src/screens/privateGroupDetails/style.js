@@ -17,7 +17,7 @@ const privateGroupDetailsStyle = StyleSheet.create({
       selectionButtonStyle: {
         marginTop:15,
         backgroundColor: constants.colors.white,
-        width: '85%',
+        width: '90%',
         borderBottomLeftRadius: 6,
         borderBottomRightRadius: 6,
         borderTopLeftRadius: 6,

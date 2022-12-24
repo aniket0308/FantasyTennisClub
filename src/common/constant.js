@@ -69,6 +69,7 @@ export const constants = {
         paymentFailed: require(`${defaultPath}/paymentFailed.png`),
         paymentSuccess: require(`${defaultPath}/PaymentSuccess.png`),
         delete: require(`${defaultPath}/rubbishBin.png`),
+        OrganizeGroup: require(`${defaultPath}/OrganizeGroup.png`),
     },
     fonts: {
         exo2Regular: 'Exo2-Regular',

@@ -32,13 +32,13 @@ const LeaderBoard = ({ route, navigation }) => {
     const leaderBoard = ({ item, index }) => {
         if (item?.error == true) {
             setIsLoading(false)
-            Alert.alert(
-                "Fantasy Tennis Club",
-                item?.message,
-                [
-                    { text: "OK", onPress: () => navigation.goBack() }
-                ]
-            );
+            // Alert.alert(
+            //     "Fantasy Tennis Club",
+            //     item?.message,
+            //     [
+            //         { text: "OK", onPress: () => navigation.goBack() }
+            //     ]
+            // );
         }
         return (
             <View style={{ padding: 5, flexDirection: 'row' }}>
@@ -125,6 +125,7 @@ const LeaderBoard = ({ route, navigation }) => {
                         scrollEnabled={true}
                         bounces={false}
                         data={[data]}
+                        directionalLockEnabled={false}
                         contentContainerStyle={{ flexDirection: 'row' }}
                         style={{ flexDirection: 'row', marginHorizontal: 10, marginTop: 10 }}
                         renderItem={leaderBoard}

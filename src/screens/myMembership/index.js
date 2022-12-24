@@ -28,6 +28,7 @@ const MyMembership = ({ navigation, route }) => {
         utils.callApiGet(`api/v1/user/my-membership`, seasonObj)
     }
 
+    console.log('check data',data);
     useEffect(() => {
         getAllMemberShips()
     }, [])
@@ -56,14 +57,18 @@ const MyMembership = ({ navigation, route }) => {
                     }
                     {data?.data?.length > 0 &&
                         data?.data.map((item, index) => {
+                            console.log('dsds itdfd',item);
                             return (
-                                item.title != 'Join Private Group' && item.title != 'Organize Private Group'
-                                && < CardWithImage
+                                < CardWithImage
                                     containerStyle={{ backgroundColor: constants.colors.white, marginBottom: 15 }}
                                     labelTitle={item.is_member}
                                     label={item?.tournament}
                                     labelStyle={myMembershipStyle.labelStyle}
                                     titleStyle={membershipStyle.titleStyle}
+                                    onPress={()=>{
+                                        route?.params == false &&item?.is_paid==false?utils.navigateTo(navigation,constants.screens.membership,{item,isLoggedIn:true})
+                                        :item?.action=='join_group' && navigation.navigate(constants.screens.privateGroupDetails,{item,isLoggedIn:true})
+                                    }}
                                 />
                             )
                         })

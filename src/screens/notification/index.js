@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { Alert, BackHandler, FlatList, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import PushNotification from "react-native-push-notification";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { useDispatch } from "react-redux";
 import { utils } from "../../common";
@@ -20,8 +21,10 @@ const Notification = ({ navigation,route }) => {
     //function for getting notification
     const getNotification = async() => {
         const token= await AsyncStorage.getItem('@Token')
-        utils.callApiGet(`api/v1/announcements/member`, {setIsLoading,setData,token})
+        utils.callApiGet(`api/v1/announcements/member`, {setIsLoading,setData,token},'getNotification')
     }
+
+    console.log('what is data',JSON.stringify(data));
 
     useEffect(() => {
         getNotification()
@@ -34,7 +37,11 @@ const Notification = ({ navigation,route }) => {
     //Render Notification Function
     const renderNotification = ({ item, index }) => {
         return (
-            <TouchableOpacity onPress={()=>{
+            <TouchableOpacity onPress={async()=>{
+                const token= await AsyncStorage.getItem('@Token')
+                if((data?.data?.notifications?.length>0 || data != undefined||data!='')&& data?.success==true){
+                    utils.callApi(`api/v1/announcements/read/${item?.id}`,{token})
+                }
                 Alert.alert(
                     "Fantasy Tennis Club",
                     `To send a message go to 'Account' then 'Contact us'.`,
@@ -75,7 +82,7 @@ const Notification = ({ navigation,route }) => {
                         showsVerticalScrollIndicator={false}
                         bounces={false}
                         style={notificationStyle.flatListView}
-                        data={data?.data}
+                        data={data?.data?.notifications}
                         renderItem={renderNotification}
                     />
             }

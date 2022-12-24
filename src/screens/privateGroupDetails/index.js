@@ -27,6 +27,8 @@ const PrivateGroupDetails = ({ route, navigation }) => {
     const [groupParticipant, setGroupParticipant] = useState('')
     const [loggedInUserName, setLoggedInUserName] = useState('')
     const [membership, setMemberShip] = useState()
+    const [organizeGrp, setOrganizeGrp] = useState(route.params?.item?.action == 'join_group' ? false : true)
+    const [, setRender] = useState({})
     const isLoading = useSelector(state => state?.profile?.isLoading)
     const dispatch = useDispatch()
     const filteredMembership = membership?.filter(i => i?.action != 'join_group' && i?.action != 'create_group')
@@ -103,16 +105,35 @@ const PrivateGroupDetails = ({ route, navigation }) => {
         <View style={privateGroupDetailsStyle.mainContainer}>
             <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />
             <SafeAreaView style={{ backgroundColor: constants.colors.backGroundLight }} />
-            <TouchableOpacity onPress={() => navigation.goBack()} style={{ padding: 5, marginTop: 10 }}>
-                <Image style={{ height: 20, width: 20, tintColor: constants.colors.darkGreen }} source={constants.icons.backArrow} />
-            </TouchableOpacity>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <TouchableOpacity onPress={() => {
+                    if (organizeGrp==true) {
+                        setOrganizeGrp(false)
+                        setRender({})
+                    } else {
+                        navigation.goBack()
+                    }
+                }} style={{ padding: 5, marginTop: 10 }}>
+                    <Image style={{ height: 20, width: 20, tintColor: constants.colors.darkGreen }} source={constants.icons.backArrow} />
+                </TouchableOpacity>
+                {
+                    organizeGrp == false
+                    && <TouchableOpacity onPress={() => {
+                        setOrganizeGrp(true)
+                        setRender({})
+                    }}
+                        style={{ padding: 5, marginTop: 10 }}>
+                        <Image style={{ height: widthPercentageToDP(10), width: widthPercentageToDP(15), tintColor: constants.colors.darkGreen }} resizeMode='contain' source={constants.icons.OrganizeGroup} />
+                    </TouchableOpacity>
+                }
+            </View>
             <Header
-                title={route.params?.item?.action == 'create_group' ? 'Private Group Details' : 'Join Private Group'}
+                title={route.params?.item?.action == 'join_group' && organizeGrp == false ? 'Join Private Group' : 'Private Group Details'}
                 subTitle='Complete your details below'
                 mainViewHeaderStyle={{ paddingHorizontal: 10 }}
                 showBackArrow={false}
             />
-            {route.params?.item?.action == 'join_group'
+            {route.params?.item?.action == 'join_group' && organizeGrp == false
                 ? <View style={{ marginVertical: 50 }}>
                     <CardWithImage
                         containerStyle={{ backgroundColor: constants.colors.labelColor, width: widthPercentageToDP(85), alignSelf: 'center' }}
@@ -128,14 +149,14 @@ const PrivateGroupDetails = ({ route, navigation }) => {
                         value={groupFullName}
                     />
                 </View>
-                : <KeyboardAwareScrollView
+                : organizeGrp == true && <KeyboardAwareScrollView
                     style={{ marginBottom: 20 }}
                     scrollEnabled={true}
                     showsVerticalScrollIndicator={false}
                     bounces={false} >
                     <FloatingInput
                         mandatoryField={true}
-                        textInputStyle={{ width: '85%', marginTop: 10, }}
+                        textInputStyle={{ width: '90%', marginTop: 10, }}
                         headerText={'Group Admin Full Name'}
                         onChangeText={(nameTxt) => { setFullName(nameTxt) }}
                         value={fullName}
@@ -143,7 +164,7 @@ const PrivateGroupDetails = ({ route, navigation }) => {
                     <FloatingInput
                         mandatoryField={true}
                         headerText={'Group Admin E-mail'}
-                        textInputStyle={{ marginTop: 15 }}
+                        textInputStyle={{ width: '90%',marginTop: 15 }}
                         onChangeText={(emailTxt) => { setGroupEmail(emailTxt) }}
                         value={groupEmail}
                         autoCapitalize='none'
@@ -151,7 +172,7 @@ const PrivateGroupDetails = ({ route, navigation }) => {
                     <FloatingInput
                         mandatoryField={true}
                         headerText={'Group Admin Mobile number'}
-                        textInputStyle={{ marginTop: 15 }}
+                        textInputStyle={{ width: '90%',marginTop: 15 }}
                         onChangeText={(groupContact) => { setGroupContact(groupContact) }}
                         value={groupContact}
                         keyboardType='phone-pad'
@@ -185,18 +206,18 @@ const PrivateGroupDetails = ({ route, navigation }) => {
                     <FloatingInput
                         mandatoryField={true}
                         headerText={'Number of Participants'}
-                        textInputStyle={{ marginTop: 15 }}
+                        textInputStyle={{ width: '90%',marginTop: 15 }}
                         onChangeText={(groupParticipant) => { setGroupParticipant(groupParticipant) }}
                         value={groupParticipant}
                         autoCapitalize='none'
                     />
-                    <Text style={{ marginVertical: 5, color: 'red', fontWeight: '600', marginLeft: widthPercentageToDP(10),fontSize:10,marginTop:10 }}>*Mandatory Field</Text>
+                    <Text style={{ marginVertical: 5, color: 'red', fontWeight: '600', marginLeft: widthPercentageToDP(10), fontSize: 10, marginTop: 10 }}>*Mandatory Field</Text>
                     <Text style={privateGroupDetailsStyle.txt}>Minimum Charge for a Private group is $50</Text>
                 </KeyboardAwareScrollView>
             }
             <Button
                 onPress={async () => {
-                    if (route.params?.item?.action == 'join_group') {
+                    if (route.params?.item?.action == 'join_group' && organizeGrp == false) {
                         dispatch(isLoaderVisibleProfile())
                         // dispatch(joinPrivateGroup({ groupFullName, dispatch, clearAllData }))
                         const privateGroupObj = {
@@ -224,7 +245,7 @@ const PrivateGroupDetails = ({ route, navigation }) => {
                     }
 
                 }}
-                titleText={route.params?.item?.action == 'join_group' ? 'Join Group' : 'Submit'}
+                titleText={route.params?.item?.action == 'join_group' && organizeGrp == false ? 'Join Group' : 'Submit'}
                 btnStyle={{ width: '90%', marginBottom: 15, marginTop: 30 }}
             />
             {/* {

@@ -36,7 +36,7 @@ const PaymentConfirmation = ({ route, navigation }) => {
                     setIsLoading(true)
                     await AsyncStorage.removeItem('@registerFirstTime')
                     setIsMembership(json?.data?.is_member)
-                    store.dispatch(checkAuthentication({data:json.data,token,isRegisteredFirstTime:false}))
+                    store.dispatch(checkAuthentication({ data: json.data, token, isRegisteredFirstTime: false }))
                     setRender({})
                 } else {
                     setIsAuthentication()
@@ -49,7 +49,7 @@ const PaymentConfirmation = ({ route, navigation }) => {
                 //   backgroundColor: 'red',
                 // });
                 setIsLoading(false)
-                store.dispatch(checkAuthentication({data:null,token,isRegisteredFirstTime:false}))
+                store.dispatch(checkAuthentication({ data: null, token, isRegisteredFirstTime: false }))
                 console.log('What Is Error In Get Api', e)
             })
     }
@@ -57,7 +57,7 @@ const PaymentConfirmation = ({ route, navigation }) => {
     useEffect(() => {
         checkMemberShip()
         const backHandler = route.params?.success == true
-            && BackHandler.addEventListener('hardwareBackPress', () => {BackHandler.exitApp()})
+            && BackHandler.addEventListener('hardwareBackPress', () => { BackHandler.exitApp() })
         return () => backHandler.remove()
     }, [])
 
@@ -77,10 +77,9 @@ const PaymentConfirmation = ({ route, navigation }) => {
             <Image source={route.params?.success == true ? constants.icons.paymentSuccess : constants.icons.paymentFailed} style={{ height: widthPercentageToDP(30), width: widthPercentageToDP(30) }} resizeMode='contain' />
             <Text style={{ color: 'black', fontSize: 24, fontWeight: '600', fontFamily: constants.fonts.notoSansRegular }}>{route.params?.success == true ? 'Payment Successfull' : 'Payment Failed'}</Text>
             <Text style={{ color: 'black', fontSize: 14, fontWeight: '600', fontFamily: constants.fonts.nuntinoRegular, textAlign: 'center' }}>{route.params?.message}</Text>
-            <Button
-                onPress={() => route.params?.success == true ? navigation.navigate(isMembership == true ? 'Dashboard' : 'Home') : navigation.goBack()}
+            <Button onPress={() =>route.params?.success == true ? navigation.navigate(isMembership == true ? 'Dashboard' : 'Home') : navigation.goBack()}
                 btnStyle={{ marginVertical: 30 }}
-                titleText={route.params?.success == true ? 'Next' : 'Enter Payment'}
+                titleText={ route.params?.success == true ? 'Next' : 'Enter Payment'}
             />
         </View>
     )
