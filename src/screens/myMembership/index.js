@@ -62,7 +62,7 @@ const MyMembership = ({ navigation, route }) => {
                                 < CardWithImage
                                     containerStyle={{ backgroundColor: constants.colors.white, marginBottom: 15 }}
                                     labelTitle={item.is_member}
-                                    label={item?.tournament}
+                                    label={item?.title}
                                     labelStyle={myMembershipStyle.labelStyle}
                                     titleStyle={membershipStyle.titleStyle}
                                     onPress={()=>{

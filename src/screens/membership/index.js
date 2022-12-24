@@ -15,8 +15,10 @@ const MemberShip = ({ route, navigation }) => {
     let tempArr = route?.params?.tournamentArr
     var count = 0;
     const totalPrice = tempArr?.length > 0 &&
-        tempArr.map((item) => {
-            count = count + parseInt(item?.price)
+        tempArr.map((item, index) => {
+            if (tempArr.indexOf(item) == index) {
+                count = count + parseInt(item?.price)
+            }
             return count
         })
 
@@ -84,8 +86,11 @@ const MemberShip = ({ route, navigation }) => {
                                         onPress={() => {
                                             if (tempArr.length != 1) {
                                                 tempArr.splice(index, 1)
+                                             setRender({})
                                             } else {
-
+                                                tempArr.splice(index, 1)
+                                                AsyncStorage.removeItem('@membership')
+                                                navigation.goBack()
                                             }
                                             setRender({})
                                         }}
@@ -99,9 +104,37 @@ const MemberShip = ({ route, navigation }) => {
                         )
                     })
                 }
+                {route.params?.isCart != true &&
+                    <View style={[commonStyle.row, { justifyContent: 'space-between', marginRight: 10, alignItems: 'center' }]}>
+                        {
+                            route.params?.item?.membership_type == 0 && <>
+                                <Text numberOfLines={1} style={[membershipStyle.txtDate, { width: widthPercentageToDP(route.params.isCart == true ? 70 : 80), fontSize: 15, color: constants.colors.black }]}>{route.params?.item?.title} x 1</Text>
+                                <Text style={[membershipStyle.txtDate, { width: widthPercentageToDP(10), fontSize: 15, color: constants.colors.black }]}>${route.params?.item?.price}</Text>
+                            </>}
+                        {route.params.isCart == true &&
+                            <TouchableOpacity
+                                onPress={() => {
+                                    if (tempArr.length != 1) {
+                                        tempArr.splice(index, 1)
+                                    } else {
+                                        // tempArr.splice(index, 1)
+                                        // let tempCartArr = []
+                                        // AsyncStorage.removeItem('@membership')
+                                        // navigation.goBack()
+                                    }
+                                    setRender({})
+                                }}
+                                style={{ padding: 5, marginTop: -3 }}
+                            >
+                                <Image resizeMode="contain" style={{ height: widthPercentageToDP(4), width: widthPercentageToDP(4), tintColor: "red" }} source={constants.icons.delete} />
+                                {/* <Text style={[membershipStyle.txtDate, { fontSize: 15, color: constants.colors.black }]}>-</Text> */}
+                            </TouchableOpacity>
+                        }
+                    </View>
+                }
                 {
-                    route?.params?.item && route?.params?.item.title
-                    && <View style={[commonStyle.row, { justifyContent: 'space-between', marginRight: 10 }]}>
+                    route?.params?.item && route?.params?.item?.tournaments &&
+                    <View style={[commonStyle.row, { justifyContent: 'space-between', marginRight: 10 }]}>
                         <Text numberOfLines={1} style={[membershipStyle.txtDate, { width: widthPercentageToDP(route.params.isCart == true ? 70 : 80), fontSize: 15, color: constants.colors.black }]}>{route?.params?.item?.title} x 1</Text>
                         <Text style={[membershipStyle.txtDate, { width: widthPercentageToDP(10), fontSize: 15, color: constants.colors.black }]}>${route?.params?.item?.price}</Text>
                         <TouchableOpacity
@@ -113,22 +146,20 @@ const MemberShip = ({ route, navigation }) => {
                         </TouchableOpacity>
                     </View>
                 }
-                <Text style={[membershipStyle.txtDate, { marginBottom: 16 }]}>2023 Season</Text>
                 {
+                    route?.params?.item && route?.params?.item?.sub_title
+                    && <Text style={[membershipStyle.txtDate, { marginBottom: 16 }]}>{route?.params?.item?.sub_title}</Text>
+                }
+                {route?.params?.item?.tournaments &&
                     route?.params?.item?.tournaments?.length > 0
-                        ? route?.params?.item?.tournaments.map((item) => {
-                            return (
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 10 }}>
-                                    <Text style={[membershipStyle.txtDate, { fontSize: 13, color: constants.colors.black }]}>{item?.title ? item?.title : item?.tournament}</Text>
-                                    <Text style={[membershipStyle.txtDate, { fontSize: 13, color: constants.colors.black }]}>${item?.price}</Text>
-                                </View>
-                            )
-                        })
-                        : <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 10 }}>
-                            <Text style={[membershipStyle.txtDate, { fontSize: 13, color: constants.colors.black }]}>{route?.params?.item?.tournament}</Text>
-                            <Text style={[membershipStyle.txtDate, { fontSize: 13, color: constants.colors.black }]}>${route?.params?.item?.price}</Text>
-                        </View>
-
+                    && route?.params?.item?.tournaments.map((item) => {
+                        return (
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 10 }}>
+                                <Text style={[membershipStyle.txtDate, { fontSize: 13, color: constants.colors.black }]}>{item?.title}</Text>
+                                <Text style={[membershipStyle.txtDate, { fontSize: 13, color: constants.colors.black }]}>${item?.price}</Text>
+                            </View>
+                        )
+                    })
                 }
                 {
                     route?.params?.item?.tournament_total &&

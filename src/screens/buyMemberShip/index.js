@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { Image, RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Image, RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import Snackbar from 'react-native-snackbar';
 import { utils } from "../../common";
@@ -45,7 +45,7 @@ const BuyMemberShip = ({ navigation, route }) => {
                 }
                 setRefresh(false)
                 setMemberShip(json?.data)
-                store.dispatch(checkAuthentication({data:json.data,token,isRegisteredFirstTime:false}))
+                store.dispatch(checkAuthentication({ data: json.data, token, isRegisteredFirstTime: false }))
             }).
             catch(e => {
                 // Snackbar.show({
@@ -62,7 +62,7 @@ const BuyMemberShip = ({ navigation, route }) => {
     const getMembershipDetails = async () => {
         await AsyncStorage.getItem('@membership').then((data) => {
             let cartData = JSON.parse(data)
-            console.log('',cartData);
+            console.log('', cartData);
             if (data == null) {
                 while (tempArr?.length > 0) {
                     tempArr.pop()
@@ -118,11 +118,14 @@ const BuyMemberShip = ({ navigation, route }) => {
                             return parseInt(i)
                         })
                         if (tempMembershipArr.includes(item?.tournament_id && item?.tournament_id) == true) {
-                            alert('membership Already Added')
+                            Alert.alert(
+                                "Fantasy Tennis Club",
+                                'membership Already Added',
+                            )
                         }
                         else {
                             const intersection = memberShip.filter(element => tempMembershipArr.includes(element?.tournament_id));
-                            utils.navigateTo(navigation, item?.action == 'create_group' || item?.action == 'join_group' ? constants.screens.privateGroupDetails : constants.screens.membership, { item, tournamentArr: item?.action == 'create_group' || item?.action == 'join_group' ? '' : intersection })
+                            utils.navigateTo(navigation, item?.action == 'create_group' || item?.action == 'join_group' ? constants.screens.privateGroupDetails : constants.screens.membership, { item, tournamentArr: item?.action == 'create_group' || item?.action == 'join_group' ? '' : intersection})
                         }
                     }
                 }

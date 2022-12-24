@@ -112,6 +112,7 @@ const Login = ({ navigation }) => {
             console.log('WERROR', error);
         }
     }
+
     useEffect(() => {
         const notification = new PushNotificationService()
         configure()
@@ -181,6 +182,7 @@ const Login = ({ navigation }) => {
                             setIsLoading: setIsLoading,
                             platform_info
                         }
+                        console.log('Check Device Token',loginObj);
                         //calling Api For Login
                         utils.callApi('api/login', loginObj, 'login', dispatch)
                     }}
