@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
@@ -6,21 +5,33 @@ import { useDispatch, useSelector } from "react-redux";
 import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
 import { Button, Header } from "../../components";
+import { deleteMembershipById, getMembershipTournament } from "../../realm/realmOperations";
 import membershipStyle from "./style";
 
 const MemberShip = ({ route, navigation }) => {
 
-    const dispatch = useDispatch()
     const [, setRender] = useState({})
-    let tempArr = route?.params?.tournamentArr
+    const [membershipArr, setMembershipArr] = useState([])
     var count = 0;
-    const totalPrice = tempArr?.length > 0 &&
-        tempArr.map((item, index) => {
-            if (tempArr.indexOf(item) == index) {
+    const totalPrice = membershipArr?.length > 0 &&
+        membershipArr.map((item, index) => {
+            if (membershipArr.indexOf(item) == index) {
                 count = count + parseInt(item?.price)
             }
             return count
         })
+
+    const getMembershipDetails = async () => {
+        let checkMembershipExist = await getMembershipTournament()
+        setMembershipArr(checkMembershipExist)
+    }
+
+    console.log('what is route.params', route.params);
+
+    useEffect(() => {
+        getMembershipDetails()
+    }, [])
+
 
     return (
         <View style={membershipStyle.mainContainer}>
@@ -32,28 +43,12 @@ const MemberShip = ({ route, navigation }) => {
                     showBackArrow={true}
                     title={'Membership Cart'}
                     titleStyle={{ marginTop: 5, marginBottom: -10 }}
-                    onPressLeftIcon={async () => {
-                        if (route?.params?.item?.membership_type == 0) {
-                            await AsyncStorage.setItem('@membership', JSON.stringify(route.params?.item?.tournament_id))
-                            navigation.goBack()
-                        }
-                        // if (tempArr?.length > 0) {
-                        //     let tempCartArr = tempArr.map((i) => {
-                        //         return i.tournament_id
-                        //     })
-                        //     AsyncStorage.setItem('@membership', JSON.stringify(tempCartArr))
-                        // }
-                        // navigation.goBack()
-                    }}
+                    onPressLeftIcon={() => navigation.goBack()}
                 />
-                {route?.params?.isCart != true && route.params?.isLoggedIn != true
+                {
+                    route?.params?.isSeason == false
                     && <TouchableOpacity
-                        onPress={async () => {
-                            if (route?.params?.item?.membership_type == 0) {
-                                await AsyncStorage.setItem('@membership', JSON.stringify(route.params?.item?.tournament_id))
-                                navigation.goBack()
-                            }
-                        }}
+                        onPress={() => navigation.goBack()}
                         style={membershipStyle.addButtonView}>
                         {
                             route?.params?.tournamentArr?.length > 0
@@ -71,84 +66,42 @@ const MemberShip = ({ route, navigation }) => {
                     <Text style={membershipStyle.txtOrder}>#4523015</Text>
                     <Text style={membershipStyle.txtActive}>Active</Text>
                 </View>
-                <Text style={membershipStyle.txtDate}>{route?.params?.item?.tournamentArr ? route?.params?.item?.item?.start_date : route?.params?.item?.start_date}</Text>
+                {route.params?.isSeason == true
+                    && <Text style={membershipStyle.txtDate}>{route?.params?.item?.start_date}</Text>
+                }
                 <View style={{ marginTop: 30 }}>
                     <Text style={[membershipStyle.txtDate, { fontSize: 14 }]}>Payment method</Text>
                     <Text style={[membershipStyle.txtDate, { fontSize: 15, color: constants.colors.black }]}>Credit Card</Text>
                 </View>
                 <View style={membershipStyle.border} />
                 {
-                    tempArr &&
-                    tempArr?.length > 0
-                    && tempArr.map((item, index) => {
-                        return (
-                            <View style={[commonStyle.row, { justifyContent: 'space-between', marginRight: 10, alignItems: 'center' }]}>
-                                <Text numberOfLines={1} style={[membershipStyle.txtDate, { width: widthPercentageToDP(route.params.isCart == true ? 70 : 80), fontSize: 15, color: constants.colors.black }]}>{item?.title} x 1</Text>
-                                <Text style={[membershipStyle.txtDate, { width: widthPercentageToDP(10), fontSize: 15, color: constants.colors.black }]}>${item?.price}</Text>
-                                {route.params.isCart == true &&
+                    route?.params?.item && route?.params?.item?.tournaments || route.params?.isLoggedIn == true ?
+                        <View style={[commonStyle.row, { justifyContent: 'space-between', marginRight: 10 }]}>
+                            <Text numberOfLines={1} style={[membershipStyle.txtDate, { width: widthPercentageToDP(route.params.isCart == true ? 70 : 80), fontSize: 15, color: constants.colors.black }]}>{route?.params?.item?.title} x 1</Text>
+                            <Text style={[membershipStyle.txtDate, { width: widthPercentageToDP(10), fontSize: 15, color: constants.colors.black }]}>${route?.params?.item?.price}</Text>
+                        </View>
+                        : membershipArr?.length > 0
+                        && membershipArr.map((item) => {
+                            console.log('what is itemmm', item);
+                            return (
+                                <View style={[commonStyle.row, { justifyContent: 'space-between', marginRight: 10 }]}>
+                                    <Text numberOfLines={1} style={[membershipStyle.txtDate, { width: widthPercentageToDP(70), fontSize: 15, color: constants.colors.black }]}>{item?.title} x 1</Text>
+                                    <Text style={[membershipStyle.txtDate, { width: widthPercentageToDP(10), fontSize: 15, color: constants.colors.black }]}>${item?.price}</Text>
                                     <TouchableOpacity
                                         onPress={() => {
-                                            if (tempArr.length != 1) {
-                                                tempArr.splice(index, 1)
-                                             setRender({})
-                                            } else {
-                                                tempArr.splice(index, 1)
-                                                AsyncStorage.removeItem('@membership')
+                                            deleteMembershipById(item?.tournament_id)
+                                            getMembershipDetails()
+                                            if (membershipArr.length == 1) {
                                                 navigation.goBack()
                                             }
-                                            setRender({})
                                         }}
                                         style={{ padding: 5, marginTop: -3 }}
                                     >
                                         <Image resizeMode="contain" style={{ height: widthPercentageToDP(4), width: widthPercentageToDP(4), tintColor: "red" }} source={constants.icons.delete} />
-                                        {/* <Text style={[membershipStyle.txtDate, { fontSize: 15, color: constants.colors.black }]}>-</Text> */}
                                     </TouchableOpacity>
-                                }
-                            </View>
-                        )
-                    })
-                }
-                {route.params?.isCart != true &&
-                    <View style={[commonStyle.row, { justifyContent: 'space-between', marginRight: 10, alignItems: 'center' }]}>
-                        {
-                            route.params?.item?.membership_type == 0 && <>
-                                <Text numberOfLines={1} style={[membershipStyle.txtDate, { width: widthPercentageToDP(route.params.isCart == true ? 70 : 80), fontSize: 15, color: constants.colors.black }]}>{route.params?.item?.title} x 1</Text>
-                                <Text style={[membershipStyle.txtDate, { width: widthPercentageToDP(10), fontSize: 15, color: constants.colors.black }]}>${route.params?.item?.price}</Text>
-                            </>}
-                        {route.params.isCart == true &&
-                            <TouchableOpacity
-                                onPress={() => {
-                                    if (tempArr.length != 1) {
-                                        tempArr.splice(index, 1)
-                                    } else {
-                                        // tempArr.splice(index, 1)
-                                        // let tempCartArr = []
-                                        // AsyncStorage.removeItem('@membership')
-                                        // navigation.goBack()
-                                    }
-                                    setRender({})
-                                }}
-                                style={{ padding: 5, marginTop: -3 }}
-                            >
-                                <Image resizeMode="contain" style={{ height: widthPercentageToDP(4), width: widthPercentageToDP(4), tintColor: "red" }} source={constants.icons.delete} />
-                                {/* <Text style={[membershipStyle.txtDate, { fontSize: 15, color: constants.colors.black }]}>-</Text> */}
-                            </TouchableOpacity>
-                        }
-                    </View>
-                }
-                {
-                    route?.params?.item && route?.params?.item?.tournaments &&
-                    <View style={[commonStyle.row, { justifyContent: 'space-between', marginRight: 10 }]}>
-                        <Text numberOfLines={1} style={[membershipStyle.txtDate, { width: widthPercentageToDP(route.params.isCart == true ? 70 : 80), fontSize: 15, color: constants.colors.black }]}>{route?.params?.item?.title} x 1</Text>
-                        <Text style={[membershipStyle.txtDate, { width: widthPercentageToDP(10), fontSize: 15, color: constants.colors.black }]}>${route?.params?.item?.price}</Text>
-                        <TouchableOpacity
-                            onPress={() => {
-                                // tempArr.splice(index)
-                            }}
-                        >
-                            {route.params.isCart == true && <Text style={[membershipStyle.txtDate, { fontSize: 15, color: constants.colors.black }]}>-</Text>}
-                        </TouchableOpacity>
-                    </View>
+                                </View>
+                            )
+                        })
                 }
                 {
                     route?.params?.item && route?.params?.item?.sub_title
@@ -182,11 +135,11 @@ const MemberShip = ({ route, navigation }) => {
                 <View style={membershipStyle.border} />
                 <View style={[commonStyle.row, { justifyContent: 'space-between', marginRight: 10 }]}>
                     <Text style={[membershipStyle.txtDate, { fontSize: 18, color: constants.colors.black, fontWeight: '700' }]}>Total</Text>
-                    <Text style={[membershipStyle.txtDate, { fontSize: 18, color: constants.colors.black, fontWeight: '700' }]}>${route?.params?.tournamentArr?.length > 0 ? route.params?.item ? totalPrice[tempArr?.length - 1] + route.params?.item?.price : totalPrice[tempArr?.length - 1] : route?.params?.item?.price}</Text>
+                    <Text style={[membershipStyle.txtDate, { fontSize: 18, color: constants.colors.black, fontWeight: '700' }]}>${route.params.isSeason == true||route.params?.isLoggedIn==true ? route.params?.item?.price : totalPrice[membershipArr?.length - 1]}</Text>
                 </View>
                 <Button
                     onPress={() => {
-                        navigation.navigate('Payment', { item: tempArr?.length > 0 ? [...route?.params?.tournamentArr, route?.params?.item] : route?.params.item, price: route?.params?.tournamentArr?.length > 0 ? route.params?.item ? totalPrice[tempArr?.length - 1] + route.params?.item?.price : totalPrice[tempArr?.length - 1] : route?.params?.item?.price })
+                        navigation.navigate('Payment', { item: membershipArr?.length > 0 ? membershipArr : route.params?.item?.tournaments?route.params?.item?.tournaments:route.params.item, price: membershipArr?.length > 0 ? totalPrice[membershipArr.length - 1] : route.params.item.price })
                     }
                     }
                     titleText={'Place Order'}

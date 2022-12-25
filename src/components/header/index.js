@@ -15,8 +15,6 @@ const Header = ({ title, subTitle, showBackArrow, titleStyle, onPressLeftIcon, s
     const [,setRender]=useState({})
     const notiState=store.getState()
 
-    console.log('dsdsds',notiState);
-
     const getNotification = async () => {
         const token = await AsyncStorage.getItem('@Token')
         utils.callApiGet(`api/v1/announcements/member`, { setIsLoading, setData,token })

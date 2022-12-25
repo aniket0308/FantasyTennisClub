@@ -7,6 +7,7 @@ import { utils } from "../../common";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
 import Loader from "../../components/loader";
+import { addTournamenrMembership, deleteAllMembership, getMembershipTournament } from "../../realm/realmOperations";
 import { checkAuthentication, logout } from "../../redux/slice/auth";
 import { store } from "../../redux/store";
 import membershipStyle from "../membership/style";
@@ -60,32 +61,8 @@ const BuyMemberShip = ({ navigation, route }) => {
     }
 
     const getMembershipDetails = async () => {
-        await AsyncStorage.getItem('@membership').then((data) => {
-            let cartData = JSON.parse(data)
-            console.log('', cartData);
-            if (data == null) {
-                while (tempArr?.length > 0) {
-                    tempArr.pop()
-                }
-                setMembershipArr([])
-            }
-
-            if (cartData?.length > 0) {
-                console.log(cartData);
-                tempArr = cartData
-                setMembershipArr(tempArr)
-            }
-            else {
-                console.log('what isss data', data);
-                tempArr.push(data)
-                let removedDuplicates = tempArr.filter((item, index) => {
-                    if (tempArr.indexOf(item) === index) {
-                        return item
-                    }
-                })
-                setMembershipArr(removedDuplicates)
-            }
-        })
+        let checkMembershipExist=await getMembershipTournament()
+        setMembershipArr(checkMembershipExist)
     }
 
     useEffect(() => {
@@ -106,26 +83,29 @@ const BuyMemberShip = ({ navigation, route }) => {
         return (
             <TouchableOpacity
                 onPress={async () => {
-                    let cartItem = await AsyncStorage.getItem('@cartItem')
-                    let parsedCartItem = JSON.parse(cartItem)
-                    console.log('cart ', parsedCartItem);
                     if (item?.membership_type == 1) {
-                        await AsyncStorage.removeItem('@membership')
-                        utils.navigateTo(navigation, constants.screens.membership, { item })
+                        deleteAllMembership()
+                        utils.navigateTo(navigation, item?.action == 'create_group' || item?.action == 'join_group' ? constants.screens.privateGroupDetails : constants.screens.membership,{isSeason :true,item})    
+                        // await AsyncStorage.removeItem('@membership')
+                        // utils.navigateTo(navigation, constants.screens.membership, { item })
                     }
                     else {
-                        let tempMembershipArr = membershipArr.map((i) => {
-                            return parseInt(i)
-                        })
-                        if (tempMembershipArr.includes(item?.tournament_id && item?.tournament_id) == true) {
-                            Alert.alert(
-                                "Fantasy Tennis Club",
-                                'membership Already Added',
-                            )
-                        }
-                        else {
-                            const intersection = memberShip.filter(element => tempMembershipArr.includes(element?.tournament_id));
-                            utils.navigateTo(navigation, item?.action == 'create_group' || item?.action == 'join_group' ? constants.screens.privateGroupDetails : constants.screens.membership, { item, tournamentArr: item?.action == 'create_group' || item?.action == 'join_group' ? '' : intersection})
+                        let checkMembershipExist=await getMembershipTournament()
+                        if(checkMembershipExist?.length>0){
+                            let FilteringMembership=checkMembershipExist.find(i=>i?.tournament_id==item?.tournament_id)
+                            if(FilteringMembership?.tournament_id==item?.tournament_id){
+                                Alert.alert(
+                                            "Fantasy Tennis Club",
+                                            'membership Already Added',
+                                        )
+                            }else{
+                                addTournamenrMembership(item)
+                                utils.navigateTo(navigation, item?.action == 'create_group' || item?.action == 'join_group' ? constants.screens.privateGroupDetails : constants.screens.membership,{isSeason :false})    
+                            }
+                            
+                        }else{
+                            addTournamenrMembership(item)
+                            utils.navigateTo(navigation, item?.action == 'create_group' || item?.action == 'join_group' ? constants.screens.privateGroupDetails : constants.screens.membership,{isSeason :false})    
                         }
                     }
                 }
@@ -158,8 +138,8 @@ const BuyMemberShip = ({ navigation, route }) => {
                         return parseInt(i)
                     })
                     const intersection = memberShip.filter(element => tempMembershipArr.includes(element?.tournament_id));
-                    if (intersection?.length > 0) {
-                        utils.navigateTo(navigation, constants.screens.membership, { tournamentArr: intersection, isCart: true })
+                    if (membershipArr?.length > 0) {
+                        utils.navigateTo(navigation, constants.screens.membership,{isSeason:false})
                     }
                 }}
             />
