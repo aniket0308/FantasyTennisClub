@@ -49,7 +49,7 @@ const StackInstideDashBoard = () => {
             <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="MyPicks" component={MyPicks} />
             <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="JoinWhatsApp" component={JoinWhatsApp} />
             <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Prizes" component={Prizes} />
-            <stack.Screen options={{ headerShown: false }} name="Consolation" component={Consolation} />
+            <stack.Screen options={{ headerShown: false , orientation: 'all'}} name="Consolation" component={Consolation} />
             <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Notifications" component={Notification} />
             <stack.Screen options={{ headerShown: false,orientation:'all' }} name="GroupLeaderBoard" component={GroupLeaderBoard} />
             <stack.Screen options={{ headerShown: false,orientation:'all' }} name="Leaderboard" component={LeaderBoard} />

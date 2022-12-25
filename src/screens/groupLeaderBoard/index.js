@@ -115,6 +115,7 @@ const GroupLeaderBoard = ({ route, navigation }) => {
                 <SearchBar
                     onChangeText={(searchResult) => setSearchResult(searchResult)}
                 />
+                <ScrollView bounces={false}>
                 {isLoading == true
                     ? <FlatList
                         horizontal={true}
@@ -127,8 +128,10 @@ const GroupLeaderBoard = ({ route, navigation }) => {
                         key={(item) => item}
                         keyExtractor={item => item}
                     />
-                    : <Loader />
+                    : <></>
                 }
+                </ScrollView>
+                {isLoading==false&&<Loader/>}
                 <TouchableOpacity onPress={() => utils.navigateTo(navigation, 'Consolation', 'Group Consolation')} style={groupLeaderBoardStyle.ViewConsolation}>
                     <Text style={groupLeaderBoardStyle.consolation}>Consolation</Text>
                 </TouchableOpacity>

@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { Alert, FlatList, Image, Platform, SafeAreaView, StatusBar, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, Image, Platform, SafeAreaView, ScrollView, StatusBar, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
@@ -20,8 +20,8 @@ const LeaderBoard = ({ route, navigation }) => {
 
     const getTournamentLeaderBoards = async () => {
         const tournamentId = await AsyncStorage.getItem('@TournamentId')
-        const token =await AsyncStorage.getItem('@Token')
-        utils.callApiGet(`api/v1/tournaments/${tournamentId}/leaderboard`, { setData, setIsLoading,navigation,token },'Leaderboard')
+        const token = await AsyncStorage.getItem('@Token')
+        utils.callApiGet(`api/v1/tournaments/${tournamentId}/leaderboard`, { setData, setIsLoading, navigation, token }, 'Leaderboard')
     }
 
     useEffect(() => {
@@ -58,8 +58,8 @@ const LeaderBoard = ({ route, navigation }) => {
                                             if (dataItem.member.toLowerCase().includes(searchResult)) {
                                                 return (
                                                     <Text
-                                                    numberOfLines={1}
-                                                        style={[leaderBoardStyle.txtScore, { marginLeft: headerItem == 'Contact' ? 0 : 10, fontWeight: dataItem?.highlight == true ? '900' : 'normal' ,maxWidth:'100%'}]}>
+                                                        numberOfLines={1}
+                                                        style={[leaderBoardStyle.txtScore, { marginLeft: headerItem == 'Contact' ? 0 : 10, fontWeight: dataItem?.highlight == true ? '900' : 'normal', maxWidth: '100%' }]}>
                                                         {
                                                             headerIndex == 0
                                                                 ? dataItem.member
@@ -72,17 +72,17 @@ const LeaderBoard = ({ route, navigation }) => {
                                             }
                                         } else {
                                             return (
-                                                <Text
-                                                numberOfLines={1}
-                                                    style={[leaderBoardStyle.txtScore, { marginLeft: headerItem == 'Contact' ? 0 : 10, fontWeight: dataItem?.highlight == true ? '900' : 'normal',maxWidth:'100%' }]}>
-                                                    {
-                                                        headerIndex == 0
-                                                            ? dataItem.member
-                                                            : headerIndex == 1
-                                                                ? dataItem.total
-                                                                : dataItem.days_point[(headerIndex - 2).toString()]
-                                                    }
-                                                </Text>
+                                                    <Text
+                                                        numberOfLines={1}
+                                                        style={[leaderBoardStyle.txtScore, { marginLeft: headerItem == 'Contact' ? 0 : 10, fontWeight: dataItem?.highlight == true ? '900' : 'normal', maxWidth: '100%' }]}>
+                                                        {
+                                                            headerIndex == 0
+                                                                ? dataItem.member
+                                                                : headerIndex == 1
+                                                                    ? dataItem.total
+                                                                    : dataItem.days_point[(headerIndex - 2).toString()]
+                                                        }
+                                                    </Text>
                                             )
                                         }
                                     })
@@ -98,7 +98,7 @@ const LeaderBoard = ({ route, navigation }) => {
     return (
         <>
             <View style={leaderBoardStyle.mainContainer}>
-            <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />
+                <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />
                 <SafeAreaView />
                 <Header
                     showBackArrow={true}
@@ -119,21 +119,25 @@ const LeaderBoard = ({ route, navigation }) => {
                 <SearchBar
                     onChangeText={(searchResult) => setSearchResult(searchResult)}
                 />
-                {isLoading == true
-                    ? <FlatList
-                        horizontal={true}
-                        scrollEnabled={true}
-                        bounces={false}
-                        data={[data]}
-                        directionalLockEnabled={false}
-                        contentContainerStyle={{ flexDirection: 'row' }}
-                        style={{ flexDirection: 'row', marginHorizontal: 10, marginTop: 10 }}
-                        renderItem={leaderBoard}
-                        key={(item) => item}
-                        keyExtractor={item => item}
-                    />
-                    : <Loader />
-                }
+                <ScrollView bounces={false}>
+                    {isLoading == true
+                        ? <FlatList
+                            horizontal={true}
+                            scrollEnabled={true}
+                            bounces={false}
+                            data={[data]}
+                            directionalLockEnabled={true}
+                            contentContainerStyle={{ flexDirection: 'row' }}
+                            style={{ flexDirection: 'row', marginHorizontal: 10, marginTop: 10 }}
+                            renderItem={leaderBoard}
+                            key={(item) => item}
+                            keyExtractor={item => item}
+
+                        />
+                        : <></>
+                    }
+                </ScrollView>
+                {isLoading==false&&<Loader />}
                 <TouchableOpacity onPress={() => utils.navigateTo(navigation, 'Consolation', 'Consolation')} style={leaderBoardStyle.ViewConsolation}>
                     <Text style={leaderBoardStyle.consolation}>Consolation</Text>
                 </TouchableOpacity>

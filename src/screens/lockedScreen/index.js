@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { Alert, FlatList, Image, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { useDispatch } from "react-redux";
 import { utils } from "../../common";
 import { constants } from "../../common/constant";
@@ -102,6 +102,7 @@ const LockedScreen = ({ navigation, route }) => {
                 <SearchBar
                     onChangeText={(searchResult) => setSearchResult(searchResult)}
                 />
+                <ScrollView bounces={false}>
                 {isLoading == true
                     ? <FlatList
                         horizontal={true}
@@ -114,8 +115,10 @@ const LockedScreen = ({ navigation, route }) => {
                         key={(item) => item}
                         keyExtractor={item => item}
                     />
-                    : <Loader />
+                    : <></>
                 }
+                </ScrollView>
+                {isLoading==false&&<Loader/>}
             </View>
         </View>
     )

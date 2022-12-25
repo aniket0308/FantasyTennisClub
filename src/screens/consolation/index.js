@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { Alert, FlatList, RefreshControl, SafeAreaView, Text, View } from "react-native";
+import { Alert, FlatList, RefreshControl, SafeAreaView, ScrollView, Text, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
@@ -171,6 +171,7 @@ const Consolation = ({ route, navigation }) => {
                 <SearchBar
                     onChangeText={(searchResult) => setSearchResult(searchResult)}
                 />
+                <ScrollView bounces={false}>
                 {isLoading == true
                     ? <FlatList
                         refreshControl={
@@ -197,8 +198,10 @@ const Consolation = ({ route, navigation }) => {
                         key={(item) => item}
                         keyExtractor={item => item}
                     />
-                    : <Loader />
+                    : <></>
                 }
+                </ScrollView>
+                {isLoading==false&& <Loader />}
                 <View style={consolationStyle.ViewConsolation}>
                     {/* <Text style={consolationStyle.consolation}>Consolation</Text> */}
                 </View>

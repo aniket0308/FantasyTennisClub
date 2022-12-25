@@ -244,7 +244,7 @@ export const callApiGet = async (path, payload, type) => {
             if (type == 'Leaderboard' && json.error == true) {
                 Alert.alert(
                     "Fantasy Tennis Club",
-                    'Leaderboard is not generated yet.',
+                    json.message,
                     [
                         { text: "OK", onPress: () => payload?.navigation.goBack() }
                     ]
