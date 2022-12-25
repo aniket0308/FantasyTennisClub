@@ -33,13 +33,17 @@ const MemberShip = ({ route, navigation }) => {
                     title={'Membership Cart'}
                     titleStyle={{ marginTop: 5, marginBottom: -10 }}
                     onPressLeftIcon={async () => {
-                        if (tempArr?.length > 0) {
-                            let tempCartArr = tempArr.map((i) => {
-                                return i.tournament_id
-                            })
-                            AsyncStorage.setItem('@membership', JSON.stringify(tempCartArr))
+                        if (route?.params?.item?.membership_type == 0) {
+                            await AsyncStorage.setItem('@membership', JSON.stringify(route.params?.item?.tournament_id))
+                            navigation.goBack()
                         }
-                        navigation.goBack()
+                        // if (tempArr?.length > 0) {
+                        //     let tempCartArr = tempArr.map((i) => {
+                        //         return i.tournament_id
+                        //     })
+                        //     AsyncStorage.setItem('@membership', JSON.stringify(tempCartArr))
+                        // }
+                        // navigation.goBack()
                     }}
                 />
                 {route?.params?.isCart != true && route.params?.isLoggedIn != true
