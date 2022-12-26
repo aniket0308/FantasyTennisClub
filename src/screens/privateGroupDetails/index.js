@@ -107,11 +107,15 @@ const PrivateGroupDetails = ({ route, navigation }) => {
             <SafeAreaView style={{ backgroundColor: constants.colors.backGroundLight }} />
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <TouchableOpacity onPress={() => {
-                    if (organizeGrp==true) {
-                        setOrganizeGrp(false)
-                        setRender({})
-                    } else {
+
+                    if(route.params?.goBackUrgent==true){
                         navigation.goBack()
+                    }else{
+                        if (organizeGrp==true ) {
+                            setOrganizeGrp(false)
+                        } else {
+                            navigation.goBack()
+                        }
                     }
                 }} style={{ padding: 5, marginTop: 10 }}>
                     <Image style={{ height: 20, width: 20, tintColor: constants.colors.darkGreen }} source={constants.icons.backArrow} />

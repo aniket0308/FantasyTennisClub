@@ -61,7 +61,7 @@ const BuyMemberShip = ({ navigation, route }) => {
     }
 
     const getMembershipDetails = async () => {
-        let checkMembershipExist=await getMembershipTournament()
+        let checkMembershipExist = await getMembershipTournament()
         setMembershipArr(checkMembershipExist)
     }
 
@@ -83,29 +83,31 @@ const BuyMemberShip = ({ navigation, route }) => {
         return (
             <TouchableOpacity
                 onPress={async () => {
-                    if (item?.membership_type == 1) {
+
+                    if(item?.action == 'create_group' || item?.action == 'join_group'){
+                        utils.navigateTo(navigation, constants.screens.privateGroupDetails, { goBackUrgent:item?.action == 'create_group'?true:false,item })
+                    }
+                    else if (item?.membership_type == 1) {
                         deleteAllMembership()
-                        utils.navigateTo(navigation, item?.action == 'create_group' || item?.action == 'join_group' ? constants.screens.privateGroupDetails : constants.screens.membership,{isSeason :true,item})    
-                        // await AsyncStorage.removeItem('@membership')
-                        // utils.navigateTo(navigation, constants.screens.membership, { item })
+                        utils.navigateTo(navigation, item?.action == 'create_group' || item?.action == 'join_group' ? constants.screens.privateGroupDetails : constants.screens.membership, { isSeason: true, item })
                     }
                     else {
-                        let checkMembershipExist=await getMembershipTournament()
-                        if(checkMembershipExist?.length>0){
-                            let FilteringMembership=checkMembershipExist.find(i=>i?.tournament_id==item?.tournament_id)
-                            if(FilteringMembership?.tournament_id==item?.tournament_id){
+                        let checkMembershipExist = await getMembershipTournament()
+                        if (checkMembershipExist?.length > 0) {
+                            let FilteringMembership = checkMembershipExist.find(i => i?.tournament_id == item?.tournament_id)
+                            if (FilteringMembership?.tournament_id == item?.tournament_id) {
                                 Alert.alert(
-                                            "Fantasy Tennis Club",
-                                            'membership Already Added',
-                                        )
-                            }else{
+                                    "Fantasy Tennis Club",
+                                    'membership Already Added',
+                                )
+                            } else {
                                 addTournamenrMembership(item)
-                                utils.navigateTo(navigation, item?.action == 'create_group' || item?.action == 'join_group' ? constants.screens.privateGroupDetails : constants.screens.membership,{isSeason :false})    
+                                utils.navigateTo(navigation, item?.action == 'create_group' || item?.action == 'join_group' ? constants.screens.privateGroupDetails : constants.screens.membership, { isSeason: false })
                             }
-                            
-                        }else{
+
+                        } else {
                             addTournamenrMembership(item)
-                            utils.navigateTo(navigation, item?.action == 'create_group' || item?.action == 'join_group' ? constants.screens.privateGroupDetails : constants.screens.membership,{isSeason :false})    
+                            utils.navigateTo(navigation, item?.action == 'create_group' || item?.action == 'join_group' ? constants.screens.privateGroupDetails : constants.screens.membership, { isSeason: false })
                         }
                     }
                 }
@@ -137,9 +139,8 @@ const BuyMemberShip = ({ navigation, route }) => {
                     let tempMembershipArr = membershipArr.map((i) => {
                         return parseInt(i)
                     })
-                    const intersection = memberShip.filter(element => tempMembershipArr.includes(element?.tournament_id));
                     if (membershipArr?.length > 0) {
-                        utils.navigateTo(navigation, constants.screens.membership,{isSeason:false})
+                        utils.navigateTo(navigation, constants.screens.membership, { isSeason: false })
                     }
                 }}
             />
