@@ -66,7 +66,7 @@ const MyMembership = ({ navigation, route }) => {
                                     titleStyle={membershipStyle.titleStyle}
                                     onPress={() => {
                                         item?.action == 'join_group'
-                                            ? navigation.navigate(constants.screens.privateGroupDetails, { item, isLoggedIn: true })
+                                            ?item?.is_paid == false&& navigation.navigate(constants.screens.privateGroupDetails, { item, isLoggedIn: true })
                                             : route?.params == false && item?.is_paid == false && utils.navigateTo(navigation, constants.screens.membership, { item, isLoggedIn: true })
                                     }}
                                 />

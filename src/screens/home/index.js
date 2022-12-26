@@ -13,12 +13,13 @@ import PushNotificationIOS from "@react-native-community/push-notification-ios";
 import PushNotificationService from "../../pushNotification/pushNotification";
 import { checkAuthentication } from "../../redux/slice/auth";
 import { store } from "../../redux/store";
+import Loader from "../../components/loader";
 
 //Home Screen
 const Home = ({ navigation }) => {
 
     const [isLoading, setIsLoading] = useState(false)
-    const [isMembership, setIsMembership] = useState(false)
+    const [isMembership, setIsMembership] = useState()
     const [data, setData] = useState()
 
     const getNotification = async () => {
@@ -41,8 +42,8 @@ const Home = ({ navigation }) => {
                 // (required) Called when a remote is received or opened, or local notification is opened
                 onNotification: async function (notification) {
                     getNotification()
-                    console.log("NOTIFICATION:sss", notification ,'what is data',JSON.stringify(data));
-
+                    // console.log("NOTIFICATION:sss", notification);
+                    // utils.callApi(`api/v1/announcements/read/${item?.id}`,{token})
                     // PushNotificationIOS.getApplicationIconBadgeNumber((n)=>{
                     //     console.log('PushNotificationIOS.getApplicationIconBadgeNumber()',n)
                     //     PushNotificationIOS.setApplicationIconBadgeNumber(n)
@@ -50,6 +51,7 @@ const Home = ({ navigation }) => {
                     // process the notification
                     // Handle notification click
                     if (notification.userInteraction == true) {
+                        console.log("NOTIFICATION:sss", notification);
                         if(data?.data?.notifications!=undefined||data?.data?.notifications?.length>0||data!=undefined||data?.data?.notifications!='')
                     {
                         data?.data?.notifications.map((i)=>{
@@ -116,7 +118,6 @@ const Home = ({ navigation }) => {
         const notification = new PushNotificationService()
         configure()
         notification.createChannel()
-        checkMemberShip()
         setTimeout(() => {
             SplashScreen.hide();
         }, 1000)
@@ -151,10 +152,10 @@ const Home = ({ navigation }) => {
             }).
             then((json) => {
                 if (json.success == true) {
-                    setIsLoading(true)
                     store.dispatch(checkAuthentication({ data: json.data, token, isRegisteredFirstTime: false }))
                 }
-                setIsMembership(json?.data?.is_member)
+                setIsLoading(false)
+                utils.navigateTo(navigation, json?.data?.is_member == true ? 'Dashboard' : 'MyMembership')
             }).
             catch(e => {
                 // Snackbar.show({
@@ -184,12 +185,14 @@ const Home = ({ navigation }) => {
                 <TouchableOpacity
                     disabled={isLoading == false ? true : false}
                     onPress={() => {
-                        utils.navigateTo(navigation, isMembership == true ? 'Dashboard' : 'MyMembership')
+                        setIsLoading(true)
+                        checkMemberShip()
                     }}
                     activeOpacity={1}
                     style={homeStyle.tennisBall}>
                     <Image resizeMode="contain" style={{ height: widthPercentageToDP(15), width: widthPercentageToDP(15) }} source={constants.icons.tennisBall} />
                 </TouchableOpacity>
+                {isLoading==false&&<Loader/>}
             </View>
         </>
     )
