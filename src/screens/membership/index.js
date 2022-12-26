@@ -139,7 +139,7 @@ const MemberShip = ({ route, navigation }) => {
                 </View>
                 <Button
                     onPress={() => {
-                        navigation.navigate('Payment', { item: membershipArr?.length > 0 ? membershipArr : route.params?.item?.tournaments?route.params?.item?.tournaments:route.params.item, price: membershipArr?.length > 0 ? totalPrice[membershipArr.length - 1] : route.params.item.price })
+                        navigation.navigate('Payment', { item: membershipArr?.length > 0 ? membershipArr : route.params.item, price: membershipArr?.length > 0 ? totalPrice[membershipArr.length - 1] : route.params.item.price })
                     }
                     }
                     titleText={'Place Order'}

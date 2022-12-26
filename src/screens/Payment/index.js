@@ -29,7 +29,7 @@ const Payment = ({ route, navigation }) => {
     const tempObj = route?.params?.item
     const price = route?.params?.price
 
-    const tournamentIdArr = tempObj?.length > 0 ? tempObj.map((item, index) => {
+    const tournamentIdArr = tempObj?.tournaments?.length > 0 ? tempObj?.tournaments.map((item, index) => {
         return item.tournament_id
     }) : tempObj?.length > 0 ? tempObj.map((item) => {
         return item?.tournament_id

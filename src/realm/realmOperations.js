@@ -4,7 +4,6 @@ import { MembershipTournament, realm } from "./schema";
 export const openRealm = async () => {
     try {
         const realm = await Realm.open({
-            path: "realm-files/myrealm",
             schema: [MembershipTournament],
         });
         return realm
