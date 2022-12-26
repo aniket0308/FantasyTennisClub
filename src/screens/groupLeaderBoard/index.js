@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { Alert, FlatList, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
@@ -115,7 +115,7 @@ const GroupLeaderBoard = ({ route, navigation }) => {
                 <SearchBar
                     onChangeText={(searchResult) => setSearchResult(searchResult)}
                 />
-                <ScrollView bounces={false}>
+                <ScrollView style={{marginBottom:25}} bounces={false}>
                 {isLoading == true
                     ? <FlatList
                         horizontal={true}

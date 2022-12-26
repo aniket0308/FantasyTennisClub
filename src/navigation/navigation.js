@@ -65,7 +65,7 @@ const StackInstideSelectionDay = () => {
             <stack.Screen options={{ headerShown: false }} name="SelectionDays" component={SelectionDays} />
             <stack.Screen options={{ headerShown: false }} name="DayPick" component={DayPick} />
             <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Notifications" component={Notification} />
-            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="LockedScreen" component={LockedScreen} />
+            <stack.Screen options={{ headerShown: false, orientation: 'all' }} name="LockedScreen" component={LockedScreen} />
         </stack.Navigator>
     )
 }

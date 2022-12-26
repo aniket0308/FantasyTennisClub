@@ -119,7 +119,7 @@ const LeaderBoard = ({ route, navigation }) => {
                 <SearchBar
                     onChangeText={(searchResult) => setSearchResult(searchResult)}
                 />
-                <ScrollView bounces={false}>
+                <ScrollView style={{marginBottom:25}} bounces={false}>
                     {isLoading == true
                         ? <FlatList
                             horizontal={true}

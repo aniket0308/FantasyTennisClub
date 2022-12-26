@@ -22,7 +22,7 @@ const DayPick = ({ route, navigation }) => {
     const [objects, setObjects] = useState({})
     const [days, setDays] = useState()
     const dispatch = useDispatch()
-    const particularDay = days?.data?.days?.find(item => route?.params == item?.id)
+    const particularDay = days?.data?.days?.find(item => route?.params?.item?.id == item?.id)
     if (objects != undefined) {
         Object.keys(objects).forEach(key => {
             if (objects[key] === undefined) {

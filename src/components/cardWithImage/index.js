@@ -4,7 +4,7 @@ import cardWithImageStyle from "./style"
 
 const CardWithImage = ({ title, containerStyle, titleStyle, imgStyle, rightIcon, label, labelTitle, labelStyle, onPress, disabled }) => {
     return (
-        <TouchableOpacity disabled={disabled} onPress={onPress} style={[cardWithImageStyle.mainContainer, containerStyle]}>
+        <TouchableOpacity activeOpacity={1} disabled={disabled} onPress={onPress} style={[cardWithImageStyle.mainContainer, containerStyle]}>
             {
                 label
                 && <View>

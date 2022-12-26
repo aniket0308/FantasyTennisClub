@@ -82,7 +82,7 @@ const SelectionDays = ({ route, navigation }) => {
                                                         : constants.screens.myPicks,
                                                     item?.is_lock_form == 1
                                                         ? { item, tournament_day: item?.id }
-                                                        : item?.id)
+                                                        : {item})
                                         }
                                         style={[
                                             selectionDayStyle.touchItem,

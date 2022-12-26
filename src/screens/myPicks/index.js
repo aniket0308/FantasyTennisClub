@@ -18,8 +18,10 @@ const MyPicks = ({ route, navigation }) => {
     const dispatch = useDispatch()
 
     const particularDayPick = data?.data?.days.find((i) => {
-        if (route?.params?.item ? route.params?.item?.id : route?.params == i.id) {
-            return i
+        if (route?.params?.item) {
+            if(route.params?.item?.id==i?.id){
+                return i
+            }
         }
     })
 
