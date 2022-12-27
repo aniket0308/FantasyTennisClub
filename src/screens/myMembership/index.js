@@ -32,6 +32,8 @@ const MyMembership = ({ navigation, route }) => {
         getAllMemberShips()
     }, [])
 
+    console.log(route.params);
+
     return (
         <View style={myMembershipStyle.mainContainer}>
             <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />
@@ -41,7 +43,7 @@ const MyMembership = ({ navigation, route }) => {
                 titleStyle={{ marginTop: 5, marginBottom: -3 }}
                 title={'My Memberships'}
                 mainViewHeaderStyle={{ paddingHorizontal: 10 }}
-                showBackArrow={true}
+                showBackArrow={route?.params!=undefined?true:false}
                 onPressLeftIcon={() => navigation.goBack()}
             />
             <ScrollView showsVerticalScrollIndicator={false} bounces={false} style={{ marginBottom: 20 }}>

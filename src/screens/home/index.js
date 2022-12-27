@@ -21,6 +21,7 @@ const Home = ({ navigation }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [isMembership, setIsMembership] = useState()
     const [data, setData] = useState()
+    const [,setRender]=useState({})
 
     const getNotification = async () => {
         const token = await AsyncStorage.getItem('@Token')
@@ -28,8 +29,14 @@ const Home = ({ navigation }) => {
     }
 
     useEffect(()=>{
-        getNotification()
+        // getNotification()
+        setRender({})
     },[])
+
+    useEffect(()=>{
+        setRender({})
+        setIsLoading(false)
+    },[navigation])
 
     const configure = () => {
         try {
@@ -154,8 +161,8 @@ const Home = ({ navigation }) => {
                 if (json.success == true) {
                     store.dispatch(checkAuthentication({ data: json.data, token, isRegisteredFirstTime: false }))
                 }
-                setIsLoading(false)
                 utils.navigateTo(navigation, json?.data?.is_member == true ? 'Dashboard' : 'MyMembership')
+                setIsLoading(false)
             }).
             catch(e => {
                 // Snackbar.show({
@@ -183,7 +190,7 @@ const Home = ({ navigation }) => {
                 <Text style={homeStyle.textTapEnter}>tap here to enter</Text>
                 <Image source={constants.icons.downArrow} style={{ height: widthPercentageToDP(20) }} resizeMode='contain' />
                 <TouchableOpacity
-                    disabled={isLoading == false ? true : false}
+                    disabled={isLoading == false ? false : true}
                     onPress={() => {
                         setIsLoading(true)
                         checkMemberShip()
@@ -192,7 +199,7 @@ const Home = ({ navigation }) => {
                     style={homeStyle.tennisBall}>
                     <Image resizeMode="contain" style={{ height: widthPercentageToDP(15), width: widthPercentageToDP(15) }} source={constants.icons.tennisBall} />
                 </TouchableOpacity>
-                {isLoading==false&&<Loader/>}
+                {isLoading==true&&<Loader/>}
             </View>
         </>
     )
