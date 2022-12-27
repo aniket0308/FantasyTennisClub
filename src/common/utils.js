@@ -10,18 +10,21 @@ import { store } from "../redux/store";
 
 //Storing Data In Local Storage
 const storeData = async (payload, isLogin) => {
+    console.log('Store data Payload', payload);
     try {
         if (isLogin == true) {
             await AsyncStorage.mergeItem('@Token', payload.token),
                 await AsyncStorage.mergeItem('@Name', payload.name),
                 await AsyncStorage.mergeItem('@Email', payload.email),
                 await AsyncStorage.mergeItem('@MobileNumber', payload.mobile_number)
+            await AsyncStorage.setItem('@userId', payload.id.toString())
         } else {
             await AsyncStorage.setItem('@Name', payload?.name),
                 await AsyncStorage.setItem('@Token', payload?.token),
                 await AsyncStorage.setItem('@Email', payload?.email),
                 await AsyncStorage.setItem('@MobileNumber', payload?.mobile_number)
             await AsyncStorage.setItem('@registerFirstTime', 'true')
+            await AsyncStorage.mergeItem('@userId', payload.id.toString())
 
         }
     } catch (e) {
@@ -99,7 +102,7 @@ export const callApi = (path, payload, type, dispatch) => {
                         storeData(json.data, false)
                         const value = await AsyncStorage.getItem('@Token')
                         const isRegisteredFirstTime = await AsyncStorage.getItem('@RegisterFirstTIme')
-                        console.log('isRegisteredFirstTime  isRegisteredFirstTime', isRegisteredFirstTime,value);
+                        console.log('isRegisteredFirstTime  isRegisteredFirstTime', isRegisteredFirstTime, value);
                         store.dispatch(registerAuthentication({ data: json?.data, token: json?.data?.token, isRegisteredFirstTime }))
                         // store.dispatch(checkAuthentication({ data: json?.data, token: json?.data?.token, isRegisteredFirstTime }))
                     }
@@ -147,6 +150,9 @@ export const callApi = (path, payload, type, dispatch) => {
                     Alert.alert(
                         "Fantasy Tennis Club",
                         json?.message,
+                        [
+                            { text: "OK", onPress: () =>type == 'privateGroup'?utils.navigateTo(payload.navigation, constants.screens.home):'' }
+                        ]
                     )
                 }
                 else if (type == 'PaymentCapture') {
@@ -158,7 +164,7 @@ export const callApi = (path, payload, type, dispatch) => {
                         utils.navigateTo(payload.navigation, constants.screens.dashBoard)
                     }
                 }
-            }else if(type == 'organizePrivateGroup' && json.error == false){
+            } else if (type == 'organizePrivateGroup' && json.error == false) {
                 Alert.alert(
                     "Fantasy Tennis Club",
                     json?.message,
@@ -202,6 +208,7 @@ export const callApi = (path, payload, type, dispatch) => {
 
 //calling apis for get
 export const callApiGet = async (path, payload, type) => {
+    console.log('what is payyload', payload);
     const urlPath = `${URL}${path}`
     try {
         fetch(urlPath, {
@@ -238,7 +245,7 @@ export const callApiGet = async (path, payload, type) => {
             if (payload.setFaq) {
                 payload.setFaq(json)
             }
-            if(payload.setRender){
+            if (payload.setRender) {
                 payload.setRender({})
             }
             if (type == 'Leaderboard' && json.error == true) {
@@ -250,7 +257,9 @@ export const callApiGet = async (path, payload, type) => {
                     ]
                 );
             }
-            payload.setIsLoading(true)
+            if (payload.setIsLoading != undefined) {
+                payload.setIsLoading(true)
+            }
             return json
         }).catch(e => {
             Snackbar.show({

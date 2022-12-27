@@ -12,7 +12,7 @@ import { constants } from "../../common/constant";
 import { Button, FloatingInput, Header } from "../../components";
 import CardWithImage from "../../components/cardWithImage";
 import Loader from "../../components/loader";
-import { checkAuthentication, joinPrivateGroup, oganizePrivateGroup } from "../../redux/slice/auth";
+import { checkAuthentication, joinPrivateGroup, logout, oganizePrivateGroup } from "../../redux/slice/auth";
 import { isLoaderNotVisibleProfile, isLoaderVisibleProfile } from "../../redux/slice/profile";
 import { store } from "../../redux/store";
 import privateGroupDetailsStyle from "./style";
@@ -50,7 +50,7 @@ const PrivateGroupDetails = ({ route, navigation }) => {
     const getAllMemberShips = async () => {
         const token = await AsyncStorage.getItem('@Token')
         //calling api for Membership
-        fetch('https://fantasytennisclub.com/admin/api/v1/membership/all', {
+        fetch('https://fantasytennisclub.com/admin/api/v1/list-tournaments', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -228,6 +228,7 @@ const PrivateGroupDetails = ({ route, navigation }) => {
                             group_name: groupFullName,
                             clearAllData: clearAllData,
                             token: await AsyncStorage.getItem('@Token'),
+                            navigation
                         }
                         //calling Api For Joining Private Group
                         utils.callApi('api/v1/private-group/join-private-group', privateGroupObj, 'privateGroup', dispatch)
