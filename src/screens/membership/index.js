@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
-import { useDispatch, useSelector } from "react-redux";
 import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
 import { Button, Header } from "../../components";
@@ -82,25 +81,24 @@ const MemberShip = ({ route, navigation }) => {
                         </View>
                         : membershipArr?.length > 0
                         && membershipArr.map((item) => {
-                            console.log('what is itemmm', item);
-                            return (
-                                <View style={[commonStyle.row, { justifyContent: 'space-between', marginRight: 10 }]}>
-                                    <Text numberOfLines={1} style={[membershipStyle.txtDate, { width: widthPercentageToDP(70), fontSize: 15, color: constants.colors.black }]}>{item?.title} x 1</Text>
-                                    <Text style={[membershipStyle.txtDate, { width: widthPercentageToDP(10), fontSize: 15, color: constants.colors.black }]}>${item?.price}</Text>
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            deleteMembershipById(item?.tournament_id)
-                                            getMembershipDetails()
-                                            if (membershipArr.length == 1) {
-                                                navigation.goBack()
-                                            }
-                                        }}
-                                        style={{ padding: 5, marginTop: -3 }}
-                                    >
-                                        <Image resizeMode="contain" style={{ height: widthPercentageToDP(4), width: widthPercentageToDP(4), tintColor: "red" }} source={constants.icons.delete} />
-                                    </TouchableOpacity>
-                                </View>
-                            )
+                                return (
+                                    <View style={[commonStyle.row, { justifyContent: 'space-between', marginRight: 10 }]}>
+                                        <Text numberOfLines={1} style={[membershipStyle.txtDate, { width: widthPercentageToDP(70), fontSize: 15, color: constants.colors.black }]}>{item?.title} x 1</Text>
+                                        <Text style={[membershipStyle.txtDate, { width: widthPercentageToDP(10), fontSize: 15, color: constants.colors.black }]}>${item?.price}</Text>
+                                        <TouchableOpacity
+                                            onPress={() => {
+                                                deleteMembershipById(item?.tournament_id)
+                                                getMembershipDetails()
+                                                if (membershipArr.length == 1) {
+                                                    navigation.goBack()
+                                                }
+                                            }}
+                                            style={{ padding: 5, marginTop: -3 }}
+                                        >
+                                            <Image resizeMode="contain" style={{ height: widthPercentageToDP(4), width: widthPercentageToDP(4), tintColor: "red" }} source={constants.icons.delete} />
+                                        </TouchableOpacity>
+                                    </View>
+                                )
                         })
                 }
                 {
@@ -135,7 +133,7 @@ const MemberShip = ({ route, navigation }) => {
                 <View style={membershipStyle.border} />
                 <View style={[commonStyle.row, { justifyContent: 'space-between', marginRight: 10 }]}>
                     <Text style={[membershipStyle.txtDate, { fontSize: 18, color: constants.colors.black, fontWeight: '700' }]}>Total</Text>
-                    <Text style={[membershipStyle.txtDate, { fontSize: 18, color: constants.colors.black, fontWeight: '700' }]}>${route.params.isSeason == true||route.params?.isLoggedIn==true ? route.params?.item?.price : totalPrice[membershipArr?.length - 1]}</Text>
+                    <Text style={[membershipStyle.txtDate, { fontSize: 18, color: constants.colors.black, fontWeight: '700' }]}>${route.params.isSeason == true || route.params?.isLoggedIn == true ? route.params?.item?.price : totalPrice[membershipArr?.length - 1]}</Text>
                 </View>
                 <Button
                     onPress={() => {

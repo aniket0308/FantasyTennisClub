@@ -35,6 +35,12 @@ const BuyMemberShip = ({ navigation, route }) => {
         }).
             then(async (response) => {
                 if (response.status == 401) {
+                    // const keys = await AsyncStorage.getAllKeys()
+                    // const cacheKeys = keys.filter(k => k.indexOf('CACHE.KEY.') !== -1)
+                    // console.log('what are cache keys',cacheKeys);
+                    // if (cacheKeys.length) {
+                    //     await AsyncStorage.multiRemove(cacheKeys)
+                    // }
                     await AsyncStorage.clear()
                     store.dispatch(logout())
                 }
@@ -56,7 +62,7 @@ const BuyMemberShip = ({ navigation, route }) => {
                 // });
                 setRefresh(false)
                 setIsLoading(false)
-                console.log('What Is Error In Get Api', e)
+                console.log('What Is Error In Getfdfdf Api', e)
             })
     }
 
@@ -84,8 +90,8 @@ const BuyMemberShip = ({ navigation, route }) => {
             <TouchableOpacity
                 onPress={async () => {
 
-                    if(item?.action == 'create_group' || item?.action == 'join_group'){
-                        utils.navigateTo(navigation, constants.screens.privateGroupDetails, { goBackUrgent:item?.action == 'create_group'?true:false,item })
+                    if (item?.action == 'create_group' || item?.action == 'join_group') {
+                        utils.navigateTo(navigation, constants.screens.privateGroupDetails, { goBackUrgent: item?.action == 'create_group' ? true : false, item })
                     }
                     else if (item?.membership_type == 1) {
                         deleteAllMembership()
@@ -93,9 +99,15 @@ const BuyMemberShip = ({ navigation, route }) => {
                     }
                     else {
                         let checkMembershipExist = await getMembershipTournament()
+                        const userId = await AsyncStorage.getItem('@userId')
                         if (checkMembershipExist?.length > 0) {
-                            let FilteringMembership = checkMembershipExist.find(i => i?.tournament_id == item?.tournament_id)
-                            if (FilteringMembership?.tournament_id == item?.tournament_id) {
+                            let FilteringMembership = checkMembershipExist.find((i) => {
+                                if(item?.tournament_id==i?.tournament_id&&i?.userId==userId){
+                                    console.log(item?.tournament_id==i?.tournament_id);
+                                    return item
+                                }
+                            })
+                            if (FilteringMembership?.tournament_id == item?.tournament_id&&FilteringMembership?.userId==userId) {
                                 Alert.alert(
                                     "Fantasy Tennis Club",
                                     'membership Already Added',

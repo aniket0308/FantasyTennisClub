@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Realm from "realm";
 import { MembershipTournament, realm } from "./schema";
 
@@ -16,8 +17,10 @@ export const addTournamenrMembership = async(payload) => {
     console.log('what is payload',payload);
     try {
         const realm=await openRealm()
+        const userId=await AsyncStorage.getItem('@userId')
         realm.write(() => {
             realm.create('membershipTournament', {
+                membership_id:new Date(Date.now()).toString(),
                 tournament_id:payload?.tournament_id,
                 end_date: payload?.end_date,
                 tournament: payload?.tournament,
@@ -25,6 +28,7 @@ export const addTournamenrMembership = async(payload) => {
                 price: payload?.price,
                 sub_title: payload?.sub_title,
                 title: payload?.title,
+                userId:userId.toString()
             })
         })
 
@@ -36,9 +40,17 @@ export const addTournamenrMembership = async(payload) => {
 export const getMembershipTournament=async()=>{
     try {
         const realm=await openRealm()
+        const userId=await AsyncStorage.getItem('@userId')
         const allMembership= realm.objects('membershipTournament')
-        console.log('Data Added Successfully!!',allMembership);
-        return allMembership
+        console.log('Data Added Successfully!!:::::::::',allMembership);
+        const filterData=allMembership.filter((i)=>{
+            console.log(i.userId==userId.toString(),'fdfdfdfdfdfdf');
+            if(i.userId==userId.toString()){
+                console.log('membership in true');
+                return i
+            }
+        })
+        return filterData
     }catch(error){
         console.log('Error in fetching data',error);
     }
@@ -47,10 +59,13 @@ export const getMembershipTournament=async()=>{
 export const deleteAllMembership=async()=>{
     try {
         const realm=await openRealm()
+        const userId=await AsyncStorage.getItem('@userId')
         realm.write(()=>{
             const allMembership= realm.objects('membershipTournament')
             allMembership.map((i)=>{
-                realm.delete(i)
+                if(i.userId==userId.toString()){
+                    realm.delete(i)
+                }
             })
         })
         console.log('Delete Successfull');
@@ -59,13 +74,14 @@ export const deleteAllMembership=async()=>{
     }
 }
 
-export const deleteMembershipById=async(tournamentId)=>{
+export const deleteMembershipById=async(tournamentId,membership_id)=>{
     try {
         const realm=await openRealm()
+        const userId=await AsyncStorage.getItem('@userId')
         realm.write(()=>{
             const allMembership= realm.objects('membershipTournament')
             allMembership.map((i)=>{
-                if(i?.tournament_id==tournamentId)
+                if(i?.tournament_id==tournamentId&&i?.userId==userId.toString()&&i?.membership_id==membership_id)
                 {
                     realm.delete(i)
                 }
