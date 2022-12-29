@@ -4,7 +4,7 @@ import { BackHandler, Image, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { constants } from "../../common/constant";
 import { Button } from "../../components";
-import { checkAuthentication } from "../../redux/slice/auth";
+import { checkAuthentication, logout } from "../../redux/slice/auth";
 import { store } from "../../redux/store";
 
 const PaymentConfirmation = ({ route, navigation }) => {

@@ -1,8 +1,10 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState } from "react";
-import { Image, SafeAreaView, StatusBar, View } from "react-native";
+import { Alert, Image, SafeAreaView, StatusBar, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { useDispatch, useSelector } from "react-redux";
+import { utils } from "../../common";
 import { commonStyle } from "../../common/commonStyle";
 import { constants } from "../../common/constant";
 import { Button, FloatingInput, Header } from "../../components";
@@ -23,7 +25,7 @@ const ChangePassword = ({ route, navigation }) => {
     const [text, setText] = useState('')
     const [email, setEmail] = useState(route?.params?.email)
     const dispatch = useDispatch()
-    const [isLoading,setIsLoading]=useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
     const clearAllData = () => {
         setText('')
@@ -45,13 +47,13 @@ const ChangePassword = ({ route, navigation }) => {
                 scrollEnabled={true}
                 showsVerticalScrollIndicator={false}
                 bounces={false}
-                contentContainerStyle={{justifyContent:'center',flex:1}}
-                style={[commonStyle.container, { backgroundColor: constants.colors.backGroundLight,marginBottom:20 }]} >
+                contentContainerStyle={{ justifyContent: 'center', flex: 1 }}
+                style={[commonStyle.container, { backgroundColor: constants.colors.backGroundLight, marginBottom: 20 }]} >
                 {route?.params != 'contactUs'
                     && <></>}
                 {route?.params == 'changePassword'
                     ? <>
-                        <Image style={[forgotPasswordStyle.imgLogo,{marginBottom:0}]} source={constants.icons.logo} />
+                        <Image style={[forgotPasswordStyle.imgLogo, { marginBottom: 0 }]} source={constants.icons.logo} />
                         <FloatingInput
                             textIsEditable={!isLoading}
                             headerText={'Old Password'}
@@ -157,19 +159,41 @@ const ChangePassword = ({ route, navigation }) => {
                     onPress={() => {
                         if (route?.params?.editProfile == 'editProfile') {
                             setIsLoading(true)
-                            dispatch(editProfile({ fullName, mobileNumber,email, navigation, dispatch,setIsLoading }))
+                            dispatch(editProfile({ fullName, mobileNumber, email, navigation, dispatch, setIsLoading }))
                         } else if (route?.params == 'contactUs') {
                             setIsLoading(true)
-                            dispatch(sendInquiry({ subject, text, dispatch, clearAllData ,setIsLoading,navigation}))
+                            dispatch(sendInquiry({ subject, text, dispatch, clearAllData, setIsLoading, navigation }))
                             setIsLoading(true)
                         } else if (route?.params?.name == 'forgotPassword') {
                             setIsLoading(true)
-                            dispatch(resetPassword({ email: route?.params?.email, newPassword, confirmPassword, navigation, dispatch,setIsLoading}))
+                            dispatch(resetPassword({ email: route?.params?.email, newPassword, confirmPassword, navigation, dispatch, setIsLoading }))
                         }
                         else {
                             setIsLoading(true)
-                            dispatch(changePassword({ oldPassword, newPassword, confirmPassword, navigation, clearAllData, dispatch,setIsLoading }))
+                            dispatch(changePassword({ oldPassword, newPassword, confirmPassword, navigation, clearAllData, dispatch, setIsLoading }))
                         }
+                    }}
+                />
+                <Button
+                    disabled={isLoading == true ? true : false}
+                    titleText={'Delete Account'}
+                    btnStyle={{ marginTop: 30 }}
+                    onPress={async() => {
+                        let token=await AsyncStorage.getItem('@Token')
+                        Alert.alert(
+                            "Fantasy Tennis Club",
+                            'Are you sure you want to delete account and all data associated with your account?',
+                            [
+                                { text: "OK", onPress: () =>{
+                                    setIsLoading(true)
+                                    setTimeout(()=>{
+                                        utils.callApi('api/v1/user/delete-account',{token},'deleteAccount')
+                                    },3000)
+                                } },
+                                { text: "Cancel", onPress: () =>{} }
+                            ]
+                        )
+                        
                     }}
                 />
             </KeyboardAwareScrollView>

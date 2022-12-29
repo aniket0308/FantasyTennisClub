@@ -5,7 +5,7 @@ import Snackbar from 'react-native-snackbar';
 import { utils } from ".";
 import { constants } from "./constant";
 import { isLoaderNotVisibleProfile } from "../redux/slice/profile";
-import { Alert } from "react-native";
+import { Alert, Keyboard } from "react-native";
 import { store } from "../redux/store";
 
 //Storing Data In Local Storage
@@ -54,12 +54,16 @@ export const callApi = (path, payload, type, dispatch) => {
         .then((res) => res.json())
         .then(async (json) => {
             console.log('what is dispatch', json);
+
+
+
             if (dispatch != undefined) {
                 dispatch(isLoaderNotVisible())
                 dispatch(isLoaderNotVisibleProfile())
             }
 
             if (json.error == true && type != 'PaymentCapture') {
+                Keyboard.dismiss()
                 Snackbar.show({
                     text: json.message,
                     duration: 1000,
@@ -92,7 +96,7 @@ export const callApi = (path, payload, type, dispatch) => {
                     store.dispatch(loginAuthentication({ data: json?.data }))
                     store.dispatch(checkAuthentication({ data: json?.data, token: value, isRegisteredFirstTime: false }))
                 }
-            } else if (type == 'logout') {
+            } else if (type == 'logout' || type=='deleteAccount') {
                 await AsyncStorage.clear()
                 store.dispatch(logout())
             } else if (type == 'Registered') {
@@ -151,7 +155,7 @@ export const callApi = (path, payload, type, dispatch) => {
                         "Fantasy Tennis Club",
                         json?.message,
                         [
-                            { text: "OK", onPress: () =>type == 'privateGroup'?utils.navigateTo(payload.navigation, constants.screens.home):'' }
+                            { text: "OK", onPress: () => type == 'privateGroup' ? utils.navigateTo(payload.navigation, constants.screens.home) : '' }
                         ]
                     )
                 }
@@ -160,7 +164,7 @@ export const callApi = (path, payload, type, dispatch) => {
                     utils.navigateTo(payload.navigation, 'PaymentConfirmation', json)
                 }
                 else {
-                    if (payload.navigation != undefined) {
+                    if (payload.navigation != undefined && json.error == false) {
                         utils.navigateTo(payload.navigation, constants.screens.dashBoard)
                     }
                 }

@@ -87,7 +87,7 @@ const MemberShip = ({ route, navigation }) => {
                                         <Text style={[membershipStyle.txtDate, { width: widthPercentageToDP(10), fontSize: 15, color: constants.colors.black }]}>${item?.price}</Text>
                                         <TouchableOpacity
                                             onPress={() => {
-                                                deleteMembershipById(item?.tournament_id)
+                                                deleteMembershipById(item?.tournament_id,item?.membership_id)
                                                 getMembershipDetails()
                                                 if (membershipArr.length == 1) {
                                                     navigation.goBack()
