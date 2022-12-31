@@ -192,7 +192,7 @@ const PrivateGroupDetails = ({ route, navigation }) => {
                         rowTextStyle={{ textAlign: 'left', marginLeft: 20, alignSelf: 'center', color: 'black' }}
                         dropdownStyle={privateGroupDetailsStyle.dropDownStyle}
                         buttonTextAfterSelection={(selectedItem, index) => {
-                            setGroupEvents(selectedItem?.tournament_id)
+                            setGroupEvents(selectedItem?.id)
                             // text represented after item is selected
                             // if data array is an array of objects then return selectedItem.property to render after item is selected
                             if (groupEvents == '') {
