@@ -33,67 +33,6 @@ const Login = ({ navigation }) => {
         device:Platform.OS=='android'?Platform.constants.Model:''
     }
 
-    const configure = () => {
-        try {
-            PushNotification.configure({
-                // (optional) Called when Token is generated (iOS and Android)
-                onRegister: function (token) {
-                    console.log("TOKEN:", token);
-                },
-
-                // (required) Called when a remote is received or opened, or local notification is opened
-                onNotification: function (notification) {
-                    // process the notification
-                    // Handle notification click
-                    if (notification.userInteraction) {
-                         if(notification?.data?.notification_type == 'MEMBER') {
-                            utils.navigateTo(navigation,constants.screens.notification)
-                        }else{
-                            utils.navigateTo(navigation,constants.screens.announcements)
-                        }
-                      }
-                    // (required) Called when a remote is received or opened, or local notification is opened
-                    notification.finish(PushNotificationIOS.FetchResult.NoData);
-                },
-
-                // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
-                onAction: function (notification) {
-                    console.log("ACTION:", notification.action);
-                    console.log("NOTIFICATION: ", notification);
-
-                    // process the action
-                },
-
-                // (optional) Called when the user fails to register for remote notifications. Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
-                onRegistrationError: function (err) {
-                    console.error(err.message, err);
-                },
-
-                // IOS ONLY (optional): default: all - Permissions to register.
-                permissions: {
-                    alert: true,
-                    badge: true,
-                    sound: true,
-                },
-
-                // Should the initial notification be popped automatically
-                // default: true
-                popInitialNotification: true,
-
-                /**
-                 * (optional) default: true
-                 * - Specified if permissions (ios) and token (android and ios) will requested or not,
-                 * - if not, you must call PushNotificationsHandler.requestPermissions() later
-                 * - if you are not using remote notification or do not have Firebase installed, use this:
-                 *     requestPermissions: Platform.OS === 'ios'
-                 */
-                requestPermissions: true,
-            })
-        } catch (error) {
-            console.log('Error:', error);
-        }
-    }
-
     const requestUserPermission = async () => {
         try {
             const token = await messaging().getToken()
@@ -114,20 +53,10 @@ const Login = ({ navigation }) => {
     }
 
     useEffect(() => {
-        const notification = new PushNotificationService()
-        configure()
-        notification.createChannel()
         requestUserPermission()
         setTimeout(() => {
             SplashScreen.hide();
         }, 1000)
-        const unsubscribe = messaging().onMessage(async remoteMessage => {
-            console.log('Message handled in the Foregorund!', remoteMessage);
-            notification.localNotification({ title: remoteMessage?.notification?.title, body: remoteMessage?.notification.body, 
-                // image: remoteMessage?.notification.android.imageUrl
-             })
-        });
-        return unsubscribe
     }, [])
 
     return (

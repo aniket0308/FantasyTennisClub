@@ -181,7 +181,7 @@ export const callApi = (path, payload, type, dispatch) => {
                 if (type == 'PaymentCapture') {
                     payload.setIsLoading(false)
                     utils.navigateTo(payload.navigation, 'PaymentConfirmation', json)
-                } else if (json.error == false) {
+                } else if (json.error == false && type!='notificationRead') {
                     if (payload.clearAllData != undefined) {
                         payload.clearAllData()
                     }
@@ -191,6 +191,10 @@ export const callApi = (path, payload, type, dispatch) => {
                         backgroundColor: 'green',
                     });
 
+                }else if(json.error == false && type=='notificationRead'){
+                    if(payload.setIsLoading!=undefined){
+                        payload.setIsLoading(true)
+                    }
                 }
 
                 if (json.error == true) {

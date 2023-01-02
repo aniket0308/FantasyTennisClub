@@ -14,7 +14,7 @@ import { store } from './redux/store';
 import messaging from '@react-native-firebase/messaging';
 import PushNotificationService from './pushNotification/pushNotification';
 import Snackbar from 'react-native-snackbar';
-import { checkAuthentication, checkLoginStep } from './redux/slice/auth';
+import { checkAuthentication, checkLoginStep, logout } from './redux/slice/auth';
 import { Alert, Text, View } from 'react-native';
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
@@ -28,7 +28,6 @@ const App = ({ navigation }) => {
   const [, setRender] = useState()
   const [isMembership, setIsMembership] = useState()
   const [isLoading, setIsLoading] = useState(false)
-
   const checkMemberShip = async () => {
     const token = await AsyncStorage.getItem('@Token')
     //calling api for Checking Membership
@@ -44,7 +43,6 @@ const App = ({ navigation }) => {
         if (response.status == 401) {
                     await AsyncStorage.clear()
                     store.dispatch(logout())
-          await AsyncStorage.clear()
       }
       return response.json()
       }).
@@ -70,7 +68,6 @@ const App = ({ navigation }) => {
         console.log('What Is Error In Get Api', e)
       })
   }
-
   useEffect(() => {
     async function checkAuthentication() {
       checkMemberShip()
@@ -83,5 +80,4 @@ const App = ({ navigation }) => {
     </Provider>
   );
 }
-
 export default App

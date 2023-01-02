@@ -127,6 +127,7 @@ const DashBoardHome = ({ navigation }) => {
     const renderInsightData = (item, index) => {
         return (
             <TouchableOpacity
+                activeOpacity={1}
                 style={[dashboardStyle.viewInsights, { backgroundColor: index == 0 ? '#F5F8FA' : constants.colors.white, marginTop: index != 0 ? 10 : 0 }]}>
                 <Text style={dashboardStyle.txtInsights} >{item.title}</Text>
                 <RenderHTML

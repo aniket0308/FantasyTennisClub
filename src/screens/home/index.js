@@ -11,7 +11,7 @@ import messaging from '@react-native-firebase/messaging';
 import PushNotification from "react-native-push-notification";
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
 import PushNotificationService from "../../pushNotification/pushNotification";
-import { checkAuthentication } from "../../redux/slice/auth";
+import { checkAuthentication, logout } from "../../redux/slice/auth";
 import { store } from "../../redux/store";
 import Loader from "../../components/loader";
 
@@ -19,24 +19,7 @@ import Loader from "../../components/loader";
 const Home = ({ navigation }) => {
 
     const [isLoading, setIsLoading] = useState(false)
-    const [isMembership, setIsMembership] = useState()
     const [data, setData] = useState()
-    const [,setRender]=useState({})
-
-    const getNotification = async () => {
-        const token = await AsyncStorage.getItem('@Token')
-        utils.callApiGet(`api/v1/announcements/member`, { setIsLoading, setData,token },'getNotification')
-    }
-
-    useEffect(()=>{
-        // getNotification()
-        setRender({})
-    },[])
-
-    useEffect(()=>{
-        setRender({})
-        setIsLoading(false)
-    },[navigation])
 
     const configure = () => {
         try {
@@ -48,27 +31,12 @@ const Home = ({ navigation }) => {
 
                 // (required) Called when a remote is received or opened, or local notification is opened
                 onNotification: async function (notification) {
-                    getNotification()
-                    // console.log("NOTIFICATION:sss", notification);
-                    // utils.callApi(`api/v1/announcements/read/${item?.id}`,{token})
-                    // PushNotificationIOS.getApplicationIconBadgeNumber((n)=>{
-                    //     console.log('PushNotificationIOS.getApplicationIconBadgeNumber()',n)
-                    //     PushNotificationIOS.setApplicationIconBadgeNumber(n)
-                    // })
                     // process the notification
                     // Handle notification click
                     if (notification.userInteraction == true) {
-                        console.log("NOTIFICATION:sss", notification);
-                        if(data?.data?.notifications!=undefined||data?.data?.notifications?.length>0||data!=undefined||data?.data?.notifications!='')
-                    {
-                        data?.data?.notifications.map((i)=>{
-                            if(i?.title==notification?.title){
-                                console.log('i?.id',i?.id)
-                            }
-                        })
-                    }
                         if (notification?.data?.notification_type == 'MEMBER') {
-                            // utils.callApi(`api/v1/announcements/read/${item?.id}`,{token})
+                            const token= await AsyncStorage.getItem('@Token')
+                            utils.callApi(`api/v1/announcements/read/${notification?.data?.notification_id}`,{token},'notificationRead')
                             utils.navigateTo(navigation, constants.screens.notification, { exit: true })
                         } else {
                             utils.navigateTo(navigation, constants.screens.announcements, { exit: true })
@@ -130,9 +98,10 @@ const Home = ({ navigation }) => {
         }, 1000)
         const unsubscribe = messaging().onMessage(async remoteMessage => {
             console.log('Message handled in the Foregorund!', remoteMessage);
-            console.log('PushNotificationIOS.getApplicationIconBadgeNumber()',)
             notification.localNotification({
-                title: remoteMessage?.notification?.title, body: remoteMessage?.notification.body,
+                title: remoteMessage?.notification?.title,
+                 body: remoteMessage?.notification.body,
+                 data:remoteMessage?.data
                 //  image: remoteMessage?.notification.android.imageUrl
             })
         });

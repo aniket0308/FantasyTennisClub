@@ -34,19 +34,25 @@ const Notification = ({ navigation,route }) => {
         }
     }, [])
 
+    useEffect(() => {
+        getNotification()
+    }, [isLoading])
+
     //Render Notification Function
     const renderNotification = ({ item, index }) => {
         return (
-            <TouchableOpacity onPress={async()=>{
+            <TouchableOpacity 
+            onPress={async()=>{
                 const token= await AsyncStorage.getItem('@Token')
                 if((data?.data?.notifications?.length>0 || data != undefined||data!='')&& data?.success==true){
-                    utils.callApi(`api/v1/announcements/read/${item?.id}`,{token})
+                    setIsLoading(false)
+                    utils.callApi(`api/v1/announcements/read/${item?.id}`,{token,setIsLoading},'notificationRead')
                 }
                 Alert.alert(
                     "Fantasy Tennis Club",
                     `To send a message go to 'Account' then 'Contact us'.`,
                 )
-            }} style={[commonStyle.row, { marginTop: 40,justifyContent:'space-between' }]}>
+            }} style={[commonStyle.row, {padding:5,marginHorizontal:-10, marginTop:index==0?40:20,justifyContent:'space-between',backgroundColor:item.is_read==false?constants.colors.cardColor:'white' }]}>
                 <View style={commonStyle.row}>
                     <View style={notificationStyle.viewCircle}>
                         <Text style={notificationStyle.txtFtc}>FTC</Text>

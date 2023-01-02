@@ -32,8 +32,6 @@ const MyMembership = ({ navigation, route }) => {
         getAllMemberShips()
     }, [])
 
-    console.log(route.params);
-
     return (
         <View style={myMembershipStyle.mainContainer}>
             <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />

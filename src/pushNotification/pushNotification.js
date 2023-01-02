@@ -88,6 +88,7 @@ class PushNotificationService {
     localNotification = (payload) => {
         if (Platform.OS == 'android') {
             PushNotification.localNotification({
+                userInfo:payload.data,
                 channelId: "Fantasy-Tennis-Club-id",
                 largeIcon: "ic_launcher",
                 // bigText: "My big text that will be shown when notification is expanded. Styling can be done using HTML tags(see android docs for details)", // (optional) default: "message" prop
@@ -114,6 +115,7 @@ class PushNotificationService {
                 body: payload?.body, // (required)
                 isCritical: true,
                 isSilent:'false',
+                userInfo:payload.data,
             })
         }
     }
