@@ -52,7 +52,7 @@ const Notification = ({ navigation,route }) => {
                     "Fantasy Tennis Club",
                     `To send a message go to 'Account' then 'Contact us'.`,
                 )
-            }} style={[commonStyle.row, {padding:5,marginHorizontal:-10, marginTop:index==0?40:20,justifyContent:'space-between',backgroundColor:item.is_read==false?constants.colors.cardColor:'white' }]}>
+            }} style={[commonStyle.row, {padding:5, marginTop:index==0?40:20,justifyContent:'center'}]}>
                 <View style={commonStyle.row}>
                     <View style={notificationStyle.viewCircle}>
                         <Text style={notificationStyle.txtFtc}>FTC</Text>

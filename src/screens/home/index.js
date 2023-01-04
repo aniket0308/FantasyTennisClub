@@ -38,6 +38,7 @@ const Home = ({ navigation }) => {
                         if (notification?.data?.notification_type == 'MEMBER') {
                             const token= await AsyncStorage.getItem('@Token')
                             utils.callApi(`api/v1/announcements/read/${notification?.data?.notification_id}`,{token},'notificationRead')
+                            utils.callApi('api/v1/announcements/member/read-all',{token},'allNotificationRead')
                             utils.navigateTo(navigation, constants.screens.notification, { exit: true })
                         } else {
                             utils.navigateTo(navigation, constants.screens.announcements, { exit: true })

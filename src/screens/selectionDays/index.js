@@ -58,7 +58,11 @@ const SelectionDays = ({ route, navigation }) => {
                 rightIcon={constants.icons.shapeBell}
                 checkLength={true}
                 rightIconStyle={{ height: widthPercentageToDP(6), width: widthPercentageToDP(6), marginTop: -10 }}
-                onPressRightIcon={() => utils.navigateTo(navigation, constants.screens.notification)}
+                onPressRightIcon={async() => {
+                        const token=await AsyncStorage.getItem('@Token')
+                        utils.callApi('api/v1/announcements/member/read-all',{token},'allNotificationRead')
+                        utils.navigateTo(navigation, constants.screens.notification)}
+                    }
                 onPressLeftIcon={() => navigation.goBack()}
             />
             {isLoading == false

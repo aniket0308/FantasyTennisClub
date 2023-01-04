@@ -58,7 +58,11 @@ const Announcments = ({ navigation, route }) => {
                 viewHeaderStyle={{ width: '100%' }}
                 rightIcon={constants.icons.shapeBell}
                 checkLength={true}
-                onPressRightIcon={() => utils.navigateTo(navigation, constants.screens.notification)}
+                onPressRightIcon={async() => {
+                        const token=await AsyncStorage.getItem('@Token')
+                        utils.callApi('api/v1/announcements/member/read-all',{token},'allNotificationRead')
+                        utils.navigateTo(navigation, constants.screens.notification)}
+                    }
                 onPressLeftIcon={() => navigation.goBack()}
                 rightIconStyle={{ height: widthPercentageToDP(6), width: widthPercentageToDP(6) }}
                 lengthStyle={{top:5}}

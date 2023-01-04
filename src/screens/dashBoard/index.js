@@ -149,7 +149,11 @@ const DashBoardHome = ({ navigation }) => {
                     subTitleStyle={{ alignSelf: 'center', color: constants.colors.darkGreen }}
                     rightIcon={constants.icons.shapeBell}
                     checkLength={true}
-                    onPressRightIcon={() => utils.navigateTo(navigation, constants.screens.notification)}
+                    onPressRightIcon={async() => {
+                        const token=await AsyncStorage.getItem('@Token')
+                        utils.callApi('api/v1/announcements/member/read-all',{token},'allNotificationRead')
+                        utils.navigateTo(navigation, constants.screens.notification)}
+                    }
                     mainViewHeaderStyle={{ paddingBottom: 10, paddingTop: 10 }}
                     resizeMode='contain'
                     rightIconStyle={{ height: widthPercentageToDP(6), width: widthPercentageToDP(6), marginTop: -10 }}

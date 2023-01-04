@@ -62,7 +62,10 @@ export const callApi = (path, payload, type, dispatch) => {
                 dispatch(isLoaderNotVisibleProfile())
             }
 
-            if (json.error == true && type != 'PaymentCapture') {
+            if(json.error == true &&type == 'allNotificationRead'){
+                return null
+            }
+            else if (json.error == true &&type != 'PaymentCapture') {
                 Keyboard.dismiss()
                 Snackbar.show({
                     text: json.message,
@@ -181,7 +184,10 @@ export const callApi = (path, payload, type, dispatch) => {
                 if (type == 'PaymentCapture') {
                     payload.setIsLoading(false)
                     utils.navigateTo(payload.navigation, 'PaymentConfirmation', json)
-                } else if (json.error == false && type!='notificationRead') {
+                }else if(json.error == false&& type == 'allNotificationRead'){
+                    return null
+                }
+                else if (json.error == false && type!='notificationRead') {
                     if (payload.clearAllData != undefined) {
                         payload.clearAllData()
                     }
