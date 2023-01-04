@@ -8,7 +8,7 @@ import { store } from "../../redux/store";
 import headerStyle from "./style";
 
 const Header = ({ title, subTitle, showBackArrow, titleStyle, onPressLeftIcon, subTitleStyle, rightIcon, viewHeaderStyle, rightIconStyle,
-    mainViewHeaderStyle, resizeMode, onPressRightIcon, rightIconTitle, rightIconTitleStyle, isCartHavingThings, lengthStyle, checkLength
+    mainViewHeaderStyle, resizeMode, onPressRightIcon, rightIconTitle, rightIconTitleStyle, isCartHavingThings, lengthStyle, checkLength,navigation
 }) => {
     const [data, setData] = useState()
     const [isLoading, setIsLoading] = useState(false)
@@ -25,6 +25,15 @@ const Header = ({ title, subTitle, showBackArrow, titleStyle, onPressLeftIcon, s
     useEffect(() => {
         getNotification()
     }, [])
+
+    useEffect(() => {
+        if(navigation!=undefined){
+            const focusHandler = navigation.addListener('focus', () => {
+                getNotification()
+            });
+            return focusHandler;
+        }
+    }, [navigation]);
 
     return (
         <View style={[headerStyle.headerView, mainViewHeaderStyle]}>

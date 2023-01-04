@@ -77,6 +77,7 @@ const Notification = ({ navigation,route }) => {
                 title={'Member Notifications'}
                 titleStyle={{ marginTop: 5, marginBottom: -3 }}
                 onPressLeftIcon={() => navigation.goBack()}
+                navigation={navigation}
             />
             {
 

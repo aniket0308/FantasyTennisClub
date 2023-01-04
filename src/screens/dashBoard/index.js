@@ -153,7 +153,7 @@ const DashBoardHome = ({ navigation }) => {
                     mainViewHeaderStyle={{ paddingBottom: 10, paddingTop: 10 }}
                     resizeMode='contain'
                     rightIconStyle={{ height: widthPercentageToDP(6), width: widthPercentageToDP(6), marginTop: -10 }}
-                    navigation={navigation.addListner}
+                    navigation={navigation}
                 />
                 {isLoading == true
                     && <ScrollView

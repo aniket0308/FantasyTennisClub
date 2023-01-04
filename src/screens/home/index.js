@@ -33,6 +33,7 @@ const Home = ({ navigation }) => {
                 onNotification: async function (notification) {
                     // process the notification
                     // Handle notification click
+                    const token = await AsyncStorage.getItem('@Token')
                     if (notification.userInteraction == true) {
                         if (notification?.data?.notification_type == 'MEMBER') {
                             const token= await AsyncStorage.getItem('@Token')
@@ -42,10 +43,10 @@ const Home = ({ navigation }) => {
                             utils.navigateTo(navigation, constants.screens.announcements, { exit: true })
                         }
                     } else {
-                        const token = await AsyncStorage.getItem('@Token')
                         utils.callApiGet(`api/v1/announcements/member`, { setIsLoading, setData, token },'getNotification')
                         utils.navigateTo(navigation, constants.screens.dashBoard, { exit: true })
                     }
+                    utils.callApiGet(`api/v1/announcements/member`, { setIsLoading, setData, token },'getNotification')
                     // (required) Called when a remote is received or opened, or local notification is opened
                     notification.finish(PushNotificationIOS.FetchResult.NoData);
                 },
