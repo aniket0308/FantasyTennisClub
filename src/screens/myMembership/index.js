@@ -49,16 +49,26 @@ const MyMembership = ({ navigation, route }) => {
                     {
                         route?.params == false
                             ? <Image style={forgotPasswordStyle.imgLogo} source={constants.icons.logo} />
-                            : <View style={{ backgroundColor: constants.colors.lightestBlue, padding: 15, borderRadius: 6, marginBottom: 20 }}>
+                            : <View style={{ backgroundColor: constants.colors.lightestBlue, padding: 15, borderRadius: 6, marginBottom: 15 }}>
                                 <Text style={{ alignSelf: 'center', textAlign: 'center', fontFamily: constants.fonts.notoSansRegular, color: 'green', fontWeight: '600', fontSize: 16 }}>Your current membership does not have access to current event</Text>
-                                <Text style={{ alignSelf: 'center', fontFamily: constants.fonts.notoSansRegular, color: 'grey', fontWeight: '400', fontSize: 12, marginTop: 10 }}>•	Access to the Platform will be granted during the dates when your membership is active</Text>
+                                <Text style={{ alignSelf: 'center', textAlign: 'center', fontFamily: constants.fonts.notoSansRegular, color: 'grey', fontWeight: '400', fontSize: 12, marginTop: 10 }}>Access to the Platform will be granted during the dates when your membership is active</Text>
                             </View>
+                    }
+                    {route?.params !== false
+                        && isLoading == true
+                        && <>
+                            <Button
+                                titleText={'Update Membership'}
+                                btnStyle={{ width: '100%', marginBottom: 15 }}
+                                onPress={() => utils.navigateTo(navigation, constants.screens.buyMemberShip, { showBackArrow: true })}
+                            />
+                        </>
                     }
                     {data?.data?.length > 0 &&
                         data?.data.map((item, index) => {
                             console.log('dsds itdfd', item);
                             return (
-                                < CardWithImage
+                                <CardWithImage
                                     containerStyle={{ backgroundColor: constants.colors.white, marginBottom: 15 }}
                                     labelTitle={item.is_member}
                                     label={item?.title}
@@ -76,11 +86,6 @@ const MyMembership = ({ navigation, route }) => {
                     {route?.params !== false
                         && isLoading == true
                         && <>
-                            <Button
-                                titleText={'Update Membership'}
-                                btnStyle={{ width: '100%' }}
-                                onPress={() => utils.navigateTo(navigation, constants.screens.buyMemberShip, { showBackArrow: true })}
-                            />
                             <Button
                                 titleText={'Logout'}
                                 btnStyle={{ width: '100%', marginTop: 10 }}

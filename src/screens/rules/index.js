@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
+import { Platform, RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
 import { utils } from "../../common";
 import { constants } from "../../common/constant";
 import { Header } from "../../components";
@@ -10,6 +10,8 @@ import { widthPercentageToDP } from "react-native-responsive-screen";
 import { useDispatch } from "react-redux";
 import { getFaq, getRules } from "../../redux/slice/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import PushNotificationIOS from "@react-native-community/push-notification-ios";
+import PushNotification from "react-native-push-notification";
 
 //Rules Screen
 const Rules = ({ navigation }) => {
@@ -17,8 +19,8 @@ const Rules = ({ navigation }) => {
     const [faq, setFaq] = useState()
     const [isLoading, setIsLoading] = useState(false)
     const [refresh, setRefresh] = useState(false)
-    const [data,setData]=useState()
-    const dispatch=useDispatch()
+    const [data, setData] = useState()
+    const dispatch = useDispatch()
 
     //Function For Getting Rules From Api
     const getRulesFromApi = async () => {
@@ -38,7 +40,7 @@ const Rules = ({ navigation }) => {
             token: await AsyncStorage.getItem('@Token'),
             setIsLoading: setIsLoading,
             setRefresh: setRefresh,
-            setFaq:setFaq
+            setFaq: setFaq
         }
         utils.callApiGet(`api/v1/page/faqs`, seasonObj)
     }
@@ -81,14 +83,25 @@ const Rules = ({ navigation }) => {
                 titleStyle={{ marginTop: 5, marginBottom: -10 }}
                 rightIcon={constants.icons.shapeBell}
                 checkLength={true}
-                rightIconStyle={{height:widthPercentageToDP(6),width:widthPercentageToDP(6)}}
-                onPressRightIcon={async() => {
-                        const token=await AsyncStorage.getItem('@Token')
-                        utils.callApi('api/v1/announcements/member/read-all',{token},'allNotificationRead')
-                        utils.navigateTo(navigation, constants.screens.notification)}
+                rightIconStyle={{ height: widthPercentageToDP(6), width: widthPercentageToDP(6) }}
+                onPressRightIcon={async () => {
+                    const token = await AsyncStorage.getItem('@Token')
+                    utils.callApi('api/v1/announcements/member/read-all', { token }, 'allNotificationRead')
+                    if (Platform.OS == 'ios') {
+                        PushNotificationIOS.getApplicationIconBadgeNumber(number => {
+                            console.log('what is number beta incrementer', number);
+                            PushNotificationIOS.setApplicationIconBadgeNumber(number + 1);
+                        });
+                    } else {
+                        PushNotification.getApplicationIconBadgeNumber(n => {
+                            PushNotification.setApplicationIconBadgeNumber(n + 1)
+                        })
                     }
+                    utils.navigateTo(navigation, constants.screens.notification)
+                }
+                }
                 onPressLeftIcon={() => navigation.goBack()}
-                lengthStyle={{top:5}}
+                lengthStyle={{ top: 5 }}
             />
             {isLoading == true
                 ? <ScrollView
@@ -108,14 +121,14 @@ const Rules = ({ navigation }) => {
                         />
                     }
                     style={{ marginBottom: 25 }}>
-                        {
-                            data!=undefined
-                            &&<RenderRules />
-                        }
-                        {
-                            faq!=undefined
-                            &&<RenderFaq />
-                        }
+                    {
+                        data != undefined
+                        && <RenderRules />
+                    }
+                    {
+                        faq != undefined
+                        && <RenderFaq />
+                    }
                 </ScrollView>
                 : <Loader />
             }

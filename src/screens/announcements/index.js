@@ -1,6 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import PushNotificationIOS from "@react-native-community/push-notification-ios";
 import React, { useEffect, useState } from "react"
-import { BackHandler, FlatList, RefreshControl, SafeAreaView, StatusBar, Text, View } from "react-native"
+import { BackHandler, FlatList, Platform, RefreshControl, SafeAreaView, StatusBar, Text, View } from "react-native"
+import PushNotification from "react-native-push-notification";
 import RenderHTML from "react-native-render-html";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { useDispatch } from "react-redux";
@@ -58,11 +60,22 @@ const Announcments = ({ navigation, route }) => {
                 viewHeaderStyle={{ width: '100%' }}
                 rightIcon={constants.icons.shapeBell}
                 checkLength={true}
-                onPressRightIcon={async() => {
-                        const token=await AsyncStorage.getItem('@Token')
-                        utils.callApi('api/v1/announcements/member/read-all',{token},'allNotificationRead')
-                        utils.navigateTo(navigation, constants.screens.notification)}
+                onPressRightIcon={async () => {
+                    const token = await AsyncStorage.getItem('@Token')
+                    utils.callApi('api/v1/announcements/member/read-all', { token }, 'allNotificationRead')
+                    if (Platform.OS == 'ios') {
+                        PushNotificationIOS.getApplicationIconBadgeNumber(number => {
+                            console.log('what is number beta incrementer', number);
+                            PushNotificationIOS.setApplicationIconBadgeNumber(0);
+                        });
+                    } else {
+                        PushNotification.getApplicationIconBadgeNumber(n => {
+                            PushNotification.setApplicationIconBadgeNumber(0)
+                        })
                     }
+                    utils.navigateTo(navigation, constants.screens.notification)
+                }
+                }
                 onPressLeftIcon={() => navigation.goBack()}
                 rightIconStyle={{ height: widthPercentageToDP(6), width: widthPercentageToDP(6) }}
                 lengthStyle={{top:5}}

@@ -25,11 +25,11 @@ const SignUp = ({ navigation }) => {
     const [mobileNumber, setMobileNumber] = useState('')
     const [deviceToken, setDeviceToken] = useState('')
     const dispatch = useDispatch()
-    const [isLoading,setIsLoading]=useState(false)
+    const [isLoading, setIsLoading] = useState(false)
     const platform = Platform.OS == 'android' ? 'android' : 'ios'
-    const platform_info={
-        version:Platform.Version,
-        device:Platform.OS=='android'?Platform.constants.Model:''
+    const platform_info = {
+        version: Platform.Version,
+        device: Platform.OS == 'android' ? Platform.constants.Model : ''
     }
     // const isLoading = useSelector((state) => state?.auth?.isLoading)
 
@@ -50,26 +50,45 @@ const SignUp = ({ navigation }) => {
     }
 
     const requestUserPermission = async () => {
+        setIsLoading(true)
         try {
             const token = await messaging().getToken()
-            if (token) {
-                setDeviceToken(token)
+            if (token != null || token != '') {
+                // setDeviceToken(token)
+                const isValidate = validateForm()
+                if (isValidate.error == false) {
+                    const registerObj = {
+                        name: fullName,
+                        email: email,
+                        mobile_number: mobileNumber,
+                        password: password,
+                        confirm_password: confirmPassword,
+                        referral: referral,
+                        navigation: navigation,
+                        device_token: token,
+                        platform: platform,
+                        setIsLoading,
+                        platform_info
+                    }
+                    //calling Api For Login
+                    utils.callApi('api/register', registerObj, 'Registered')
+                }
             }
-            const authStatus = await messaging().requestPermission();
-            const enabled =
-                authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-                authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+            // const authStatus = await messaging().requestPermission();
+            // const enabled =
+            //     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+            //     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-            if (enabled) {
-                console.log('Authorization status:', authStatus);
-            }
+            // if (enabled) {
+            //     console.log('Authorization status:', authStatus);
+            // }
         } catch (error) {
             console.log('WERROR', error);
         }
     }
 
     useEffect(() => {
-        requestUserPermission()
+        // requestUserPermission()
     }, [])
 
     return (
@@ -114,7 +133,7 @@ const SignUp = ({ navigation }) => {
                     maxLength={15}
                 />
                 <FloatingInput
-                mandatoryField={true}
+                    mandatoryField={true}
                     textIsEditable={!isLoading}
                     headerText={'Password'}
                     textInputStyle={{ marginTop: 15 }}
@@ -143,38 +162,18 @@ const SignUp = ({ navigation }) => {
                     value={referral}
                     autoCapitalize='none'
                 />
-                <Text style={{ marginVertical: 5, color: 'red', fontWeight: '600', marginLeft: widthPercentageToDP(10),fontSize:10 }}>*Mandatory Field</Text>
+                <Text style={{ marginVertical: 5, color: 'red', fontWeight: '600', marginLeft: widthPercentageToDP(10), fontSize: 10 }}>*Mandatory Field</Text>
                 <Button
                     disabled={isLoading == true ? true : false}
                     titleText='Sign Up'
                     btnStyle={{ marginTop: 50 }}
-                    onPress={async() => {
-                        setIsLoading(true)
-                        const isValidate=validateForm()
-                        if(isValidate.error==false){
-                            const registerObj = {
-                                name: fullName,
-                                email: email,
-                                mobile_number: mobileNumber,
-                                password: password,
-                                confirm_password: confirmPassword,
-                                referral: referral,
-                                navigation: navigation,
-                                device_token: deviceToken,
-                                platform: platform,
-                                setIsLoading,
-                                platform_info
-                            }
-                            //calling Api For Login
-                            utils.callApi('api/register', registerObj, 'Registered')
-                        }
-                    }}
+                    onPress={requestUserPermission}
                 />
             </KeyboardAwareScrollView>
             {isLoading == true && <Loader />}
             <View style={signUpStyle.footer}>
                 <Text style={signUpStyle.txtNewToFantasy} >Already have a Fantasy Tennis Club? </Text>
-                <TouchableOpacity onPress={() =>  utils.navigateTo(navigation, constants.screens.login)} >
+                <TouchableOpacity onPress={() => utils.navigateTo(navigation, constants.screens.login)} >
                     <Text style={signUpStyle.txtSignUp}>Login</Text>
                 </TouchableOpacity>
             </View>

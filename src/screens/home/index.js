@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, StatusBar, TouchableOpacity, BackHandler } from 'react-native'
+import { View, Text, Image, StatusBar, TouchableOpacity, BackHandler, Platform } from 'react-native'
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import SplashScreen from "react-native-splash-screen";
 import { utils } from "../../common";
@@ -35,6 +35,16 @@ const Home = ({ navigation }) => {
                     // Handle notification click
                     const token = await AsyncStorage.getItem('@Token')
                     if (notification.userInteraction == true) {
+                        if (Platform.OS == 'ios') {
+                            PushNotificationIOS.getApplicationIconBadgeNumber(number => {
+                                console.log('what is number beta', number);
+                                PushNotificationIOS.setApplicationIconBadgeNumber(0);
+                            });
+                        } else {
+                            PushNotification.getApplicationIconBadgeNumber(n => {
+                                PushNotification.setApplicationIconBadgeNumber(0)
+                            })
+                        }
                         if (notification?.data?.notification_type == 'MEMBER') {
                             const token= await AsyncStorage.getItem('@Token')
                             utils.callApi(`api/v1/announcements/read/${notification?.data?.notification_id}`,{token},'notificationRead')
@@ -102,10 +112,20 @@ const Home = ({ navigation }) => {
             console.log('Message handled in the Foregorund!', remoteMessage);
             notification.localNotification({
                 title: remoteMessage?.notification?.title,
-                 body: remoteMessage?.notification.body,
-                 data:remoteMessage?.data
+                body: remoteMessage?.notification.body,
+                data: remoteMessage?.data
                 //  image: remoteMessage?.notification.android.imageUrl
             })
+            if (Platform.OS == 'ios') {
+                PushNotificationIOS.getApplicationIconBadgeNumber(number => {
+                    console.log('what is number beta incrementer', number);
+                    PushNotificationIOS.setApplicationIconBadgeNumber(number + 1);
+                });
+            } else {
+                PushNotification.getApplicationIconBadgeNumber(n => {
+                    PushNotification.setApplicationIconBadgeNumber(n + 1)
+                })
+            }
         });
         return unsubscribe
     }, [])
@@ -170,7 +190,7 @@ const Home = ({ navigation }) => {
                     style={homeStyle.tennisBall}>
                     <Image resizeMode="contain" style={{ height: widthPercentageToDP(15), width: widthPercentageToDP(15) }} source={constants.icons.tennisBall} />
                 </TouchableOpacity>
-                {isLoading==true&&<Loader/>}
+                {isLoading == true && <Loader />}
             </View>
         </>
     )

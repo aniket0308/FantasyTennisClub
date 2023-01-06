@@ -174,28 +174,33 @@ const ChangePassword = ({ route, navigation }) => {
                         }
                     }}
                 />
-                <Button
-                    disabled={isLoading == true ? true : false}
-                    titleText={'Delete Account'}
-                    btnStyle={{ marginTop: 30 }}
-                    onPress={async() => {
-                        let token=await AsyncStorage.getItem('@Token')
-                        Alert.alert(
-                            "Fantasy Tennis Club",
-                            'Are you sure you want to delete account and all data associated with your account?',
-                            [
-                                { text: "OK", onPress: () =>{
-                                    setIsLoading(true)
-                                    setTimeout(()=>{
-                                        utils.callApi('api/v1/user/delete-account',{token},'deleteAccount')
-                                    },3000)
-                                } },
-                                { text: "Cancel", onPress: () =>{} }
-                            ]
-                        )
-                        
-                    }}
-                />
+                {
+                    route?.params?.editProfile == 'editProfile'
+                    && <Button
+                        disabled={isLoading == true ? true : false}
+                        titleText={'Delete Account'}
+                        btnStyle={{ marginTop: 30 }}
+                        onPress={async () => {
+                            let token = await AsyncStorage.getItem('@Token')
+                            Alert.alert(
+                                "Fantasy Tennis Club",
+                                'Are you sure you want to delete account and all data associated with your account?',
+                                [
+                                    {
+                                        text: "OK", onPress: () => {
+                                            setIsLoading(true)
+                                            setTimeout(() => {
+                                                utils.callApi('api/v1/user/delete-account', { token }, 'deleteAccount')
+                                            }, 3000)
+                                        }
+                                    },
+                                    { text: "Cancel", onPress: () => { } }
+                                ]
+                            )
+
+                        }}
+                    />
+                }
             </KeyboardAwareScrollView>
         </View>
     )

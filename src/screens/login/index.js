@@ -28,32 +28,43 @@ const Login = ({ navigation }) => {
     const platform = Platform.OS == 'android' ? 'android' : 'ios'
     const dispatch = useDispatch()
     const [isLoading, setIsLoading] = useState(false)
-    const platform_info={
-        version:Platform.Version,
-        device:Platform.OS=='android'?Platform.constants.Model:''
+    const platform_info = {
+        version: Platform.Version,
+        device: Platform.OS == 'android' ? Platform.constants.Model : ''
     }
 
     const requestUserPermission = async () => {
+        setIsLoading(true)
         try {
             const token = await messaging().getToken()
-            if (token) {
-                setDeviceToken(token)
+            if (token != null || token != '') {
+                const loginObj = {
+                    email: email,
+                    password: password,
+                    device_token: token,
+                    platform: platform,
+                    setIsLoading: setIsLoading,
+                    platform_info
+                }
+                console.log('Check Device Token', loginObj);
+                //calling Api For Login
+                utils.callApi('api/login', loginObj, 'login', dispatch)
             }
-            const authStatus = await messaging().requestPermission();
-            const enabled =
-                authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-                authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+            // const authStatus = await messaging().requestPermission();
+            // const enabled =
+            //     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+            //     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-            if (enabled) {
-                console.log('Authorization status:', authStatus);
-            }
+            // if (enabled) {
+            //     console.log('Authorization status:', authStatus);
+            // }
         } catch (error) {
             console.log('WERROR', error);
         }
     }
 
     useEffect(() => {
-        requestUserPermission()
+        // requestUserPermission()
         setTimeout(() => {
             SplashScreen.hide();
         }, 1000)
@@ -101,20 +112,7 @@ const Login = ({ navigation }) => {
                     disabled={isLoading}
                     titleText='Login'
                     btnStyle={{ marginTop: 34 }}
-                    onPress={async () => {
-                        setIsLoading(true)
-                        const loginObj = {
-                            email: email,
-                            password: password,
-                            device_token: deviceToken,
-                            platform: platform,
-                            setIsLoading: setIsLoading,
-                            platform_info
-                        }
-                        console.log('Check Device Token',loginObj);
-                        //calling Api For Login
-                        utils.callApi('api/login', loginObj, 'login', dispatch)
-                    }}
+                    onPress={requestUserPermission}
                 />
                 <SafeAreaView />
             </KeyboardAwareScrollView>
