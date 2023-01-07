@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, StatusBar, TouchableOpacity, BackHandler, Platform } from 'react-native'
+import { View, Text, Image, StatusBar, TouchableOpacity, BackHandler, Platform, Alert } from 'react-native'
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import SplashScreen from "react-native-splash-screen";
 import { utils } from "../../common";
@@ -20,6 +20,7 @@ const Home = ({ navigation }) => {
 
     const [isLoading, setIsLoading] = useState(false)
     const [data, setData] = useState()
+    const [,setRender]=useState()
 
     const configure = () => {
         try {
@@ -31,6 +32,7 @@ const Home = ({ navigation }) => {
 
                 // (required) Called when a remote is received or opened, or local notification is opened
                 onNotification: async function (notification) {
+                    console.log('what is notification adsfsdgfd',notification);
                     // process the notification
                     // Handle notification click
                     const token = await AsyncStorage.getItem('@Token')
@@ -47,15 +49,15 @@ const Home = ({ navigation }) => {
                             const token= await AsyncStorage.getItem('@Token')
                             utils.callApi(`api/v1/announcements/read/${notification?.data?.notification_id}`,{token},'notificationRead')
                             utils.callApi('api/v1/announcements/member/read-all',{token},'allNotificationRead')
-                            utils.navigateTo(navigation, constants.screens.notification, { exit: true })
+                            utils.navigateTo(navigation, constants.screens.notification, { exit:notification?.foreground==true?false:true })
                         } else {
-                            utils.navigateTo(navigation, constants.screens.announcements, { exit: true })
+                            utils.navigateTo(navigation, constants.screens.announcements, { exit:notification?.foreground==true?false:true })
                         }
                     } else {
-                        utils.callApiGet(`api/v1/announcements/member`, { setIsLoading, setData, token },'getNotification')
-                        utils.navigateTo(navigation, constants.screens.dashBoard, { exit: true })
+                        utils.callApiGet(`api/v1/announcements/member`, { setIsLoading, setData, setRender,token },'getNotification')
+                        utils.navigateTo(navigation, constants.screens.dashBoard, { exit:notification?.foreground==true?false:true })
                     }
-                    utils.callApiGet(`api/v1/announcements/member`, { setIsLoading, setData, token },'getNotification')
+                    utils.callApiGet(`api/v1/announcements/member`, { setIsLoading, setData, token,setRender },'getNotification')
                     // (required) Called when a remote is received or opened, or local notification is opened
                     notification.finish(PushNotificationIOS.FetchResult.NoData);
                 },

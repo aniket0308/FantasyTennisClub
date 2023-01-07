@@ -84,7 +84,12 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 {
   completionHandler(UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionBadge);
 }
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{
+  exit(0);
+//    [[NSNotificationCenter defaultCenter] postNotification: @"NotificationNameHere"];
 
+}
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
  [RNCPushNotificationIOS didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
@@ -93,6 +98,15 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
+  if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
+          NSInteger currentBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber;
+    
+          [UIApplication sharedApplication].applicationIconBadgeNumber = currentBadgeNumber + 1;
+
+          completionHandler(UIBackgroundFetchResultNewData);
+    NSLog(@"currentBadgeNumber-currentBadgeNumber %ldid", (long)currentBadgeNumber);
+          return;
+      }
   [RNCPushNotificationIOS didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
 }
 // Required for the registrationError event.
