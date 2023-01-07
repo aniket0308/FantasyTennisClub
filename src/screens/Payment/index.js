@@ -107,7 +107,7 @@ const Payment = ({ route, navigation }) => {
                         value={cvc}
                         onChangeText={(e) => setCvc(e)}
                         keyboardType='phone-pad'
-                        maxLength={3}
+                        maxLength={4}
                     />
                 </View>
                 <FloatingInput

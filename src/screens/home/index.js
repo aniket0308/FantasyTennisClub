@@ -41,9 +41,7 @@ const Home = ({ navigation }) => {
                                 PushNotificationIOS.setApplicationIconBadgeNumber(0);
                             });
                         } else {
-                            PushNotification.getApplicationIconBadgeNumber(n => {
-                                PushNotification.setApplicationIconBadgeNumber(0)
-                            })
+                           PushNotification.removeAllDeliveredNotifications()
                         }
                         if (notification?.data?.notification_type == 'MEMBER') {
                             const token= await AsyncStorage.getItem('@Token')

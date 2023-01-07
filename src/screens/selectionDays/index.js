@@ -69,9 +69,7 @@ const SelectionDays = ({ route, navigation }) => {
                             PushNotificationIOS.setApplicationIconBadgeNumber(0);
                         });
                     } else {
-                        PushNotification.getApplicationIconBadgeNumber(n => {
-                            PushNotification.setApplicationIconBadgeNumber(0)
-                        })
+                        PushNotification.removeAllDeliveredNotifications()
                     }
                     utils.navigateTo(navigation, constants.screens.notification)
                 }

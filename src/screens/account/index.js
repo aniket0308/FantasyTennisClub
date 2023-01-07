@@ -10,6 +10,7 @@ import CardWithImage from "../../components/cardWithImage";
 import Loader from "../../components/loader";
 import { isLoaderVisible, logout } from "../../redux/slice/auth";
 import accountStyle from "./style";
+import DeviceInfo from 'react-native-device-info';
 
 //Account Screen
 const Account = ({ navigation }) => {
@@ -111,6 +112,7 @@ const Account = ({ navigation }) => {
                             )
                         })
                     }
+                    <Text style={{ alignSelf: 'center', marginTop: 10 }}>Version: {DeviceInfo.getVersion()}</Text>
                 </View>
                 {isLoading == true && <Loader />}
             </ScrollView>
