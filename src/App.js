@@ -21,6 +21,7 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import { utils } from './common';
 import { constants } from './common/constant';
 import Routes from './navigation/route';
+import { navigate } from './navigation/navigationRef';
 
 const App = ({ navigation }) => {
 
@@ -28,6 +29,7 @@ const App = ({ navigation }) => {
   const [, setRender] = useState()
   const [isMembership, setIsMembership] = useState()
   const [isLoading, setIsLoading] = useState(false)
+
   const checkMemberShip = async () => {
     const token = await AsyncStorage.getItem('@Token')
     //calling api for Checking Membership
@@ -69,6 +71,8 @@ const App = ({ navigation }) => {
       })
   }
   useEffect(() => {
+    let noti=new PushNotificationService()
+    Platform.OS=='ios'&&noti.configure()
     async function checkAuthentication() {
       checkMemberShip()
     }

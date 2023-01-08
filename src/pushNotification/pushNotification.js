@@ -1,14 +1,18 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
 import { Platform } from "react-native";
 import PushNotification, { Importance } from "react-native-push-notification";
+import { utils } from "../common";
+import { constants } from "../common/constant";
+import { navigate } from "../navigation/navigationRef";
 
 class PushNotificationService {
- constructor(props){
-    this.state={
-        id:0
+    constructor(props) {
+        this.state = {
+            id: 0
+        }
     }
- }
-    configure = () => {
+    configure = (navigateToFromAndroid) => {
         try {
             PushNotification.configure({
                 // (optional) Called when Token is generated (iOS and Android)
@@ -17,14 +21,54 @@ class PushNotificationService {
                 },
 
                 // (required) Called when a remote is received or opened, or local notification is opened
-                onNotification: function (notification) {
-                    console.log("NOTIFICATION:", notification);
-
+                onNotification: async function (notification) {
+                    console.log('What is Notification',notification);
                     // process the notification
-
+                    // Handle notification click
+                    const token = await AsyncStorage.getItem('@Token')
+                    if (notification.userInteraction == true && notification.foreground == true) {
+                        if (Platform.OS == 'ios') {
+                            PushNotificationIOS.getApplicationIconBadgeNumber(number => {
+                                console.log('what is number beta', number);
+                                PushNotificationIOS.setApplicationIconBadgeNumber(0);
+                            });
+                        } else {
+                            PushNotification.removeAllDeliveredNotifications()
+                        }
+                        if (notification?.data?.notification_type == 'MEMBER') {
+                            const token = await AsyncStorage.getItem('@Token')
+                            utils.callApi(`api/v1/announcements/read/${notification?.data?.notification_id}`, { token }, 'notificationRead')
+                            utils.callApi('api/v1/announcements/member/read-all', { token }, 'allNotificationRead')
+                            if(Platform.OS=='android'){
+                                utils.navigateTo(navigateToFromAndroid,constants.screens.notification, { exit: notification?.foreground == true ? false : true })
+                            }else{
+                                navigate(constants.screens.notification, { exit: notification?.foreground == true ? false : true })
+                            }
+                        } else {
+                            if(Platform.OS=='android'){
+                                utils.navigateTo(navigateToFromAndroid,constants.screens.announcements, { exit: notification?.foreground == true ? false : true })
+                            }else{
+                                navigate(constants.screens.announcements, { exit: notification?.foreground == true ? false : true })
+                            }
+                        }
+                    } else {
+                        console.log('From BACKGROUND !!!!!!',notification);
+                        if(notification.userInteraction == true){
+                            if (notification?.data?.notification_type == 'MEMBER') {
+                                const token = await AsyncStorage.getItem('@Token')
+                                utils.callApi(`api/v1/announcements/read/${notification?.data?.notification_id}`, { token }, 'notificationRead')
+                                utils.callApi('api/v1/announcements/member/read-all', { token }, 'allNotificationRead')
+                                utils.navigateTo(navigateToFromAndroid,constants.screens.notification, { fromBackground:true })
+                            } else {
+                                utils.navigateTo(navigateToFromAndroid,constants.screens.announcements, { fromBackground:true })
+                            }
+                            // utils.navigateTo(navigate,constants.screens.announcements, { fromBackground:true })
+                        }
+                    }
                     // (required) Called when a remote is received or opened, or local notification is opened
                     notification.finish(PushNotificationIOS.FetchResult.NoData);
                 },
+
 
                 // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
                 onAction: function (notification) {
@@ -88,7 +132,7 @@ class PushNotificationService {
     localNotification = (payload) => {
         if (Platform.OS == 'android') {
             PushNotification.localNotification({
-                userInfo:payload.data,
+                userInfo: payload.data,
                 channelId: "Fantasy-Tennis-Club-id",
                 largeIcon: "ic_launcher",
                 // bigText: "My big text that will be shown when notification is expanded. Styling can be done using HTML tags(see android docs for details)", // (optional) default: "message" prop
@@ -102,20 +146,20 @@ class PushNotificationService {
                 title: payload?.title, // (optional)
                 message: payload?.body, // (required)
                 picture: payload?.image,
-                soundName:'default',
-                bigPictureUrl:payload?.image,
+                soundName: 'default',
+                bigPictureUrl: payload?.image,
             })
-        }else{
-            let tempId=this.state.id++
+        } else {
+            let tempId = this.state.id++
             PushNotificationIOS.addNotificationRequest({
                 id: `${tempId}`, // (optional) Valid unique 32 bit integer specified as string. default: Autogenerated Unique ID
                 title: payload?.title, // (optional)
-                fireDate: new Date(Date.now()+1000),
-                soundName:'default',
+                fireDate: new Date(Date.now() + 1000),
+                soundName: 'default',
                 body: payload?.body, // (required)
                 isCritical: true,
-                isSilent:'false',
-                userInfo:payload.data,
+                isSilent: 'false',
+                userInfo: payload.data,
             })
         }
     }

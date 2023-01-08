@@ -43,17 +43,17 @@ const bottomTab = createBottomTabNavigator()
 const StackInstideDashBoard = () => {
     return (
         <stack.Navigator initialRouteName="DashBoard">
-            <stack.Screen options={{ headerShown: false, orientation: 'portrait' ,gestureEnabled:false}} name="DashBoard" component={DashBoardHome} />
-            <stack.Screen options={{ headerShown: false, orientation: 'portrait',gestureEnabled:false }} name="Announcements" component={Announcments} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait', gestureEnabled: false }} name="DashBoard" component={DashBoardHome} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Announcements" component={Announcments} />
             <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="SelectionDays" component={SelectionDays} />
             <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="MyPicks" component={MyPicks} />
             <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="JoinWhatsApp" component={JoinWhatsApp} />
             <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Prizes" component={Prizes} />
-            <stack.Screen options={{ headerShown: false , orientation: 'all'}} name="Consolation" component={Consolation} />
-            <stack.Screen options={{ headerShown: false, orientation: 'portrait',gestureEnabled:false }} name="Notifications" component={Notification} />
-            <stack.Screen options={{ headerShown: false,orientation:'all' }} name="GroupLeaderBoard" component={GroupLeaderBoard} />
-            <stack.Screen options={{ headerShown: false,orientation:'all' }} name="Leaderboard" component={LeaderBoard} />
-            <stack.Screen options={{ headerShown: false,orientation:'all' }} name="LockedScreen" component={LockedScreen} />
+            <stack.Screen options={{ headerShown: false, orientation: 'all' }} name="Consolation" component={Consolation} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Notifications" component={Notification} />
+            <stack.Screen options={{ headerShown: false, orientation: 'all' }} name="GroupLeaderBoard" component={GroupLeaderBoard} />
+            <stack.Screen options={{ headerShown: false, orientation: 'all' }} name="Leaderboard" component={LeaderBoard} />
+            <stack.Screen options={{ headerShown: false, orientation: 'all' }} name="LockedScreen" component={LockedScreen} />
         </stack.Navigator>
     )
 }
@@ -74,10 +74,10 @@ const StackInstideSelectionDay = () => {
 const StackInstideLeaderboard = () => {
     return (
         <stack.Navigator initialRouteName="LeaderBoard">
-            <stack.Screen options={{ headerShown: false,orientation:'all' }} name="Consolation" component={Consolation} />
-            <stack.Screen options={{ headerShown: false,orientation:'all' }} name="GroupLeaderBoard" component={GroupLeaderBoard} />
-            <stack.Screen options={{ headerShown: false,orientation:'all' }} name="LeaderBoard" component={LeaderBoard} />
-            <stack.Screen options={{ headerShown: false,orientation:'all' }} name="seasonLeaderBoard" component={seasonLeaderBoard} />
+            <stack.Screen options={{ headerShown: false, orientation: 'all' }} name="Consolation" component={Consolation} />
+            <stack.Screen options={{ headerShown: false, orientation: 'all' }} name="GroupLeaderBoard" component={GroupLeaderBoard} />
+            <stack.Screen options={{ headerShown: false, orientation: 'all' }} name="LeaderBoard" component={LeaderBoard} />
+            <stack.Screen options={{ headerShown: false, orientation: 'all' }} name="seasonLeaderBoard" component={seasonLeaderBoard} />
         </stack.Navigator>
     )
 }
@@ -119,11 +119,11 @@ const BottomTab = ({ navigation }) => {
                 initialRouteName="Dashboard">
                 <bottomTab.Screen
                     options={{
-                        unmountOnBlur: true ,
+                        unmountOnBlur: true,
                         headerShown: false, tabBarIcon: ({ focused }) => {
                             return (
                                 <View
-                                style={{paddingVertical:20}}>
+                                    style={{ paddingVertical: 20 }}>
                                     <Image
                                         source={constants.icons.home}
                                         resizeMode='contain'
@@ -152,10 +152,10 @@ const BottomTab = ({ navigation }) => {
                     component={StackInstideDashBoard} />
                 <bottomTab.Screen
                     options={{
-                        unmountOnBlur: true ,
+                        unmountOnBlur: true,
                         headerShown: false, tabBarIcon: ({ focused }) => {
                             return (
-                                <View style={{paddingVertical:20}}>
+                                <View style={{ paddingVertical: 20 }}>
                                     <Image
                                         source={constants.icons.selectionDays}
                                         resizeMode='contain'
@@ -183,7 +183,8 @@ const BottomTab = ({ navigation }) => {
                     name="SelectionDays"
                     component={StackInstideSelectionDay} />
                 <bottomTab.Screen
-                    options={{unmountOnBlur: true ,
+                    options={{
+                        unmountOnBlur: true,
                         headerShown: false,
                         tabBarIcon: ({ focused }) => {
                             return (
@@ -213,10 +214,11 @@ const BottomTab = ({ navigation }) => {
                     name="GroupLeaderBoard"
                     component={StackInstideLeaderboard} />
                 <bottomTab.Screen
-                    options={{unmountOnBlur: true ,
+                    options={{
+                        unmountOnBlur: true,
                         headerShown: false, tabBarIcon: ({ focused }) => {
                             return (
-                                <View style={{paddingVertical:20}}>
+                                <View style={{ paddingVertical: 20 }}>
                                     <Image
                                         source={constants.icons.rules}
                                         style={{
@@ -245,10 +247,10 @@ const BottomTab = ({ navigation }) => {
                     component={StackInsideRules} />
                 <bottomTab.Screen
                     options={{
-                        unmountOnBlur: true ,
+                        unmountOnBlur: true,
                         headerShown: false, tabBarIcon: ({ focused }) => {
                             return (
-                                <View style={{paddingVertical:20,marginLeft:-10}}>
+                                <View style={{ paddingVertical: 20, marginLeft: -10 }}>
                                     <Image
                                         source={constants.icons.account}
                                         style={{
@@ -284,53 +286,53 @@ const BottomTab = ({ navigation }) => {
 //Navigation Before Authentication Or Say Login
 export const RootNavigator = () => {
     return (
-        <NavigationContainer>
-            <stack.Navigator initialRouteName="Login">
-                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Login" component={Login} />
-                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="SignUp" component={SignUp} />
-                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="ForgotPassword" component={ForgotPassword} />
-                <stack.Screen options={{ headerShown: false, orientation: 'portrait',gestureEnabled:false }} name="BuyMemberShip" component={BuyMemberShip} />
-                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="ChangePassword" component={ChangePassword} />
-                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="OtpVerification" component={OtpVerification} />
-            </stack.Navigator>
-        </NavigationContainer>
+        //<NavigationContainer>
+        <stack.Navigator initialRouteName="Login">
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Login" component={Login} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="SignUp" component={SignUp} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="ForgotPassword" component={ForgotPassword} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait', gestureEnabled: false }} name="BuyMemberShip" component={BuyMemberShip} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="ChangePassword" component={ChangePassword} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="OtpVerification" component={OtpVerification} />
+        </stack.Navigator>
+        // </NavigationContainer>
     )
 }
 
 //Navigation After Authentication Or Say Login
 export const AuthNavigator = () => {
     return (
-        <NavigationContainer >
-            <stack.Navigator initialRouteName='Home'>
-                <stack.Screen options={{ headerShown: false, orientation: 'portrait',gestureEnabled:false }} name="Home" component={Home} />
-                <stack.Screen options={{ headerShown: false, orientation: 'portrait',gestureEnabled:false }} name="Dashboard" component={BottomTab} />
-                <stack.Screen options={{ headerShown: false, orientation: 'portrait',gestureEnabled:false }} name="BuyMemberShip" component={BuyMemberShip} />
-                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="PrivateGroupDetails" component={PrivateGroupDetails} />
-                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="MemberShip" component={MemberShip} />
-                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="MyMembership" component={MyMembership} />
-                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Payment" component={Payment} />
-                <stack.Screen options={{ headerShown: false, orientation: 'portrait' ,gestureEnabled:false}} name="PaymentConfirmation" component={PaymentConfirmation} />
-                <stack.Screen options={{ headerShown: false, orientation: 'portrait' ,gestureEnabled:false}} name="Announcements" component={Announcments} />
-                <stack.Screen options={{ headerShown: false, orientation: 'portrait' ,gestureEnabled:false}} name="Notifications" component={Notification} />
-            </stack.Navigator>
-        </NavigationContainer >
+        //<NavigationContainer>
+        <stack.Navigator initialRouteName='Home'>
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait', gestureEnabled: false }} name="Home" component={Home} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait', gestureEnabled: false }} name="Dashboard" component={BottomTab} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait', gestureEnabled: false }} name="BuyMemberShip" component={BuyMemberShip} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="PrivateGroupDetails" component={PrivateGroupDetails} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="MemberShip" component={MemberShip} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="MyMembership" component={MyMembership} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Payment" component={Payment} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait', gestureEnabled: false }} name="PaymentConfirmation" component={PaymentConfirmation} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait', }} name="Announcements" component={Announcments} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Notifications" component={Notification} />
+        </stack.Navigator>
+        //</NavigationContainer>
     )
 }
 
 //Navigation After Authentication Or Say Login
 export const RegisterFirstTime = () => {
     return (
-        <NavigationContainer >
-            <stack.Navigator initialRouteName='BuyMemberShip'>
-                <stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
-                <stack.Screen options={{ headerShown: false, orientation: 'portrait',gestureEnabled:false }} name="Dashboard" component={BottomTab} />
-                <stack.Screen options={{ headerShown: false, orientation: 'portrait' ,gestureEnabled:false}} name="BuyMemberShip" component={BuyMemberShip} />
-                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="MyMembership" component={MyMembership} />
-                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="PrivateGroupDetails" component={PrivateGroupDetails} />
-                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="MemberShip" component={MemberShip} />
-                <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Payment" component={Payment} />
-                <stack.Screen options={{ headerShown: false, orientation: 'portrait',gestureEnabled:false }} name="PaymentConfirmation" component={PaymentConfirmation} />
-            </stack.Navigator>
-        </NavigationContainer >
+        //<NavigationContainer>
+        <stack.Navigator initialRouteName='BuyMemberShip'>
+            <stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait', gestureEnabled: false }} name="Dashboard" component={BottomTab} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait', gestureEnabled: false }} name="BuyMemberShip" component={BuyMemberShip} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="MyMembership" component={MyMembership} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="PrivateGroupDetails" component={PrivateGroupDetails} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="MemberShip" component={MemberShip} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait' }} name="Payment" component={Payment} />
+            <stack.Screen options={{ headerShown: false, orientation: 'portrait', gestureEnabled: false }} name="PaymentConfirmation" component={PaymentConfirmation} />
+        </stack.Navigator>
+        //</NavigationContainer>
     )
 }

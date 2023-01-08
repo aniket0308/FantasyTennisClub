@@ -14,96 +14,40 @@ import PushNotificationService from "../../pushNotification/pushNotification";
 import { checkAuthentication, logout } from "../../redux/slice/auth";
 import { store } from "../../redux/store";
 import Loader from "../../components/loader";
+import { navigate } from "../../navigation/navigationRef";
+import { useRoute } from "@react-navigation/native";
 
 //Home Screen
 const Home = ({ navigation }) => {
 
     const [isLoading, setIsLoading] = useState(false)
     const [data, setData] = useState()
-    const [,setRender]=useState()
-
-    const configure = () => {
-        try {
-            PushNotification.configure({
-                // (optional) Called when Token is generated (iOS and Android)
-                onRegister: function (token) {
-                    console.log("TOKEN:", token);
-                },
-
-                // (required) Called when a remote is received or opened, or local notification is opened
-                onNotification: async function (notification) {
-                    console.log('what is notification adsfsdgfd',notification);
-                    // process the notification
-                    // Handle notification click
-                    const token = await AsyncStorage.getItem('@Token')
-                    if (notification.userInteraction == true) {
-                        if (Platform.OS == 'ios') {
-                            PushNotificationIOS.getApplicationIconBadgeNumber(number => {
-                                console.log('what is number beta', number);
-                                PushNotificationIOS.setApplicationIconBadgeNumber(0);
-                            });
-                        } else {
-                           PushNotification.removeAllDeliveredNotifications()
-                        }
-                        if (notification?.data?.notification_type == 'MEMBER') {
-                            const token= await AsyncStorage.getItem('@Token')
-                            utils.callApi(`api/v1/announcements/read/${notification?.data?.notification_id}`,{token},'notificationRead')
-                            utils.callApi('api/v1/announcements/member/read-all',{token},'allNotificationRead')
-                            utils.navigateTo(navigation, constants.screens.notification, { exit:notification?.foreground==true?false:true })
-                        } else {
-                            utils.navigateTo(navigation, constants.screens.announcements, { exit:notification?.foreground==true?false:true })
-                        }
-                    } else {
-                        utils.callApiGet(`api/v1/announcements/member`, { setIsLoading, setData, setRender,token },'getNotification')
-                        utils.navigateTo(navigation, constants.screens.dashBoard, { exit:notification?.foreground==true?false:true })
-                    }
-                    utils.callApiGet(`api/v1/announcements/member`, { setIsLoading, setData, token,setRender },'getNotification')
-                    // (required) Called when a remote is received or opened, or local notification is opened
-                    notification.finish(PushNotificationIOS.FetchResult.NoData);
-                },
-
-                // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
-                onAction: function (notification) {
-                    console.log("ACTION:", notification.action);
-                    console.log("NOTIFICATION: vvv", notification);
-
-                    // process the action
-                },
-
-                // (optional) Called when the user fails to register for remote notifications. Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
-                onRegistrationError: function (err) {
-                    console.error(err.message, err);
-                },
-
-                // IOS ONLY (optional): default: all - Permissions to register.
-                permissions: {
-                    alert: true,
-                    badge: true,
-                    sound: true,
-                },
-
-                // Should the initial notification be popped automatically
-                // default: true
-                popInitialNotification: true,
-
-                /**
-                 * (optional) default: true
-                 * - Specified if permissions (ios) and token (android and ios) will requested or not,
-                 * - if not, you must call PushNotificationsHandler.requestPermissions() later
-                 * - if you are not using remote notification or do not have Firebase installed, use this:
-                 *     requestPermissions: Platform.OS === 'ios'
-                 */
-                requestPermissions: true,
-            })
-        } catch (error) {
-            console.log('Error:', error);
-        }
-    }
-
+    const [, setRender] = useState()
 
     useEffect(() => {
         const notification = new PushNotificationService()
-        configure()
+        if(Platform.OS=='android'){
+            notification.configure(navigation)
+        }
+        messaging().onNotificationOpenedApp(async remoteMessage => {
+            console.log('App Opened From Background', remoteMessage);
+            if (Platform.OS == 'ios') {
+                PushNotificationIOS.getApplicationIconBadgeNumber(number => {
+                    console.log('what is number beta', number);
+                    PushNotificationIOS.setApplicationIconBadgeNumber(0);
+                });
+            } else {
+                PushNotification.removeAllDeliveredNotifications()
+            }
+            if (remoteMessage?.data?.notification_type == 'MEMBER') {
+                const token = await AsyncStorage.getItem('@Token')
+                utils.callApi(`api/v1/announcements/read/${remoteMessage?.data?.notification_id}`, { token }, 'notificationRead')
+                utils.callApi('api/v1/announcements/member/read-all', { token }, 'allNotificationRead')
+                utils.navigateTo(navigation,constants.screens.notification,{fromBackground:true})
+            } else {
+                utils.navigateTo(navigation,constants.screens.announcements,{fromBackground:true})
+            }
+        })
         notification.createChannel()
         setTimeout(() => {
             SplashScreen.hide();

@@ -74,7 +74,13 @@ const Announcments = ({ navigation, route }) => {
                     utils.navigateTo(navigation, constants.screens.notification)
                 }
                 }
-                onPressLeftIcon={() => navigation.goBack()}
+                onPressLeftIcon={() => {
+                    if(route?.params?.fromBackground == true){
+                        navigation.navigate(constants.screens.dashBoard)
+                    }else{
+                        navigation.goBack()
+                    }
+                }}
                 rightIconStyle={{ height: widthPercentageToDP(6), width: widthPercentageToDP(6) }}
                 lengthStyle={{top:5}}
             />

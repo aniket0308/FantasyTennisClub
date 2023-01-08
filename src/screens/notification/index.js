@@ -2,7 +2,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { Alert, BackHandler, FlatList, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import PushNotification from "react-native-push-notification";
+import RenderHTML from "react-native-render-html";
 import { widthPercentageToDP } from "react-native-responsive-screen";
+import { FullWindowOverlay } from "react-native-screens";
 import { useDispatch } from "react-redux";
 import { utils } from "../../common";
 import { commonStyle } from "../../common/commonStyle";
@@ -28,10 +30,6 @@ const Notification = ({ navigation,route }) => {
 
     useEffect(() => {
         getNotification()
-        if(route?.params?.exit==true){
-            const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {BackHandler.exitApp()})
-        return () => backHandler.remove()
-        }
     }, [])
 
     useEffect(() => {
@@ -59,7 +57,11 @@ const Notification = ({ navigation,route }) => {
                     </View>
                     <View style={[commonStyle.column, { justifyContent: 'center', marginLeft: 20 }]}>
                         <Text style={[notificationStyle.txtFtc, { color: constants.colors.darkBlue, fontWeight: '600' }]}>{item?.title}</Text>
-                        <Text style={[notificationStyle.txtFtc, { color: constants.colors.labelColor, fontWeight: '400', fontSize: 12, marginTop: 5,width:widthPercentageToDP(60) }]}>{item?.description}</Text>
+                        {/* <Text style={[notificationStyle.txtFtc, { color: constants.colors.labelColor, fontWeight: '400', fontSize: 12, marginTop: 5,width:widthPercentageToDP(60) }]}>{item?.description}</Text> */}
+                        <RenderHTML
+                        baseStyle={{width:widthPercentageToDP(58)}}
+                            source={{ html: `${item?.description}` }}
+                        />
                     </View>
                 </View>
                 <Text style={[notificationStyle.txtFtc, { color: constants.colors.black, fontWeight: '400', fontSize: 12, marginTop: 5, alignSelf: 'center' }]}>{item?.time_ago}</Text>
@@ -76,7 +78,13 @@ const Notification = ({ navigation,route }) => {
                 showBackArrow={true}
                 title={'Member Notifications'}
                 titleStyle={{ marginTop: 5, marginBottom: -3 }}
-                onPressLeftIcon={() => navigation.goBack()}
+                onPressLeftIcon={() => {
+                    if(route?.params?.fromBackground == true){
+                        utils.navigateTo(navigation,constants.screens.dashBoard)
+                    }else{
+                        navigation.goBack()
+                    }
+                }}
                 navigation={navigation}
             />
             {

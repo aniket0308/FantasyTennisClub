@@ -84,12 +84,7 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 {
   completionHandler(UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionBadge);
 }
-- (void)applicationDidEnterBackground:(UIApplication *)application
-{
-  exit(0);
-//    [[NSNotificationCenter defaultCenter] postNotification: @"NotificationNameHere"];
 
-}
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
  [RNCPushNotificationIOS didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
