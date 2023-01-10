@@ -25,20 +25,36 @@ class PushNotificationService {
                     console.log('What is Notification',notification);
                     // process the notification
                     // Handle notification click
+
+                    if(notification?.data?.notification_type != 'MEMBER') {
+                        if(Platform.OS=='ios'){
+                            PushNotificationIOS.getApplicationIconBadgeNumber(number=>{
+                                PushNotificationIOS.setApplicationIconBadgeNumber(number-1)
+                            })
+                        }else{
+                            PushNotification.getApplicationIconBadgeNumber(number=>{
+                                PushNotification.setApplicationIconBadgeNumber(number-1)
+                            })
+                        }
+                    }
+
+
                     const token = await AsyncStorage.getItem('@Token')
                     if (notification.userInteraction == true && notification.foreground == true) {
-                        if (Platform.OS == 'ios') {
-                            PushNotificationIOS.getApplicationIconBadgeNumber(number => {
-                                console.log('what is number beta', number);
-                                PushNotificationIOS.setApplicationIconBadgeNumber(0);
-                            });
+                        if (Platform.OS == 'ios' ) {
+                            if(notification?.data?.notification_type == 'MEMBER'){
+                                PushNotificationIOS.getApplicationIconBadgeNumber(number => {
+                                    console.log('what is number beta', number);
+                                    PushNotificationIOS.setApplicationIconBadgeNumber(0);
+                                });
+                            }
                         } else {
-                            PushNotification.removeAllDeliveredNotifications()
+                            if(notification?.data?.notification_type == 'MEMBER'){
+                                PushNotification.removeAllDeliveredNotifications()    
+                            }
                         }
                         if (notification?.data?.notification_type == 'MEMBER') {
                             const token = await AsyncStorage.getItem('@Token')
-                            utils.callApi(`api/v1/announcements/read/${notification?.data?.notification_id}`, { token }, 'notificationRead')
-                            utils.callApi('api/v1/announcements/member/read-all', { token }, 'allNotificationRead')
                             if(Platform.OS=='android'){
                                 utils.navigateTo(navigateToFromAndroid,constants.screens.notification, { exit: notification?.foreground == true ? false : true })
                             }else{
@@ -55,14 +71,13 @@ class PushNotificationService {
                         console.log('From BACKGROUND !!!!!!',notification);
                         if(notification.userInteraction == true){
                             if (notification?.data?.notification_type == 'MEMBER') {
-                                const token = await AsyncStorage.getItem('@Token')
-                                utils.callApi(`api/v1/announcements/read/${notification?.data?.notification_id}`, { token }, 'notificationRead')
-                                utils.callApi('api/v1/announcements/member/read-all', { token }, 'allNotificationRead')
+                                if(Platform.OS=='android'){
+                                    PushNotification.removeAllDeliveredNotifications()
+                                }
                                 utils.navigateTo(navigateToFromAndroid,constants.screens.notification, { fromBackground:true })
                             } else {
                                 utils.navigateTo(navigateToFromAndroid,constants.screens.announcements, { fromBackground:true })
                             }
-                            // utils.navigateTo(navigate,constants.screens.announcements, { fromBackground:true })
                         }
                     }
                     // (required) Called when a remote is received or opened, or local notification is opened

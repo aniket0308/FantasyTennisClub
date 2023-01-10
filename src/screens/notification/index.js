@@ -26,11 +26,20 @@ const Notification = ({ navigation,route }) => {
         utils.callApiGet(`api/v1/announcements/member`, {setIsLoading,setData,token},'getNotification')
     }
 
-    console.log('what is data',JSON.stringify(data));
+    const readAllNotification=async()=>{
+        const token = await AsyncStorage.getItem('@Token')
+        utils.callApi('api/v1/announcements/member/read-all', { token }, 'allNotificationRead')
+    }
 
     useEffect(() => {
         getNotification()
+        readAllNotification()
     }, [])
+
+    useEffect(() => {
+        getNotification()
+        readAllNotification()
+    }, [route.params])
 
     useEffect(() => {
         getNotification()

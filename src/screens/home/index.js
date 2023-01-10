@@ -32,17 +32,28 @@ const Home = ({ navigation }) => {
         messaging().onNotificationOpenedApp(async remoteMessage => {
             console.log('App Opened From Background', remoteMessage);
             if (Platform.OS == 'ios') {
-                PushNotificationIOS.getApplicationIconBadgeNumber(number => {
-                    console.log('what is number beta', number);
-                    PushNotificationIOS.setApplicationIconBadgeNumber(0);
-                });
+                if(remoteMessage?.data?.notification_type == 'MEMBER'){
+                    PushNotificationIOS.getApplicationIconBadgeNumber(number => {
+                        console.log('what is number beta', number);
+                        PushNotificationIOS.setApplicationIconBadgeNumber(0);
+                    });    
+                }else{
+                    PushNotificationIOS.getApplicationIconBadgeNumber(number => {
+                        console.log('what is number beta', number);
+                        PushNotificationIOS.setApplicationIconBadgeNumber(number-1);
+                    });    
+                }
             } else {
-                PushNotification.removeAllDeliveredNotifications()
+                if(remoteMessage?.data?.notification_type == 'MEMBER'){
+                    PushNotification.removeAllDeliveredNotifications()
+                }else{
+                    PushNotification.getApplicationIconBadgeNumber((number)=>{
+                        PushNotification.setApplicationIconBadgeNumber(number-1)
+                    })
+                }
             }
             if (remoteMessage?.data?.notification_type == 'MEMBER') {
                 const token = await AsyncStorage.getItem('@Token')
-                utils.callApi(`api/v1/announcements/read/${remoteMessage?.data?.notification_id}`, { token }, 'notificationRead')
-                utils.callApi('api/v1/announcements/member/read-all', { token }, 'allNotificationRead')
                 utils.navigateTo(navigation,constants.screens.notification,{fromBackground:true})
             } else {
                 utils.navigateTo(navigation,constants.screens.announcements,{fromBackground:true})
@@ -61,14 +72,28 @@ const Home = ({ navigation }) => {
                 //  image: remoteMessage?.notification.android.imageUrl
             })
             if (Platform.OS == 'ios') {
-                PushNotificationIOS.getApplicationIconBadgeNumber(number => {
-                    console.log('what is number beta incrementer', number);
-                    PushNotificationIOS.setApplicationIconBadgeNumber(number + 1);
-                });
-            } else {
-                PushNotification.getApplicationIconBadgeNumber(n => {
-                    PushNotification.setApplicationIconBadgeNumber(n + 1)
-                })
+                if(remoteMessage?.data?.notification_type=='MEMBER'){
+                    PushNotificationIOS.getApplicationIconBadgeNumber(number => {
+                        console.log('what is number beta incrementer', number);
+                        PushNotificationIOS.setApplicationIconBadgeNumber(number + 1);
+                    });
+                }else{
+                    PushNotificationIOS.getApplicationIconBadgeNumber(number => {
+                        console.log('what is number beta incrementer', number);
+                        PushNotificationIOS.setApplicationIconBadgeNumber(number - 1);
+                    });
+                }
+            }
+             else {
+                if(remoteMessage?.data?.notification_type=='MEMBER'){
+                    PushNotification.getApplicationIconBadgeNumber(n => {
+                        PushNotification.setApplicationIconBadgeNumber(n + 1)
+                    })
+                }else{
+                    PushNotification.getApplicationIconBadgeNumber(n => {
+                        PushNotification.setApplicationIconBadgeNumber(n - 1)
+                    })
+                }
             }
         });
         return unsubscribe
