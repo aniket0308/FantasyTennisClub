@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
 import React, { useEffect, useState } from "react";
-import { Platform, SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
+import { Platform, RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
 import PushNotification from "react-native-push-notification";
 import RenderHTML from "react-native-render-html";
 import { widthPercentageToDP } from "react-native-responsive-screen";
@@ -14,22 +14,23 @@ import SearchBar from "../../components/searchBar";
 import { getTournamentParticipants } from "../../redux/slice/auth";
 import prizeStyle from "./style";
 
-const Prizes = ({ navigation,route }) => {
+const Prizes = ({ navigation, route }) => {
 
     const [isLoading, setIsLoading] = useState(false)
     const [description, setDescription] = useState(route?.params)
     const [searchResult, setSearchResult] = useState('')
-    const [data,setData]=useState()
-    const dispatch=useDispatch()
+    const [data, setData] = useState()
+    const [refresh, setRefresh] = useState(false)
+    const dispatch = useDispatch()
 
     const getAllTournamentParticipants = async () => {
         const tournamentId = await AsyncStorage.getItem('@TournamentId')
         const token = await AsyncStorage.getItem('@Token')
-        utils.callApiGet(`api/v1/tournaments/${tournamentId}/participations`, {setIsLoading,setData,token})
+        utils.callApiGet(`api/v1/tournaments/${tournamentId}/participations`, { setIsLoading, setData, token })
     }
 
     useEffect(() => {
-            getAllTournamentParticipants()
+        getAllTournamentParticipants()
     }, [])
 
     return (
@@ -37,30 +38,50 @@ const Prizes = ({ navigation,route }) => {
             <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />
             <SafeAreaView />
             <Header
+                navigation={navigation}
+                refresh={refresh}
                 showBackArrow={true}
                 title={'Event Details'}
                 titleStyle={{ marginTop: 5, marginBottom: -10 }}
                 rightIcon={constants.icons.shapeBell}
                 checkLength={true}
-                rightIconStyle={{height:widthPercentageToDP(6),width:widthPercentageToDP(6)}}
-                onPressRightIcon={async() => {
-                        const token=await AsyncStorage.getItem('@Token')
-                        utils.callApi('api/v1/announcements/member/read-all',{token},'allNotificationRead')
-                         if(Platform.OS=='ios'){
-                PushNotificationIOS.getApplicationIconBadgeNumber(number => {
-                    console.log('what is number beta incrementer',number);
-                    PushNotificationIOS.setApplicationIconBadgeNumber(0);
-                  });
-            }else{
-                PushNotification.removeAllDeliveredNotifications()
-            }
-                        utils.navigateTo(navigation, constants.screens.notification)}
+                rightIconStyle={{ height: widthPercentageToDP(6), width: widthPercentageToDP(6) }}
+                onPressRightIcon={async () => {
+                    const token = await AsyncStorage.getItem('@Token')
+                    utils.callApi('api/v1/announcements/member/read-all', { token }, 'allNotificationRead')
+                    if (Platform.OS == 'ios') {
+                        PushNotificationIOS.getApplicationIconBadgeNumber(number => {
+                            console.log('what is number beta incrementer', number);
+                            PushNotificationIOS.setApplicationIconBadgeNumber(0);
+                        });
+                    } else {
+                        PushNotification.removeAllDeliveredNotifications()
                     }
+                    utils.navigateTo(navigation, constants.screens.notification)
+                }
+                }
                 onPressLeftIcon={() => navigation.goBack()}
-                lengthStyle={{top:5}}
+                lengthStyle={{ top: 5 }}
             />
             <View style={{ backgroundColor: constants.colors.white, flex: 1, marginBottom: 25 }}>
-                <ScrollView bounces={false} showsVerticalScrollIndicator={false} >
+                <ScrollView
+                    refreshControl={
+                        <RefreshControl
+                            title='Loading...'
+                            tintColor={constants.colors.darkBlue}
+                            colors={[constants.colors.darkBlue]}
+                            titleColor={constants.colors.darkBlue}
+                            size='large'
+                            refreshing={refresh}
+                            onRefresh={() => {
+                                setRefresh(true)
+                                setTimeout(() => {
+                                    setRefresh(false)
+                                }, 1000)
+                            }}
+                        />
+                    }
+                    bounces={true} showsVerticalScrollIndicator={false} >
                     {/* <Text style={prizeStyle.txtMemberParticipate}>Members Participating</Text>
                     <SearchBar
                     onChangeText={(search)=>setSearchResult(search)}
@@ -79,7 +100,7 @@ const Prizes = ({ navigation,route }) => {
                             })
                         } */}
                         {
-                            description && isLoading==true
+                            description && isLoading == true
                             && <RenderHTML
                                 source={{ html: `${description}` }}
                             />

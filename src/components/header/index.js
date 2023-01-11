@@ -8,7 +8,8 @@ import { store } from "../../redux/store";
 import headerStyle from "./style";
 
 const Header = ({ title, subTitle, showBackArrow, titleStyle, onPressLeftIcon, subTitleStyle, rightIcon, viewHeaderStyle, rightIconStyle,
-    mainViewHeaderStyle, resizeMode, onPressRightIcon, rightIconTitle, rightIconTitleStyle, isCartHavingThings, lengthStyle, checkLength,navigation
+    mainViewHeaderStyle, resizeMode, onPressRightIcon, rightIconTitle, rightIconTitleStyle, isCartHavingThings, lengthStyle, checkLength,navigation,
+    refresh
 }) => {
     const [data, setData] = useState()
     const [isLoading, setIsLoading] = useState(false)
@@ -19,12 +20,14 @@ const Header = ({ title, subTitle, showBackArrow, titleStyle, onPressLeftIcon, s
         const token = await AsyncStorage.getItem('@Token')
         utils.callApiGet(`api/v1/announcements/member`, { setIsLoading, setData,token })
     }
-
-    console.log('data iosss ',data);
-
+     
     useEffect(() => {
         getNotification()
     }, [])
+
+    useEffect(() => {
+        getNotification()
+    }, [refresh])
 
     useEffect(() => {
         if(navigation!=undefined){

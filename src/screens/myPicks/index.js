@@ -83,6 +83,8 @@ const MyPicks = ({ route, navigation }) => {
             <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />
             <SafeAreaView />
             <Header
+                refresh={refresh}
+                navigation={navigation}
                 title={'MY PICKS'}
                 subTitle={particularDayPick?.day}
                 titleStyle={{ alignSelf: 'center', fontSize: 22 }}

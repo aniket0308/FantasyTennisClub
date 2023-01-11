@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
 import React, { useEffect, useState } from "react";
-import { Alert, Image, Platform, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Image, Platform, RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import PushNotification from "react-native-push-notification";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { useDispatch } from "react-redux";
@@ -19,6 +19,7 @@ const SelectionDays = ({ route, navigation }) => {
     const [days, setDays] = useState()
     const [isLoading, setIsLoading] = useState(false)
     const dispatch = useDispatch()
+    const [refresh, setRefresh] = useState(false)
 
     function reverseArr() {
         var ret = new Array;
@@ -53,6 +54,7 @@ const SelectionDays = ({ route, navigation }) => {
             <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />
             <SafeAreaView />
             <Header
+                refresh={refresh}
                 showBackArrow={true}
                 title={myPicks == 'MY PICKS' ? 'My Picks' : 'Selection Days'}
                 titleStyle={{ fontSize: 22, marginTop: 10 }}
@@ -75,10 +77,30 @@ const SelectionDays = ({ route, navigation }) => {
                 }
                 }
                 onPressLeftIcon={() => navigation.goBack()}
+                navigation={navigation}
             />
             {isLoading == false
                 ? <Loader />
-                : <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flex: 1, justifyContent: 'center' }} style={{ marginBottom: 25 }} bounces={false}>
+                : <ScrollView
+                    refreshControl={
+                        <RefreshControl
+                            title='Loading...'
+                            tintColor={constants.colors.darkBlue}
+                            colors={[constants.colors.darkBlue]}
+                            titleColor={constants.colors.darkBlue}
+                            size='large'
+                            refreshing={refresh}
+                            onRefresh={() => {
+                                setRefresh(true)
+                                setTimeout(()=>{
+                                    setRefresh(false)
+                                },1000)
+                            }}
+                        />
+                    }
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{ flex: 1, justifyContent: 'center' }}
+                    style={{ marginBottom: 25 }} bounces={true}>
                     <View style={selectionDayStyle.touchableMainView}>
                         {days?.data?.days?.length > 0
                             && reverseDays?.map((item, index) => {

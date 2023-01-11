@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
 import React, { useEffect, useState } from "react";
-import { Image, Platform, RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { Alert, BackHandler, Image, Platform, RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import PushNotification from "react-native-push-notification";
 import RenderHTML from "react-native-render-html";
 import { widthPercentageToDP } from "react-native-responsive-screen";
@@ -53,6 +53,23 @@ const DashBoardHome = ({ navigation }) => {
         });
         return focusHandler;
     }, [navigation]);
+
+    // useEffect(() => {
+    //     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+    //         Alert.alert(
+    //                     "Fantasy Tennis Club",
+    //                     'Are you sure you want to exit?',
+    //                     [
+    //                         { text: "OK", onPress: () => BackHandler.exitApp()},
+    //                         { text: "CANCEL", onPress: () => {} }
+    //                     ]
+    //                 )
+    //                 return true
+    //     })
+    //     return () => backHandler.remove()
+
+    // }, []);
+
     useEffect(() => {
         getDays()
         getAnnouncement(false)
@@ -145,6 +162,7 @@ const DashBoardHome = ({ navigation }) => {
                 <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />
                 <SafeAreaView />
                 <Header
+                    refresh={refresh}
                     title={'Dashboard'}
                     subTitle={days?.data?.title}
                     titleStyle={{ alignSelf: 'center', fontSize: 22 }}
@@ -154,13 +172,13 @@ const DashBoardHome = ({ navigation }) => {
                     onPressRightIcon={async () => {
                         const token = await AsyncStorage.getItem('@Token')
                         utils.callApi('api/v1/announcements/member/read-all', { token }, 'allNotificationRead')
-                         if (Platform.OS == 'ios') {
+                        if (Platform.OS == 'ios') {
                             PushNotificationIOS.getApplicationIconBadgeNumber(number => {
                                 console.log('what is number beta incrementer', number);
                                 PushNotificationIOS.setApplicationIconBadgeNumber(0);
                             });
                         } else {
-                           PushNotification.removeAllDeliveredNotifications()
+                            PushNotification.removeAllDeliveredNotifications()
                         }
                         utils.navigateTo(navigation, constants.screens.notification)
                     }

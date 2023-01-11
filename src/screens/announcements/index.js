@@ -54,6 +54,8 @@ const Announcments = ({ navigation, route }) => {
             <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />
             <SafeAreaView />
             <Header
+            navigation={navigation}
+            refresh={refresh}
                 showBackArrow={true}
                 title={'Announcements'}
                 titleStyle={{ marginTop: 5, marginBottom: -10 }}

@@ -78,6 +78,8 @@ const Rules = ({ navigation }) => {
             <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />
             <SafeAreaView />
             <Header
+                navigation={navigation}
+                refresh={refresh}
                 showBackArrow={true}
                 title={'Rules and FAQs'}
                 titleStyle={{ marginTop: 5, marginBottom: -10 }}
