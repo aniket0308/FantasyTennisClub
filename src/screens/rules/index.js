@@ -89,16 +89,6 @@ const Rules = ({ navigation }) => {
                 onPressRightIcon={async () => {
                     const token = await AsyncStorage.getItem('@Token')
                     utils.callApi('api/v1/announcements/member/read-all', { token }, 'allNotificationRead')
-                    if (Platform.OS == 'ios') {
-                        PushNotificationIOS.getApplicationIconBadgeNumber(number => {
-                            console.log('what is number beta incrementer', number);
-                            PushNotificationIOS.setApplicationIconBadgeNumber(number + 1);
-                        });
-                    } else {
-                        PushNotification.getApplicationIconBadgeNumber(n => {
-                            PushNotification.setApplicationIconBadgeNumber(n + 1)
-                        })
-                    }
                     utils.navigateTo(navigation, constants.screens.notification)
                 }
                 }

@@ -26,17 +26,6 @@ class PushNotificationService {
                     // process the notification
                     // Handle notification click
 
-                    if(notification?.data?.notification_type != 'MEMBER') {
-                        if(Platform.OS=='ios'){
-                            PushNotificationIOS.getApplicationIconBadgeNumber(number=>{
-                                PushNotificationIOS.setApplicationIconBadgeNumber(number-1)
-                            })
-                        }else{
-                            PushNotification.getApplicationIconBadgeNumber(number=>{
-                                PushNotification.setApplicationIconBadgeNumber(number-1)
-                            })
-                        }
-                    }
 
 
                     const token = await AsyncStorage.getItem('@Token')

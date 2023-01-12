@@ -40,7 +40,7 @@ const Home = ({ navigation }) => {
                 }else{
                     PushNotificationIOS.getApplicationIconBadgeNumber(number => {
                         console.log('what is number beta', number);
-                        PushNotificationIOS.setApplicationIconBadgeNumber(number-1);
+                        // PushNotificationIOS.setApplicationIconBadgeNumber(number-1);
                     });    
                 }
             } else {
@@ -48,7 +48,7 @@ const Home = ({ navigation }) => {
                     PushNotification.removeAllDeliveredNotifications()
                 }else{
                     PushNotification.getApplicationIconBadgeNumber((number)=>{
-                        PushNotification.setApplicationIconBadgeNumber(number-1)
+                        // PushNotification.setApplicationIconBadgeNumber(number-1)
                     })
                 }
             }
@@ -80,7 +80,7 @@ const Home = ({ navigation }) => {
                 }else{
                     PushNotificationIOS.getApplicationIconBadgeNumber(number => {
                         console.log('what is number beta incrementer', number);
-                        PushNotificationIOS.setApplicationIconBadgeNumber(number - 1);
+                        // PushNotificationIOS.setApplicationIconBadgeNumber(number - 1);
                     });
                 }
             }
@@ -91,7 +91,7 @@ const Home = ({ navigation }) => {
                     })
                 }else{
                     PushNotification.getApplicationIconBadgeNumber(n => {
-                        PushNotification.setApplicationIconBadgeNumber(n - 1)
+                        // PushNotification.setApplicationIconBadgeNumber(n - 1)
                     })
                 }
             }

@@ -46,6 +46,7 @@ const DashBoardHome = ({ navigation }) => {
         getDays()
         getAnnouncement(false)
     }, [refresh])
+
     useEffect(() => {
         const focusHandler = navigation.addListener('focus', () => {
             getDays()
@@ -131,7 +132,7 @@ const DashBoardHome = ({ navigation }) => {
             >
                 {
                     item?.score
-                    && <Text style={dashboardStyle.txtScore}>{days?.data[item?.title == 'Leaderboard' ? 'leaderboard' : item?.title == 'Consolation' ? 'consolation' : 'season_ranking']}</Text>
+                    && <Text style={dashboardStyle.txtScore}>{days != undefined && days?.data != undefined && days?.data[item?.title == 'Leaderboard' ? 'leaderboard' : item?.title == 'Consolation' ? 'consolation' : 'season_ranking']}</Text>
                 }
                 {
                     item.icon
@@ -212,7 +213,7 @@ const DashBoardHome = ({ navigation }) => {
                         <View>
                             <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-around' }}>
                                 {
-                                    tempData.map((item, index) => {
+                                    tempData != undefined && tempData.map((item, index) => {
                                         return (
                                             renderItem(item, index)
                                         )
@@ -226,7 +227,7 @@ const DashBoardHome = ({ navigation }) => {
                                 </TouchableOpacity>
                             </View>
                             {
-                                data?.data?.length > 0 &&
+                                data != undefined && data?.data?.length > 0 &&
                                 data?.data.map((i, index) => {
                                     return renderInsightData(i, index)
                                 })

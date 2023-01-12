@@ -94,12 +94,12 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
   if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
-          NSInteger currentBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber;
-    
-          [UIApplication sharedApplication].applicationIconBadgeNumber = currentBadgeNumber + 1;
+//          NSInteger currentBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber;
+//
+//          [UIApplication sharedApplication].applicationIconBadgeNumber = currentBadgeNumber + 1;
 
           completionHandler(UIBackgroundFetchResultNewData);
-    NSLog(@"currentBadgeNumber-currentBadgeNumber %ldid", (long)currentBadgeNumber);
+//    NSLog(@"currentBadgeNumber-currentBadgeNumber %ldid", (long)currentBadgeNumber);
           return;
       }
   [RNCPushNotificationIOS didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];

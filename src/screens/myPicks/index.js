@@ -65,7 +65,7 @@ const MyPicks = ({ route, navigation }) => {
                                         <Text style={myPicksStyle.txtDay}>{matchItem && matchItem?.match}</Text>
                                     </View>
                                     <View style={{ backgroundColor: constants.colors.white, paddingHorizontal: 10, paddingTop: 10, paddingBottom: 10 }}>
-                                        <Text style={[myPicksStyle.txtMyPick, { color: constants.colors.black, fontSize: 14 }]}>{matchItem && matchItem?.players && matchItem?.players[0].player} v/s {matchItem && matchItem?.players && matchItem?.players[1]?.player}</Text>
+                                        <Text style={[myPicksStyle.txtMyPick, { color: constants.colors.black, fontSize: 14 }]}>{matchItem?.title}</Text>
                                         <Text style={[myPicksStyle.txtMyPick, { color: constants.colors.black, fontSize: 14 }]}>Winner:  {matchItem && matchItem?.winner}</Text>
                                         <Text style={[myPicksStyle.txtMyPick, { marginTop: 10 }]}>My Pick:  {matchItem && matchItem?.my_pick}</Text>
                                     </View>

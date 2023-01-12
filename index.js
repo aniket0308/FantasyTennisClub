@@ -20,13 +20,13 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
   if (Platform.OS == 'ios') {
     if(remoteMessage?.data?.notification_type=='MEMBER'){
         PushNotificationIOS.getApplicationIconBadgeNumber(number => {
-            console.log('what is number beta incrementer', number);
+            console.log('what is number beta incrementer Baclkgroubd', number);
             PushNotificationIOS.setApplicationIconBadgeNumber(number + 1);
         });
     }else{
         PushNotificationIOS.getApplicationIconBadgeNumber(number => {
-            console.log('what is number beta incrementer', number);
-            PushNotificationIOS.setApplicationIconBadgeNumber(number - 1);
+            console.log('what is number beta Decrementer backgrounf', number);
+            // PushNotificationIOS.setApplicationIconBadgeNumber(number - 1);
         });
     }
 }
@@ -37,7 +37,7 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
         })
     }else{
         PushNotification.getApplicationIconBadgeNumber(n => {
-            PushNotification.setApplicationIconBadgeNumber(n - 1)
+            // PushNotification.setApplicationIconBadgeNumber(n - 1)
         })
     }
 }
