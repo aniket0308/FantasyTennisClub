@@ -87,10 +87,6 @@ const SignUp = ({ navigation }) => {
         }
     }
 
-    useEffect(() => {
-        // requestUserPermission()
-    }, [])
-
     return (
         <>
             <StatusBar backgroundColor={constants.colors.backGroundLight} barStyle='dark-content' />

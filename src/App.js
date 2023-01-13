@@ -56,7 +56,7 @@ const App = ({ navigation }) => {
             store.dispatch(checkAuthentication({data:json.data,token}))
             setRender({})
           } else {
-            setIsAuthentication(false)
+            // setIsAuthentication(false)
           }
       }).
       catch(e => {
