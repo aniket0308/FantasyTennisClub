@@ -70,9 +70,9 @@ const Payment = ({ route, navigation }) => {
                 scrollEnabled={true}
                 contentContainerStyle={{ justifyContent: 'center', flex: 1, alignItems: 'center' }}
                 style={[commonStyle.container, loginStyle.container]} >
-                <Image style={{ width: widthPercentageToDP(50) }} resizeMode='contain' source={constants.icons.cards} />
+                <Image style={{ height: widthPercentageToDP(30), marginBottom: 50 }} resizeMode='contain' source={constants.icons.cards} />
                 <FloatingInput
-                    textInputStyle={{ marginTop: -35 }}
+                    //textInputStyle={{ marginTop: -35 }}
                     mandatoryField={true}
                     headerText={'Card Number'}
                     value={cardNumber}
