@@ -12,3 +12,4 @@
 -keepclassmembers class com.android.installreferrer.api.** {
   *;
 }
+-keep class me.leolin.shortcutbadger.impl.** { <init>(...); }

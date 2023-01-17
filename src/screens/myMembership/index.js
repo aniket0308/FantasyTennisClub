@@ -25,7 +25,7 @@ const MyMembership = ({ navigation, route }) => {
             setData: setData
         }
         //calling Api For Getting getMyMembership
-        utils.callApiGet(`api/v1/user/my-membership`, seasonObj)
+        await utils.callApiGet(`api/v1/user/my-membership`, seasonObj)
     }
 
     useEffect(() => {

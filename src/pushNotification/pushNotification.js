@@ -40,6 +40,7 @@ class PushNotificationService {
                         } else {
                             if(notification?.data?.notification_type == 'MEMBER'){
                                 PushNotification.removeAllDeliveredNotifications()    
+                                await AsyncStorage.removeItem('@count')
                             }
                         }
                         if (notification?.data?.notification_type == 'MEMBER') {
@@ -62,6 +63,7 @@ class PushNotificationService {
                             if (notification?.data?.notification_type == 'MEMBER') {
                                 if(Platform.OS=='android'){
                                     PushNotification.removeAllDeliveredNotifications()
+                                    await AsyncStorage.removeItem('@count')
                                 }
                                 utils.navigateTo(navigateToFromAndroid,constants.screens.notification, { fromBackground:true })
                             } else {
@@ -134,6 +136,7 @@ class PushNotificationService {
     }
 
     localNotification = (payload) => {
+        console.log('what is notification payload',payload);
         if (Platform.OS == 'android') {
             PushNotification.localNotification({
                 userInfo: payload.data,

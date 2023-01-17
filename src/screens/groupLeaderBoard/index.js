@@ -20,7 +20,7 @@ const GroupLeaderBoard = ({ route, navigation }) => {
     const getTournamentLeaderBoard = async () => {
         const tournamentId = await AsyncStorage.getItem('@TournamentId')
         const token = await AsyncStorage.getItem('@Token')
-        utils.callApiGet(`api/v1/tournaments/${tournamentId}/group/leaderboard`, { setData, setIsLoading, token })
+       await utils.callApiGet(`api/v1/tournaments/${tournamentId}/group/leaderboard`, { setData, setIsLoading, token })
     }
 
 

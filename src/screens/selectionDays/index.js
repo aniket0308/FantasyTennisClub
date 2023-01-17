@@ -32,7 +32,7 @@ const SelectionDays = ({ route, navigation }) => {
 
     const getDays = async () => {
         const token = await AsyncStorage.getItem('@Token')
-        utils.callApiGet(`api/v1/member-dashboard`, { setIsLoading, setDays, token })
+        await utils.callApiGet(`api/v1/member-dashboard`, { setIsLoading, setDays, token })
     }
 
     useEffect(() => {
@@ -72,6 +72,7 @@ const SelectionDays = ({ route, navigation }) => {
                         });
                     } else {
                         PushNotification.removeAllDeliveredNotifications()
+                        await AsyncStorage.removeItem('@count')
                     }
                     utils.navigateTo(navigation, constants.screens.notification)
                 }

@@ -23,12 +23,12 @@ const Consolation = ({ route, navigation }) => {
         const token = await AsyncStorage.getItem('@Token')
         const tournamentId = await AsyncStorage.getItem('@TournamentId')
         if (route.params == 'Season Ranking') {
-            utils.callApiGet(`api/v1/season-leaderboard`, { setIsLoading, setRefresh, setData, token })
+            await utils.callApiGet(`api/v1/season-leaderboard`, { setIsLoading, setRefresh, setData, token })
         } else if (route.params == 'Consolation') {
-            utils.callApiGet(`api/v1/tournaments/${tournamentId}/consolation-leaderboard`, { setIsLoading, setRefresh, setData, token })
+            await utils.callApiGet(`api/v1/tournaments/${tournamentId}/consolation-leaderboard`, { setIsLoading, setRefresh, setData, token })
         }
         else {
-            utils.callApiGet(`api/v1/tournaments/${tournamentId}/group/consolation-leaderboard`, { setIsLoading, setRefresh, setData, token })
+            await utils.callApiGet(`api/v1/tournaments/${tournamentId}/group/consolation-leaderboard`, { setIsLoading, setRefresh, setData, token })
         }
     }
 

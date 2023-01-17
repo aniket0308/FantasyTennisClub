@@ -37,7 +37,7 @@ const MyPicks = ({ route, navigation }) => {
             setData: setData
         }
         //calling Api For Getting picks
-        utils.callApiGet(`api/v1/tournaments/${tournamentId}/my-picks`, pickObj)
+        await utils.callApiGet(`api/v1/tournaments/${tournamentId}/my-picks`, pickObj)
     }
 
     useEffect(() => {
@@ -101,6 +101,7 @@ const MyPicks = ({ route, navigation }) => {
                         });
                     } else {
                         PushNotification.removeAllDeliveredNotifications()
+                        await AsyncStorage.removeItem('@count')
                     }
                     utils.navigateTo(navigation, constants.screens.notification)
                 }

@@ -21,7 +21,7 @@ const LeaderBoard = ({ route, navigation }) => {
     const getTournamentLeaderBoards = async () => {
         const tournamentId = await AsyncStorage.getItem('@TournamentId')
         const token = await AsyncStorage.getItem('@Token')
-        utils.callApiGet(`api/v1/tournaments/${tournamentId}/leaderboard`, { setData, setIsLoading, navigation, token }, 'Leaderboard')
+        await utils.callApiGet(`api/v1/tournaments/${tournamentId}/leaderboard`, { setData, setIsLoading, navigation, token }, 'Leaderboard')
     }
 
     useEffect(() => {

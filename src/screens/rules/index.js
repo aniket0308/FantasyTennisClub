@@ -31,7 +31,7 @@ const Rules = ({ navigation }) => {
             setData: setData
         }
         //calling Api For Getting about
-        utils.callApiGet(`api/v1/page/rules`, seasonObj)
+        await utils.callApiGet(`api/v1/page/rules`, seasonObj)
     }
 
     //get Faq From Api
@@ -42,7 +42,7 @@ const Rules = ({ navigation }) => {
             setRefresh: setRefresh,
             setFaq: setFaq
         }
-        utils.callApiGet(`api/v1/page/faqs`, seasonObj)
+        await utils.callApiGet(`api/v1/page/faqs`, seasonObj)
     }
 
     useEffect(() => {

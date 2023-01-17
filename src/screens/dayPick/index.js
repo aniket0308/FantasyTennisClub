@@ -33,7 +33,7 @@ const DayPick = ({ route, navigation }) => {
     //get Particular Day Match
     const getAllMatchesOfParticulatDay = async () => {
         const token = await AsyncStorage.getItem('@Token')
-        utils.callApiGet(`api/v1/member-dashboard`, { setIsLoading, setDays, setRefresh, token })
+        await utils.callApiGet(`api/v1/member-dashboard`, { setIsLoading, setDays, setRefresh, token })
     }
 
     useEffect(() => {

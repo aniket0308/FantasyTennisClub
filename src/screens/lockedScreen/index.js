@@ -22,7 +22,7 @@ const LockedScreen = ({ navigation, route }) => {
     const getSaveMemberPicks = async () => {
         // dispatch(getSavedPicks({setData,setIsLoading}))
         const token=await AsyncStorage.getItem('@Token')
-        utils.callApiGet(`api/v1/tournaments/${route?.params?.item?.tournament_id}/${route?.params?.item?.id}/members-picks`, {setData,setIsLoading,token})
+        await utils.callApiGet(`api/v1/tournaments/${route?.params?.item?.tournament_id}/${route?.params?.item?.id}/members-picks`, {setData,setIsLoading,token})
     }
 
     const getMemberPickRender = ({ item, index }) => {

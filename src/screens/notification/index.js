@@ -23,7 +23,7 @@ const Notification = ({ navigation,route }) => {
     //function for getting notification
     const getNotification = async() => {
         const token= await AsyncStorage.getItem('@Token')
-        utils.callApiGet(`api/v1/announcements/member`, {setIsLoading,setData,token},'getNotification')
+        await utils.callApiGet(`api/v1/announcements/member`, {setIsLoading,setData,token},'getNotification')
     }
 
     const readAllNotification=async()=>{

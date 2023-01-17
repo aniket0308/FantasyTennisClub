@@ -27,7 +27,7 @@ const Announcments = ({ navigation, route }) => {
             setRefresh: setRefresh,
             setData: setData,
         }
-        utils.callApiGet(`api/v1/announcements/general${filter == true ? '/all' : ''}`, announcementObj)
+        await utils.callApiGet(`api/v1/announcements/general${filter == true ? '/all' : ''}`, announcementObj)
     }
 
     useEffect(() => {
@@ -72,6 +72,7 @@ const Announcments = ({ navigation, route }) => {
                         });
                     } else {
                         PushNotification.removeAllDeliveredNotifications()
+                        await AsyncStorage.removeItem('@count')
                     }
                     utils.navigateTo(navigation, constants.screens.notification)
                 }

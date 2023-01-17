@@ -26,7 +26,7 @@ const AboutUs = ({ navigation }) => {
             setData: setData
         }
         //calling Api For Getting about
-        utils.callApiGet(`api/v1/page/about`, seasonObj)
+        await utils.callApiGet(`api/v1/page/about`, seasonObj)
     }
 
     useEffect(() => {

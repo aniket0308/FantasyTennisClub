@@ -9,19 +9,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react'
 import { Provider } from 'react-redux';
-import { AuthNavigator, RegisterFirstTime, RootNavigator } from './navigation/navigation';
 import { store } from './redux/store';
-import messaging from '@react-native-firebase/messaging';
 import PushNotificationService from './pushNotification/pushNotification';
 import Snackbar from 'react-native-snackbar';
 import { checkAuthentication, checkLoginStep, logout } from './redux/slice/auth';
-import { Alert, Text, View } from 'react-native';
-import PushNotification from 'react-native-push-notification';
-import PushNotificationIOS from '@react-native-community/push-notification-ios';
-import { utils } from './common';
-import { constants } from './common/constant';
 import Routes from './navigation/route';
-import { navigate } from './navigation/navigationRef';
 
 const App = ({ navigation }) => {
 

@@ -23,7 +23,7 @@ const JoinWhatsApp = ({ navigation, route }) => {
     const dispatch = useDispatch()
 
     const getEtiquete = async () => {
-        utils.callApiGet(`api/v1/page/whatsapp-group`, { setIsLoading, setData, token: await AsyncStorage.getItem('@Token') })
+      await utils.callApiGet(`api/v1/page/whatsapp-group`, { setIsLoading, setData, token: await AsyncStorage.getItem('@Token') })
     }
 
     useEffect(() => {
@@ -53,6 +53,7 @@ const JoinWhatsApp = ({ navigation, route }) => {
                         });
                     } else {
                         PushNotification.removeAllDeliveredNotifications()
+                        await AsyncStorage.removeItem('@count')
                     }
 
                     utils.navigateTo(navigation, constants.screens.notification)

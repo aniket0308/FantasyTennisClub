@@ -46,6 +46,7 @@ const Home = ({ navigation }) => {
             } else {
                 if(remoteMessage?.data?.notification_type == 'MEMBER'){
                     PushNotification.removeAllDeliveredNotifications()
+                    await AsyncStorage.removeItem('@count')
                 }else{
                     PushNotification.getApplicationIconBadgeNumber((number)=>{
                         // PushNotification.setApplicationIconBadgeNumber(number-1)
@@ -86,12 +87,31 @@ const Home = ({ navigation }) => {
             }
              else {
                 if(remoteMessage?.data?.notification_type=='MEMBER'){
-                    PushNotification.getApplicationIconBadgeNumber(n => {
-                        PushNotification.setApplicationIconBadgeNumber(n + 1)
+                    await AsyncStorage.getItem('@count').then(async(count)=>{
+                        if(count==null){
+                           await AsyncStorage.setItem('@count','0')
+                           PushNotification.setApplicationIconBadgeNumber(1)
+                        }
+                        else{
+                            let incrementer=parseInt(count)+1
+                            PushNotification.setApplicationIconBadgeNumber(incrementer)
+                            await AsyncStorage.setItem('@count',incrementer.toString())
+        
+                        }
                     })
                 }else{
-                    PushNotification.getApplicationIconBadgeNumber(n => {
-                        // PushNotification.setApplicationIconBadgeNumber(n - 1)
+                    await AsyncStorage.getItem('@count').then(async(count)=>{
+                        console.log('count==',count);
+                        if(count==null || count<0){
+                           await AsyncStorage.setItem('@count','0')
+                           PushNotification.removeAllDeliveredNotifications()
+                        }
+                        else{
+                            let decrementer=parseInt(count)
+                            PushNotification.setApplicationIconBadgeNumber(decrementer)
+                            await AsyncStorage.setItem('@count',decrementer.toString())
+        
+                        }
                     })
                 }
             }

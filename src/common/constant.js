@@ -65,7 +65,7 @@ export const constants = {
         effilTower: require(`${defaultPath}/effilTower.png`),
         map: require(`${defaultPath}/map.png`),
         whiteBackArrow: require(`${defaultPath}/whiteBackArrow.png`),
-        cards: require(`${defaultPath}/Visa.png`),
+        cards: require(`${defaultPath}/AuthorizeNet.png`),
         paymentFailed: require(`${defaultPath}/paymentFailed.png`),
         paymentSuccess: require(`${defaultPath}/PaymentSuccess.png`),
         delete: require(`${defaultPath}/rubbishBin.png`),

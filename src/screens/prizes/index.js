@@ -26,7 +26,7 @@ const Prizes = ({ navigation, route }) => {
     const getAllTournamentParticipants = async () => {
         const tournamentId = await AsyncStorage.getItem('@TournamentId')
         const token = await AsyncStorage.getItem('@Token')
-        utils.callApiGet(`api/v1/tournaments/${tournamentId}/participations`, { setIsLoading, setData, token })
+        await utils.callApiGet(`api/v1/tournaments/${tournamentId}/participations`, { setIsLoading, setData, token })
     }
 
     useEffect(() => {
@@ -56,6 +56,7 @@ const Prizes = ({ navigation, route }) => {
                         });
                     } else {
                         PushNotification.removeAllDeliveredNotifications()
+                        await AsyncStorage.removeItem('@count')
                     }
                     utils.navigateTo(navigation, constants.screens.notification)
                 }

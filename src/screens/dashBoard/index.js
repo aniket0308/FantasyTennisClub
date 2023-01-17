@@ -29,7 +29,7 @@ const DashBoardHome = ({ navigation }) => {
             setDays: setDays
         }
         //calling Api For Getting Days
-        utils.callApiGet(`api/v1/member-dashboard`, getDaysObj)
+        await utils.callApiGet(`api/v1/member-dashboard`, getDaysObj)
     }
 
     const getAnnouncement = async (filter) => {
@@ -39,7 +39,7 @@ const DashBoardHome = ({ navigation }) => {
             setRefresh: setRefresh,
             setData: setData,
         }
-        utils.callApiGet(`api/v1/announcements/general${filter == true ? '/all' : ''}`, announcementObj)
+        await utils.callApiGet(`api/v1/announcements/general${filter == true ? '/all' : ''}`, announcementObj)
     }
 
     useEffect(() => {
@@ -180,6 +180,7 @@ const DashBoardHome = ({ navigation }) => {
                             });
                         } else {
                             PushNotification.removeAllDeliveredNotifications()
+                            await AsyncStorage.removeItem('@count')
                         }
                         utils.navigateTo(navigation, constants.screens.notification)
                     }
