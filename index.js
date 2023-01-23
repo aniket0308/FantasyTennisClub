@@ -2,7 +2,7 @@
  * @format
  */
 
-import { AppRegistry, NativeModules, Platform } from 'react-native';
+import { AppRegistry, NativeModules, Platform, } from 'react-native';
 import App from './src/App';
 import { name as appName } from './app.json';
 import messaging from '@react-native-firebase/messaging';
@@ -12,34 +12,54 @@ import PushNotificationService from './src/pushNotification/pushNotification';
 import PushNotification from 'react-native-push-notification';
 
 const noti = new PushNotificationService()
-Platform.OS=='ios'&&noti.configure()
+Platform.OS == 'ios' && noti.configure()
 
-// Register background handler
+// Register backgradb devicesound handler
 messaging().setBackgroundMessageHandler(async remoteMessage => {
-  console.log('Message handled in the background!', remoteMessage);
-  if (Platform.OS == 'ios') {
-    if(remoteMessage?.data?.notification_type=='MEMBER'){
-        PushNotificationIOS.getApplicationIconBadgeNumber(number => {
-            console.log('what is number beta incrementer Baclkgroubd', number);
-            PushNotificationIOS.setApplicationIconBadgeNumber(number + 1);
-        });
-    }else{
-        PushNotificationIOS.getApplicationIconBadgeNumber(number => {
-            console.log('what is number beta Decrementer backgrounf', number);
-            // PushNotificationIOS.setApplicationIconBadgeNumber(number - 1);
-        });
+    console.log('Message handled in the background!', remoteMessage);
+    if (Platform.OS == 'ios') {
+        if (remoteMessage?.data?.notification_type == 'MEMBER') {
+            PushNotificationIOS.getApplicationIconBadgeNumber(number => {
+                console.log('what is number beta incrementer Baclkgroubd', number);
+                PushNotificationIOS.setApplicationIconBadgeNumber(number + 1);
+            });
+        } else {
+            PushNotificationIOS.getApplicationIconBadgeNumber(number => {
+                console.log('what is number beta Decrementer backgrounf', number);
+                // PushNotificationIOS.setApplicationIconBadgeNumber(number - 1);
+            });
+        }
     }
-}
- else {
-    if(remoteMessage?.data?.notification_type!='MEMBER'){
-        PushNotification.getApplicationIconBadgeNumber(n => {
-            PushNotification.setApplicationIconBadgeNumber(n + 1)
-        })
-    }else{
-        PushNotification.getApplicationIconBadgeNumber(n => {
-            // PushNotification.setApplicationIconBadgeNumber(n - 1)
-        })
+    else {
+        if (remoteMessage?.data?.notification_type == 'MEMBER') {
+            await AsyncStorage.getItem('@count').then(async(count)=>{
+                console.log('count==',count);
+                if(count==null){
+                   await AsyncStorage.setItem('@count','0')
+                   PushNotification.setApplicationIconBadgeNumber(1)
+                }
+                else{
+                    let incrementer=parseInt(count)+1
+                    PushNotification.setApplicationIconBadgeNumber(incrementer)
+                    await AsyncStorage.setItem('@count',incrementer.toString())
+                }
+            })
+        } else {
+            await AsyncStorage.getItem('@count').then(async(count)=>{
+                console.log('count==',count);
+                let a=parseInt(count)
+                if(a==null || a<=0){
+                    PushNotification.removeAllDeliveredNotifications()
+                    await AsyncStorage.setItem('@count','0')
+                }
+                else{
+                    let decrementer=parseInt(count)
+                    PushNotification.setApplicationIconBadgeNumber(decrementer)
+                    await AsyncStorage.setItem('@count',decrementer.toString())
+
+                }
+            })
+        }
     }
-}
 });
 AppRegistry.registerComponent(appName, () => App)
