@@ -119,7 +119,7 @@ const BottomTab = ({ navigation }) => {
                 initialRouteName="Dashboard">
                 <bottomTab.Screen
                     options={{
-                        unmountOnBlur: false,
+                        unmountOnBlur: true,
                         headerShown: false, tabBarIcon: ({ focused }) => {
                             return (
                                 <View
@@ -152,7 +152,7 @@ const BottomTab = ({ navigation }) => {
                     component={StackInstideDashBoard} />
                 <bottomTab.Screen
                     options={{
-                        unmountOnBlur: false,
+                        unmountOnBlur: true,
                         headerShown: false, tabBarIcon: ({ focused }) => {
                             return (
                                 <View style={{ paddingVertical: 20 }}>
@@ -184,7 +184,7 @@ const BottomTab = ({ navigation }) => {
                     component={StackInstideSelectionDay} />
                 <bottomTab.Screen
                     options={{
-                        unmountOnBlur: false,
+                        unmountOnBlur: true,
                         headerShown: false,
                         tabBarIcon: ({ focused }) => {
                             return (
@@ -215,7 +215,7 @@ const BottomTab = ({ navigation }) => {
                     component={StackInstideLeaderboard} />
                 <bottomTab.Screen
                     options={{
-                        unmountOnBlur: false,
+                        unmountOnBlur: true,
                         headerShown: false, tabBarIcon: ({ focused }) => {
                             return (
                                 <View style={{ paddingVertical: 20 }}>
@@ -247,7 +247,7 @@ const BottomTab = ({ navigation }) => {
                     component={StackInsideRules} />
                 <bottomTab.Screen
                     options={{
-                        unmountOnBlur: false,
+                        unmountOnBlur: true,
                         headerShown: false, tabBarIcon: ({ focused }) => {
                             return (
                                 <View style={{ paddingVertical: 20, marginLeft: -10 }}>
