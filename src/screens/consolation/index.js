@@ -156,13 +156,13 @@ const Consolation = ({ route, navigation }) => {
                     showBackArrow={true}
                     onPressLeftIcon={() => navigation.goBack()}
                     title={route?.params == undefined ? '' : route?.params}
-                    subTitle={route?.params == 'Season Ranking' ? '' : 'View Horizontal '}
-                    titleStyle={{ alignSelf: 'center', fontSize: 22, marginTop: 8 }}
+                    subTitle={route?.params == 'Season Ranking' ? '' : ''}
+                    titleStyle={{ alignSelf: 'center', fontSize: 22, marginTop: 8,width:route?.params == 'Consolation'?widthPercentageToDP(35):widthPercentageToDP(80) }}
                     subTitleStyle={{ alignSelf: 'center', color: constants.colors.darkGreen }}
-                    rightIcon={route?.params == 'Season Ranking' ? '' : constants.icons.participant}
-                    mainViewHeaderStyle={{ paddingBottom: 10, paddingTop: 10, width: route.params == 'Season Ranking' ? widthPercentageToDP(75) : null }}
+                    rightIcon={route?.params == 'Season Ranking' ? '' :route?.params == 'Consolation'?constants.icons.participant:''}
+                    mainViewHeaderStyle={{ paddingRight: 5, width: route.params == 'Season Ranking' ? widthPercentageToDP(75) : null }}
                     resizeMode='stretch'
-                    rightIconStyle={{ tintColor: '#23587B', height: widthPercentageToDP(16), width: widthPercentageToDP(16), alignSelf: 'center', marginTop: 10 }}
+                    rightIconStyle={{ tintColor: '#23587B', height: widthPercentageToDP(8), width: widthPercentageToDP(13), alignSelf: 'center'}}
                     rightIconTitleStyle={{ color: '#23587B', fontFamily: constants.fonts.nuntinoRegular, fontSize: 10, fontWeight: '600' }}
                     onPressRightIcon={() => utils.navigateTo(navigation, 'GroupLeaderBoard')}
                 />

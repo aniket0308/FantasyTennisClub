@@ -103,7 +103,7 @@ const GroupLeaderBoard = ({ route, navigation }) => {
                     showBackArrow={true}
                     viewHeaderStyle={{ width: widthPercentageToDP(78) }}
                     onPressLeftIcon={() => navigation.goBack()}
-                    title={'Group Leaderboard'}
+                    title={'Private Group Leaderboard'}
                     titleStyle={{ marginTop: 8, }}
                     subTitleStyle={{ alignSelf: 'center', color: constants.colors.darkGreen }}
                     mainViewHeaderStyle={{ paddingBottom: 10, paddingTop: 10 }}
@@ -132,7 +132,7 @@ const GroupLeaderBoard = ({ route, navigation }) => {
                 }
                 </ScrollView>
                 {isLoading==false&&<Loader/>}
-                <TouchableOpacity onPress={() => utils.navigateTo(navigation, 'Consolation', 'Group Consolation')} style={groupLeaderBoardStyle.ViewConsolation}>
+                <TouchableOpacity onPress={() => utils.navigateTo(navigation, 'Consolation', 'Private Group Consolation')} style={groupLeaderBoardStyle.ViewConsolation}>
                     <Text style={groupLeaderBoardStyle.consolation}>Consolation</Text>
                 </TouchableOpacity>
             </View>
