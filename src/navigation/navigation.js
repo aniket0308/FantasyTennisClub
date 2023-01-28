@@ -34,6 +34,7 @@ import LockedScreen from "../screens/lockedScreen"
 import seasonLeaderBoard from "../screens/seasonLeaderBoard"
 import Payment from "../screens/Payment"
 import PaymentConfirmation from "../screens/paymentConfirmation"
+import GroupConsolation from "../screens/groupConsolation"
 
 //Stacks Of Screen To Navigate
 const stack = createNativeStackNavigator()
@@ -76,6 +77,7 @@ const StackInstideLeaderboard = () => {
         <stack.Navigator initialRouteName="LeaderBoard">
             <stack.Screen options={{ headerShown: false, orientation: 'all' }} name="Consolation" component={Consolation} />
             <stack.Screen options={{ headerShown: false, orientation: 'all' }} name="GroupLeaderBoard" component={GroupLeaderBoard} />
+            <stack.Screen options={{ headerShown: false, orientation: 'all' }} name="GroupConsolation" component={GroupConsolation} />
             <stack.Screen options={{ headerShown: false, orientation: 'all' }} name="LeaderBoard" component={LeaderBoard} />
             <stack.Screen options={{ headerShown: false, orientation: 'all' }} name="seasonLeaderBoard" component={seasonLeaderBoard} />
         </stack.Navigator>

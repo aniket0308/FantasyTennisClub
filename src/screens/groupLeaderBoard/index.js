@@ -132,7 +132,7 @@ const GroupLeaderBoard = ({ route, navigation }) => {
                 }
                 </ScrollView>
                 {isLoading==false&&<Loader/>}
-                <TouchableOpacity onPress={() => utils.navigateTo(navigation, 'Consolation', 'Private Group Consolation')} style={groupLeaderBoardStyle.ViewConsolation}>
+                <TouchableOpacity onPress={() => utils.navigateTo(navigation, 'GroupConsolation')} style={groupLeaderBoardStyle.ViewConsolation}>
                     <Text style={groupLeaderBoardStyle.consolation}>Consolation</Text>
                 </TouchableOpacity>
             </View>
