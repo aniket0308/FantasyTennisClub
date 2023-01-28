@@ -147,7 +147,7 @@ const GroupConsolation = ({ route, navigation }) => {
                     onPressLeftIcon={() => navigation.goBack()}
                     title={'Private Group Consolation'}
                     subTitle={route?.params == 'Season Ranking' ? '' : ''}
-                    titleStyle={{ alignSelf: 'center', fontSize: 22, marginTop: 8, width: route?.params == 'Consolation' ? widthPercentageToDP(35) : widthPercentageToDP(80) }}
+                    titleStyle={{ marginTop: 8,width:widthPercentageToDP(90),textAlign:'center' }}
                     subTitleStyle={{ alignSelf: 'center', color: constants.colors.darkGreen }}
                     mainViewHeaderStyle={{ paddingRight: 5, width: widthPercentageToDP(75)}}
                     resizeMode='stretch'
