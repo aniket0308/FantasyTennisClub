@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
 import React, { useEffect, useState } from "react";
-import { Alert, BackHandler, Image, Platform, RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, BackHandler, Image, Platform, RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import PushNotification from "react-native-push-notification";
 import RenderHTML from "react-native-render-html";
 import { widthPercentageToDP } from "react-native-responsive-screen";
@@ -106,32 +106,35 @@ const DashBoardHome = ({ navigation }) => {
     const renderItem = (item, index) => {
         return (
             <TouchableOpacity
+            activeOpacity={1}
                 onPress={() => {
-                    if (item.icon) {
-                        utils.navigateTo(navigation, constants.screens.joinWhatsApp, days.data.whatsapp_group_link)
-                    } else {
-                        utils.navigateTo(
-                            navigation,
-                            item.title == 'MY PICKS'
-                                ? constants.screens.selectionDays
-                                : item.title == 'PRIZES'
-                                    ? constants.screens.prizes
-                                    : item.title == 'Leaderboard'
-                                        ? 'Leaderboard'
-                                        : 'Consolation',
-                            item.title == 'PRIZES' ? days.data.description : item.title
-                        )
+                    if(days?.data != undefined){
+                        if (item.icon) {
+                            utils.navigateTo(navigation, constants.screens.joinWhatsApp, days.data.whatsapp_group_link)
+                        } else {
+                            utils.navigateTo(
+                                navigation,
+                                item.title == 'MY PICKS'
+                                    ? constants.screens.selectionDays
+                                    : item.title == 'PRIZES'
+                                        ? constants.screens.prizes
+                                        : item.title == 'Leaderboard'
+                                            ? 'Leaderboard'
+                                            : 'Consolation',
+                                item.title == 'PRIZES' ? days.data.description : item.title
+                            )
+                        }
                     }
-                    // notification.localNotification()
                 }
                 }
                 style={[dashboardStyle.touchableView, {
                     marginTop: index != 0 || index != 1 ? 10 : 0,
-                    // marginLeft: index % 2 == 0 ? 0 : 25,
                 }]}
             >
                 {
-                    item?.score
+                    days?.data == undefined &&item?.score
+                    ?<ActivityIndicator color={constants.colors.darkBlue} />
+                    :item?.score
                     && <Text style={dashboardStyle.txtScore}>{days != undefined && days?.data != undefined && days?.data[item?.title == 'Leaderboard' ? 'leaderboard' : item?.title == 'Consolation' ? 'consolation' : 'season_ranking']}</Text>
                 }
                 {
