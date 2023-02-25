@@ -19,7 +19,7 @@ const DashBoardHome = ({ navigation }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [refresh, setRefresh] = useState(false)
     const [days, setDays] = useState()
-    const [data, setData] = useState()
+    const [news, setnews] = useState()
 
     const getDays = async () => {
         const getDaysObj = {
@@ -32,25 +32,25 @@ const DashBoardHome = ({ navigation }) => {
         await utils.callApiGet(`api/v1/member-dashboard`, getDaysObj)
     }
 
-    const getAnnouncement = async (filter) => {
-        const announcementObj = {
+    const getNews = async () => {
+        const newsObj = {
             token: await AsyncStorage.getItem('@Token'),
             setIsLoading: setIsLoading,
             setRefresh: setRefresh,
-            setData: setData,
+            setData: setnews,
         }
-        await utils.callApiGet(`api/v1/announcements/general${filter == true ? '/all' : ''}`, announcementObj)
+        await utils.callApiGet(`api/v1/news`, newsObj)
     }
 
     useEffect(() => {
         getDays()
-        getAnnouncement(false)
+        getNews()
     }, [refresh])
 
     useEffect(() => {
         const focusHandler = navigation.addListener('focus', () => {
             getDays()
-            getAnnouncement(false)
+            getNews()
         });
         return focusHandler;
     }, [navigation]);
@@ -73,7 +73,7 @@ const DashBoardHome = ({ navigation }) => {
 
     useEffect(() => {
         getDays()
-        getAnnouncement(false)
+        getNews()
     }, [])
 
     const tempData = [
@@ -152,9 +152,8 @@ const DashBoardHome = ({ navigation }) => {
             <TouchableOpacity
                 activeOpacity={1}
                 style={[dashboardStyle.viewInsights, { backgroundColor: index == 0 ? '#F5F8FA' : constants.colors.white, marginTop: index != 0 ? 10 : 0 }]}>
-                <Text style={dashboardStyle.txtInsights} >{item.title}</Text>
                 <RenderHTML
-                    source={{ html: `${item?.description}` }}
+                    source={{ html: `${item?.content}` }}
                 />
             </TouchableOpacity>
         )
@@ -201,7 +200,7 @@ const DashBoardHome = ({ navigation }) => {
                                 onRefresh={() => {
                                     setRefresh(true)
                                     getDays()
-                                    getAnnouncement(false)
+                                    getNews()
                                 }}
                                 title='Loading...'
                                 tintColor={constants.colors.darkBlue}
@@ -224,15 +223,12 @@ const DashBoardHome = ({ navigation }) => {
                                     })
                                 }
                             </View>
-                            <View style={[commonStyle.row, { justifyContent: 'space-between', marginVertical: 20, alignItems: 'center' }]}>
-                                <Text style={dashboardStyle.txtGeneral}>General Anouncements:</Text>
-                                <TouchableOpacity onPress={() => utils.navigateTo(navigation, constants.screens.announcements, { initial: false })}>
-                                    <Text style={[dashboardStyle.txtGeneral, { fontSize: 16 }]}>See All</Text>
-                                </TouchableOpacity>
+                            <View style={[commonStyle.row, { justifyContent: 'center', marginVertical: 20, alignItems: 'center' }]}>
+                                <Text style={dashboardStyle.txtGeneral}>News</Text>
                             </View>
                             {
-                                data != undefined && data?.data?.length > 0 &&
-                                data?.data.map((i, index) => {
+                                news != undefined && news?.data?.length > 0 &&
+                                news?.data.map((i, index) => {
                                     return renderInsightData(i, index)
                                 })
                             }

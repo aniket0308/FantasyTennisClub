@@ -73,47 +73,60 @@ const Home = ({ navigation }) => {
                 //  image: remoteMessage?.notification.android.imageUrl
             })
             if (Platform.OS == 'ios') {
-                if(remoteMessage?.data?.notification_type=='MEMBER'){
-                    PushNotificationIOS.getApplicationIconBadgeNumber(number => {
-                        console.log('what is number beta incrementer', number);
-                        PushNotificationIOS.setApplicationIconBadgeNumber(number + 1);
-                    });
-                }else{
-                    PushNotificationIOS.getApplicationIconBadgeNumber(number => {
-                        console.log('what is number beta incrementer', number);
-                        // PushNotificationIOS.setApplicationIconBadgeNumber(number - 1);
-                    });
-                }
+                PushNotificationIOS.setApplicationIconBadgeNumber(number + 1);
+                // if(remoteMessage?.data?.notification_type=='MEMBER'){
+                //     PushNotificationIOS.getApplicationIconBadgeNumber(number => {
+                //         console.log('what is number beta incrementer', number);
+                //         PushNotificationIOS.setApplicationIconBadgeNumber(number + 1);
+                //     });
+                // }else{
+                //     PushNotificationIOS.getApplicationIconBadgeNumber(number => {
+                //         console.log('what is number beta incrementer', number);
+                //         // PushNotificationIOS.setApplicationIconBadgeNumber(number - 1);
+                //     });
+                // }
             }
              else {
-                if(remoteMessage?.data?.notification_type=='MEMBER'){
-                    await AsyncStorage.getItem('@count').then(async(count)=>{
-                        if(count==null){
-                           await AsyncStorage.setItem('@count','0')
-                           PushNotification.setApplicationIconBadgeNumber(1)
-                        }
-                        else{
-                            let incrementer=parseInt(count)+1
-                            PushNotification.setApplicationIconBadgeNumber(incrementer)
-                            await AsyncStorage.setItem('@count',incrementer.toString())
+                await AsyncStorage.getItem('@count').then(async(count)=>{
+                    if(count==null){
+                       await AsyncStorage.setItem('@count','1')
+                       PushNotification.setApplicationIconBadgeNumber(1)
+                    }
+                    else{
+                        let incrementer=parseInt(count)+1
+                        PushNotification.setApplicationIconBadgeNumber(incrementer)
+                        await AsyncStorage.setItem('@count',incrementer.toString())
+    
+                    }
+                })
+                // if(remoteMessage?.data?.notification_type=='MEMBER'){
+                //     await AsyncStorage.getItem('@count').then(async(count)=>{
+                //         if(count==null){
+                //            await AsyncStorage.setItem('@count','0')
+                //            PushNotification.setApplicationIconBadgeNumber(1)
+                //         }
+                //         else{
+                //             let incrementer=parseInt(count)+1
+                //             PushNotification.setApplicationIconBadgeNumber(incrementer)
+                //             await AsyncStorage.setItem('@count',incrementer.toString())
         
-                        }
-                    })
-                }else{
-                    await AsyncStorage.getItem('@count').then(async(count)=>{
-                        console.log('count==',count);
-                        if(count==null || count<0){
-                           await AsyncStorage.setItem('@count','0')
-                           PushNotification.removeAllDeliveredNotifications()
-                        }
-                        else{
-                            let decrementer=parseInt(count)
-                            PushNotification.setApplicationIconBadgeNumber(decrementer)
-                            await AsyncStorage.setItem('@count',decrementer.toString())
+                //         }
+                //     })
+                // }else{
+                //     await AsyncStorage.getItem('@count').then(async(count)=>{
+                //         console.log('count==',count);
+                //         if(count==null || count<0){
+                //            await AsyncStorage.setItem('@count','0')
+                //            PushNotification.removeAllDeliveredNotifications()
+                //         }
+                //         else{
+                //             let decrementer=parseInt(count)
+                //             PushNotification.setApplicationIconBadgeNumber(decrementer)
+                //             await AsyncStorage.setItem('@count',decrementer.toString())
         
-                        }
-                    })
-                }
+                //         }
+                //     })
+                // }
             }
         });
         return unsubscribe

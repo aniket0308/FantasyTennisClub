@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
 import React, { useEffect, useState } from "react";
-import { Platform, RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, View } from "react-native";
+import { Platform, RefreshControl, SafeAreaView, ScrollView, StatusBar, Text, View, useWindowDimensions } from "react-native";
 import PushNotification from "react-native-push-notification";
 import RenderHTML from "react-native-render-html";
 import { widthPercentageToDP } from "react-native-responsive-screen";
@@ -22,11 +22,19 @@ const Prizes = ({ navigation, route }) => {
     const [data, setData] = useState()
     const [refresh, setRefresh] = useState(false)
     const dispatch = useDispatch()
+    const { width } = useWindowDimensions()
 
     const getAllTournamentParticipants = async () => {
         const tournamentId = await AsyncStorage.getItem('@TournamentId')
         const token = await AsyncStorage.getItem('@Token')
         await utils.callApiGet(`api/v1/tournaments/${tournamentId}/participations`, { setIsLoading, setData, token })
+    }
+
+    const mixedStyle = {
+        p: {
+            margin: 0,
+            padding: 0,
+        }
     }
 
     useEffect(() => {
@@ -103,6 +111,9 @@ const Prizes = ({ navigation, route }) => {
                         {
                             description && isLoading == true
                             && <RenderHTML
+                                contentWidth={width}
+                                enableExperimentalMarginCollapsing={true}
+                                tagsStyles={mixedStyle}
                                 source={{ html: `${description}` }}
                             />
                         }

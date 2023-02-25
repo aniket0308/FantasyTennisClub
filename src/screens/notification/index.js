@@ -23,7 +23,7 @@ const Notification = ({ navigation,route }) => {
     //function for getting notification
     const getNotification = async() => {
         const token= await AsyncStorage.getItem('@Token')
-        await utils.callApiGet(`api/v1/announcements/member`, {setIsLoading,setData,token},'getNotification')
+        await utils.callApiGet(`api/v1/announcements`, {setIsLoading,setData,token},'getNotification')
     }
 
     const readAllNotification=async()=>{
@@ -49,17 +49,19 @@ const Notification = ({ navigation,route }) => {
     const renderNotification = ({ item, index }) => {
         return (
             <TouchableOpacity 
-            onPress={async()=>{
-                const token= await AsyncStorage.getItem('@Token')
-                if((data?.data?.notifications?.length>0 || data != undefined||data!='')&& data?.success==true){
-                    setIsLoading(false)
-                    utils.callApi(`api/v1/announcements/read/${item?.id}`,{token,setIsLoading},'notificationRead')
-                }
-                Alert.alert(
-                    "Fantasy Tennis Club",
-                    `To send a message go to 'Account' then 'Contact us'.`,
-                )
-            }} style={[commonStyle.row, {padding:5, marginTop:index==0?40:20,justifyContent:'center'}]}>
+            activeOpacity={1}
+            // onPress={async()=>{
+            //     const token= await AsyncStorage.getItem('@Token')
+            //     if((data?.data?.notifications?.length>0 || data != undefined||data!='')&& data?.success==true){
+            //         setIsLoading(false)
+            //         utils.callApi(`api/v1/announcements/read/${item?.id}`,{token,setIsLoading},'notificationRead')
+            //     }
+            //     Alert.alert(
+            //         "Fantasy Tennis Club",
+            //         `To send a message go to 'Account' then 'Contact us'.`,
+            //     )
+            // }} 
+            style={[commonStyle.row, {padding:5, marginTop:index==0?40:20}]}>
                 <View style={commonStyle.row}>
                     <View style={notificationStyle.viewCircle}>
                         <Text style={notificationStyle.txtFtc}>FTC</Text>

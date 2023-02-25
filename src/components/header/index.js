@@ -15,24 +15,33 @@ const Header = ({ title, subTitle, showBackArrow, titleStyle, onPressLeftIcon, s
     const [isLoading, setIsLoading] = useState(false)
     const [,setRender]=useState({})
     const notiState=store.getState()
+    const [length,setLength]=useState()
 
     const getNotification = async () => {
         const token = await AsyncStorage.getItem('@Token')
-        token!=null&&utils.callApiGet(`api/v1/announcements/member`, { setIsLoading, setData,token })
+        token!=null&&utils.callApiGet(`api/v1/announcements`, { setIsLoading, setData,token })
     }
-     
+
+    const getLength=async()=>{
+        await AsyncStorage.getItem('@count').then(async(count)=>{
+            setLength(count)
+        })
+    }
     useEffect(() => {
         getNotification()
+        getLength()
     }, [])
 
     useEffect(() => {
         getNotification()
+        getLength()
     }, [refresh])
 
     useEffect(() => {
         if(navigation!=undefined){
             const focusHandler = navigation.addListener('focus', () => {
                 getNotification()
+                getLength()
             });
             return focusHandler;
         }
@@ -55,7 +64,7 @@ const Header = ({ title, subTitle, showBackArrow, titleStyle, onPressLeftIcon, s
                     {
                         rightIcon
                         && <TouchableOpacity style={headerStyle.rightIconTouchableShow} activeOpacity={1} onPress={onPressRightIcon}>
-                            {data?.data?.total > 0 && checkLength == true && <View style={[{ backgroundColor: 'red', height: 10, width: 10, borderRadius: 10, position: 'absolute', right: 6, top: -6 }, lengthStyle]} />}
+                            {length > 0 && checkLength == true && <View style={[{ backgroundColor: 'red', height: 10, width: 10, borderRadius: 10, position: 'absolute', right: 6, top: -6 }, lengthStyle]} />}
                             <Image
                                 style={[headerStyle.imgBack, { tintColor: constants.colors.black }, rightIconStyle]}
                                 source={rightIcon}
@@ -77,7 +86,7 @@ const Header = ({ title, subTitle, showBackArrow, titleStyle, onPressLeftIcon, s
                     {
                         rightIcon
                         && <TouchableOpacity style={headerStyle.rightIconTouchable} activeOpacity={1} onPress={onPressRightIcon}>
-                            {data?.data?.total > 0 && checkLength == true && <View style={[{ backgroundColor: 'red', height: 10, width: 10, borderRadius: 10, position: 'absolute', right: 10 }, lengthStyle]} />}
+                            { length > 0&& checkLength == true && <View style={[{ backgroundColor: 'red', height: 10, width: 10, borderRadius: 10, position: 'absolute', right: 10 }, lengthStyle]} />}
                             <Image
                                 style={[headerStyle.imgBack, { tintColor: constants.colors.black }, rightIconStyle]}
                                 source={rightIcon}
