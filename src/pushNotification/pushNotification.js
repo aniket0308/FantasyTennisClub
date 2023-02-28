@@ -31,12 +31,16 @@ class PushNotificationService {
                     const token = await AsyncStorage.getItem('@Token')
                     if (notification.userInteraction == true && notification.foreground == true) {
                         if (Platform.OS == 'ios' ) {
-                            if(notification?.data?.notification_type == 'MEMBER'){
-                                PushNotificationIOS.getApplicationIconBadgeNumber(number => {
-                                    console.log('what is number beta', number);
-                                    PushNotificationIOS.setApplicationIconBadgeNumber(0);
-                                });
-                            }
+                            PushNotificationIOS.getApplicationIconBadgeNumber(number => {
+                                console.log('what is number beta', number);
+                                PushNotificationIOS.setApplicationIconBadgeNumber(0);
+                            });
+                            // if(notification?.data?.notification_type == 'MEMBER'){
+                                // PushNotificationIOS.getApplicationIconBadgeNumber(number => {
+                                //     console.log('what is number beta', number);
+                                //     PushNotificationIOS.setApplicationIconBadgeNumber(0);
+                                // });
+                            // }
                         } else {
                             if(notification?.data?.notification_type == 'MEMBER'){
                                 PushNotification.removeAllDeliveredNotifications()    

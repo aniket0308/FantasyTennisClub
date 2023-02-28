@@ -32,17 +32,21 @@ const Home = ({ navigation }) => {
         messaging().onNotificationOpenedApp(async remoteMessage => {
             console.log('App Opened From Background', remoteMessage);
             if (Platform.OS == 'ios') {
-                if(remoteMessage?.data?.notification_type == 'MEMBER'){
-                    PushNotificationIOS.getApplicationIconBadgeNumber(number => {
-                        console.log('what is number beta', number);
-                        PushNotificationIOS.setApplicationIconBadgeNumber(0);
-                    });    
-                }else{
-                    PushNotificationIOS.getApplicationIconBadgeNumber(number => {
-                        console.log('what is number beta', number);
-                        // PushNotificationIOS.setApplicationIconBadgeNumber(number-1);
-                    });    
-                }
+                PushNotificationIOS.getApplicationIconBadgeNumber(number => {
+                    console.log('what is number beta', number);
+                    PushNotificationIOS.setApplicationIconBadgeNumber(0);
+                });
+                // if(remoteMessage?.data?.notification_type == 'MEMBER'){
+                //     // PushNotificationIOS.getApplicationIconBadgeNumber(number => {
+                //     //     console.log('what is number beta', number);
+                //     //     PushNotificationIOS.setApplicationIconBadgeNumber(0);
+                //     // });    
+                // }else{
+                //     PushNotificationIOS.getApplicationIconBadgeNumber(number => {
+                //         console.log('what is number beta', number);
+                //         // PushNotificationIOS.setApplicationIconBadgeNumber(number-1);
+                //     });    
+                // }
             } else {
                 if(remoteMessage?.data?.notification_type == 'MEMBER'){
                     PushNotification.removeAllDeliveredNotifications()
