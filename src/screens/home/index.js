@@ -32,9 +32,10 @@ const Home = ({ navigation }) => {
         messaging().onNotificationOpenedApp(async remoteMessage => {
             console.log('App Opened From Background', remoteMessage);
             if (Platform.OS == 'ios') {
-                PushNotificationIOS.getApplicationIconBadgeNumber(number => {
+                PushNotificationIOS.getApplicationIconBadgeNumber(async number => {
                     console.log('what is number beta', number);
                     PushNotificationIOS.setApplicationIconBadgeNumber(0);
+                    await AsyncStorage.removeItem('@count')
                 });
                 // if(remoteMessage?.data?.notification_type == 'MEMBER'){
                 //     // PushNotificationIOS.getApplicationIconBadgeNumber(number => {

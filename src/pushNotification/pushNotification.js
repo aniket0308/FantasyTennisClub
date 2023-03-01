@@ -31,8 +31,15 @@ class PushNotificationService {
                     const token = await AsyncStorage.getItem('@Token')
                     if (notification.userInteraction == true && notification.foreground == true) {
                         if (Platform.OS == 'ios' ) {
-                            PushNotificationIOS.getApplicationIconBadgeNumber(number => {
+                            PushNotificationIOS.getApplicationIconBadgeNumber(async (number) => {
                                 console.log('what is number beta', number);
+                                if(number==null){
+                                    await AsyncStorage.setItem('@count','1')
+                                 }
+                                 else{
+                                     let incrementer=parseInt(number)+1
+                                     await AsyncStorage.setItem('@count',incrementer.toString())
+                                 }
                                 PushNotificationIOS.setApplicationIconBadgeNumber(0);
                             });
                             // if(notification?.data?.notification_type == 'MEMBER'){
@@ -42,10 +49,10 @@ class PushNotificationService {
                                 // });
                             // }
                         } else {
-                            if(notification?.data?.notification_type == 'MEMBER'){
-                                PushNotification.removeAllDeliveredNotifications()    
-                                await AsyncStorage.removeItem('@count')
-                            }
+                            PushNotification.removeAllDeliveredNotifications()    
+                            await AsyncStorage.removeItem('@count')
+                            // if(notification?.data?.notification_type == 'MEMBER'){
+                            // }
                         }
                         if (notification?.data?.notification_type == 'MEMBER') {
                             const token = await AsyncStorage.getItem('@Token')

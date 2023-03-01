@@ -18,8 +18,15 @@ Platform.OS == 'ios' && noti.configure()
 messaging().setBackgroundMessageHandler(async remoteMessage => {
     console.log('Message handled in the background!', remoteMessage);
     if (Platform.OS == 'ios') {
-            PushNotificationIOS.getApplicationIconBadgeNumber(number => {
+            PushNotificationIOS.getApplicationIconBadgeNumber(async(number) => {
                 console.log('what is number beta incrementer Baclkgroubd', number);
+                if(number==null){
+                    await AsyncStorage.setItem('@count','1')
+                 }
+                 else{
+                     let incrementer=parseInt(number)+1
+                     await AsyncStorage.setItem('@count',incrementer.toString())
+                 }
                 PushNotificationIOS.setApplicationIconBadgeNumber(number + 1);
             });
         // if (remoteMessage?.data?.notification_type == 'MEMBER') {

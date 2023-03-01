@@ -66,9 +66,10 @@ const Announcments = ({ navigation, route }) => {
                     const token = await AsyncStorage.getItem('@Token')
                     utils.callApi('api/v1/announcements/member/read-all', { token }, 'allNotificationRead')
                     if (Platform.OS == 'ios') {
-                        PushNotificationIOS.getApplicationIconBadgeNumber(number => {
+                        PushNotificationIOS.getApplicationIconBadgeNumber(async number => {
                             console.log('what is number beta incrementer', number);
                             PushNotificationIOS.setApplicationIconBadgeNumber(0);
+                            await AsyncStorage.removeItem('@count')
                         });
                     } else {
                         PushNotification.removeAllDeliveredNotifications()
