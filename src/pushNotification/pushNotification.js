@@ -33,14 +33,8 @@ class PushNotificationService {
                         if (Platform.OS == 'ios' ) {
                             PushNotificationIOS.getApplicationIconBadgeNumber(async (number) => {
                                 console.log('what is number beta', number);
-                                if(number==null){
-                                    await AsyncStorage.setItem('@count','1')
-                                 }
-                                 else{
-                                     let incrementer=parseInt(number)+1
-                                     await AsyncStorage.setItem('@count',incrementer.toString())
-                                 }
                                 PushNotificationIOS.setApplicationIconBadgeNumber(0);
+                                await AsyncStorage.removeItem('@count')
                             });
                             // if(notification?.data?.notification_type == 'MEMBER'){
                                 // PushNotificationIOS.getApplicationIconBadgeNumber(number => {
@@ -78,6 +72,11 @@ class PushNotificationService {
                                 }
                                 utils.navigateTo(navigateToFromAndroid,constants.screens.notification, { fromBackground:true })
                             } else {
+                                PushNotificationIOS.getApplicationIconBadgeNumber(async (number) => {
+                                    console.log('what is number beta', number);
+                                    PushNotificationIOS.setApplicationIconBadgeNumber(0);
+                                    await AsyncStorage.removeItem('@count')
+                                });
                                 utils.navigateTo(navigateToFromAndroid,constants.screens.announcements, { fromBackground:true })
                             }
                         }
