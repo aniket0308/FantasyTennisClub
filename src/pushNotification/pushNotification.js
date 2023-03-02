@@ -65,20 +65,21 @@ class PushNotificationService {
                     } else {
                         console.log('From BACKGROUND !!!!!!',notification);
                         if(notification.userInteraction == true){
-                            if (notification?.data?.notification_type == 'MEMBER') {
+                            // if (notification?.data?.notification_type == 'MEMBER') {
                                 if(Platform.OS=='android'){
                                     PushNotification.removeAllDeliveredNotifications()
                                     await AsyncStorage.removeItem('@count')
+                                }else{
+                                    PushNotificationIOS.getApplicationIconBadgeNumber(async (number) => {
+                                        console.log('what is number beta', number);
+                                        PushNotificationIOS.setApplicationIconBadgeNumber(0);
+                                        await AsyncStorage.removeItem('@count')
+                                    });
                                 }
                                 utils.navigateTo(navigateToFromAndroid,constants.screens.notification, { fromBackground:true })
-                            } else {
-                                PushNotificationIOS.getApplicationIconBadgeNumber(async (number) => {
-                                    console.log('what is number beta', number);
-                                    PushNotificationIOS.setApplicationIconBadgeNumber(0);
-                                    await AsyncStorage.removeItem('@count')
-                                });
-                                utils.navigateTo(navigateToFromAndroid,constants.screens.announcements, { fromBackground:true })
-                            }
+                            // } else {
+                                // utils.navigateTo(navigateToFromAndroid,constants.screens.notification, { fromBackground:true })
+                            // }
                         }
                     }
                     // (required) Called when a remote is received or opened, or local notification is opened

@@ -18,17 +18,30 @@ Platform.OS == 'ios' && noti.configure()
 messaging().setBackgroundMessageHandler(async remoteMessage => {
     console.log('Message handled in the background!', remoteMessage);
     if (Platform.OS == 'ios') {
-            PushNotificationIOS.getApplicationIconBadgeNumber(async(number) => {
-                console.log('what is number beta incrementer Baclkgroubd', number);
-                if(number==null){
-                    await AsyncStorage.setItem('@count','1')
-                 }
-                 else{
-                     let incrementer=parseInt(number)+1
-                     await AsyncStorage.setItem('@count',incrementer.toString())
-                 }
-                PushNotificationIOS.setApplicationIconBadgeNumber(number + 1);
-            });
+        await AsyncStorage.getItem('@count').then(async (count) => {
+            console.log('count==', count);
+            if (count == null) {
+                await AsyncStorage.setItem('@count', '0')
+                PushNotificationIOS.setApplicationIconBadgeNumber(1);
+            }
+            else {
+                let incrementer = parseInt(number) + 1
+                await AsyncStorage.setItem('@count', incrementer.toString())
+                PushNotificationIOS.setApplicationIconBadgeNumber(incrementer);
+            }
+        })
+        // PushNotificationIOS.getApplicationIconBadgeNumber(async(number) => {
+        //     console.log('what is number beta incrementer Baclkgroubd', number);
+        //     if(number==null){
+        //         await AsyncStorage.setItem('@count','0')
+        //         PushNotificationIOS.setApplicationIconBadgeNumber(1);
+        //      }
+        //      else{
+        //          let incrementer=parseInt(number)+1
+        //          await AsyncStorage.setItem('@count',incrementer.toString())
+        //          PushNotificationIOS.setApplicationIconBadgeNumber(incrementer);
+        //      }
+        // });
         // if (remoteMessage?.data?.notification_type == 'MEMBER') {
         //     PushNotificationIOS.getApplicationIconBadgeNumber(number => {
         //         console.log('what is number beta incrementer Baclkgroubd', number);
@@ -42,16 +55,16 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
         // }
     }
     else {
-        await AsyncStorage.getItem('@count').then(async(count)=>{
-            console.log('count==',count);
-            if(count==null){
-               await AsyncStorage.setItem('@count','1')
-               PushNotification.setApplicationIconBadgeNumber(1)
+        await AsyncStorage.getItem('@count').then(async (count) => {
+            console.log('count==', count);
+            if (count == null) {
+                await AsyncStorage.setItem('@count', '0')
+                PushNotification.setApplicationIconBadgeNumber(1)
             }
-            else{
-                let incrementer=parseInt(count)+1
+            else {
+                let incrementer = parseInt(count) + 1
                 PushNotification.setApplicationIconBadgeNumber(incrementer)
-                await AsyncStorage.setItem('@count',incrementer.toString())
+                await AsyncStorage.setItem('@count', incrementer.toString())
             }
         })
         // if (remoteMessage?.data?.notification_type == 'MEMBER') {

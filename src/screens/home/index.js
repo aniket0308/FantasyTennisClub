@@ -49,21 +49,21 @@ const Home = ({ navigation }) => {
                 //     });    
                 // }
             } else {
-                if(remoteMessage?.data?.notification_type == 'MEMBER'){
+                // if(remoteMessage?.data?.notification_type == 'MEMBER'){
                     PushNotification.removeAllDeliveredNotifications()
                     await AsyncStorage.removeItem('@count')
-                }else{
-                    PushNotification.getApplicationIconBadgeNumber((number)=>{
+                // }else{
+                    // PushNotification.getApplicationIconBadgeNumber((number)=>{
                         // PushNotification.setApplicationIconBadgeNumber(number-1)
-                    })
-                }
+                    // })
+                // }
             }
-            if (remoteMessage?.data?.notification_type == 'MEMBER') {
+            // if (remoteMessage?.data?.notification_type == 'MEMBER') {
                 const token = await AsyncStorage.getItem('@Token')
                 utils.navigateTo(navigation,constants.screens.notification,{fromBackground:true})
-            } else {
-                utils.navigateTo(navigation,constants.screens.announcements,{fromBackground:true})
-            }
+            // } else {
+                // utils.navigateTo(navigation,constants.screens.announcements,{fromBackground:true})
+            // }
         })
         notification.createChannel()
         setTimeout(() => {
@@ -78,7 +78,18 @@ const Home = ({ navigation }) => {
                 //  image: remoteMessage?.notification.android.imageUrl
             })
             if (Platform.OS == 'ios') {
-                PushNotificationIOS.setApplicationIconBadgeNumber(number + 1);
+                await AsyncStorage.getItem('@count').then(async (count) => {
+                    console.log('count==', count);
+                    if (count == null) {
+                        await AsyncStorage.setItem('@count', '0')
+                        PushNotificationIOS.setApplicationIconBadgeNumber(1);
+                    }
+                    else {
+                        let incrementer = parseInt(number) + 1
+                        await AsyncStorage.setItem('@count', incrementer.toString())
+                        PushNotificationIOS.setApplicationIconBadgeNumber(incrementer);
+                    }
+                })
                 // if(remoteMessage?.data?.notification_type=='MEMBER'){
                 //     PushNotificationIOS.getApplicationIconBadgeNumber(number => {
                 //         console.log('what is number beta incrementer', number);
@@ -94,7 +105,7 @@ const Home = ({ navigation }) => {
              else {
                 await AsyncStorage.getItem('@count').then(async(count)=>{
                     if(count==null){
-                       await AsyncStorage.setItem('@count','1')
+                       await AsyncStorage.setItem('@count','0')
                        PushNotification.setApplicationIconBadgeNumber(1)
                     }
                     else{
