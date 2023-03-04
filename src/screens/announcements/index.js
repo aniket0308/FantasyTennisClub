@@ -74,6 +74,7 @@ const Announcments = ({ navigation, route }) => {
                     } else {
                         PushNotification.removeAllDeliveredNotifications()
                         await AsyncStorage.removeItem('@count')
+                        PushNotification.setApplicationIconBadgeNumber(0)
                     }
                     utils.navigateTo(navigation, constants.screens.notification)
                 }

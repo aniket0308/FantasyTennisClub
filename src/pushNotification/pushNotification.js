@@ -22,7 +22,7 @@ class PushNotificationService {
 
                 // (required) Called when a remote is received or opened, or local notification is opened
                 onNotification: async function (notification) {
-                    console.log('What is Notification',notification);
+                    console.log('What is Notification', notification);
                     // process the notification
                     // Handle notification click
 
@@ -30,56 +30,65 @@ class PushNotificationService {
 
                     const token = await AsyncStorage.getItem('@Token')
                     if (notification.userInteraction == true && notification.foreground == true) {
-                        if (Platform.OS == 'ios' ) {
+                        if (Platform.OS == 'ios') {
                             PushNotificationIOS.getApplicationIconBadgeNumber(async (number) => {
                                 console.log('what is number beta', number);
                                 PushNotificationIOS.setApplicationIconBadgeNumber(0);
                                 await AsyncStorage.removeItem('@count')
                             });
                             // if(notification?.data?.notification_type == 'MEMBER'){
-                                // PushNotificationIOS.getApplicationIconBadgeNumber(number => {
-                                //     console.log('what is number beta', number);
-                                //     PushNotificationIOS.setApplicationIconBadgeNumber(0);
-                                // });
+                            // PushNotificationIOS.getApplicationIconBadgeNumber(number => {
+                            //     console.log('what is number beta', number);
+                            //     PushNotificationIOS.setApplicationIconBadgeNumber(0);
+                            // });
                             // }
                         } else {
-                            PushNotification.removeAllDeliveredNotifications()    
+                            PushNotification.removeAllDeliveredNotifications()
                             await AsyncStorage.removeItem('@count')
+                            PushNotification.setApplicationIconBadgeNumber(0)
                             // if(notification?.data?.notification_type == 'MEMBER'){
                             // }
                         }
-                        if (notification?.data?.notification_type == 'MEMBER') {
+                        if (notification?.data?.notification_type != 'MEMBERs') {
                             const token = await AsyncStorage.getItem('@Token')
-                            if(Platform.OS=='android'){
-                                utils.navigateTo(navigateToFromAndroid,constants.screens.notification, { exit: notification?.foreground == true ? false : true })
-                            }else{
+                            if (Platform.OS == 'android') {
+                                utils.navigateTo(navigateToFromAndroid, constants.screens.notification, { exit: notification?.foreground == true ? false : true })
+                            } else {
                                 navigate(constants.screens.notification, { exit: notification?.foreground == true ? false : true })
-                            }
-                        } else {
-                            if(Platform.OS=='android'){
-                                utils.navigateTo(navigateToFromAndroid,constants.screens.announcements, { exit: notification?.foreground == true ? false : true })
-                            }else{
-                                navigate(constants.screens.announcements, { exit: notification?.foreground == true ? false : true })
                             }
                         }
                     } else {
-                        console.log('From BACKGROUND !!!!!!',notification);
-                        if(notification.userInteraction == true){
-                            // if (notification?.data?.notification_type == 'MEMBER') {
-                                if(Platform.OS=='android'){
+                        console.log('From BACKGROUND !!!!!!', notification);
+                        if (notification.userInteraction == true) {
+                            if (notification?.data?.notification_type != 'MEMBERs') {
+                                if (Platform.OS == 'android') {
                                     PushNotification.removeAllDeliveredNotifications()
                                     await AsyncStorage.removeItem('@count')
-                                }else{
+                                    utils.navigateTo(navigateToFromAndroid, constants.screens.notification, { fromBackground: true })
+                                } else {
                                     PushNotificationIOS.getApplicationIconBadgeNumber(async (number) => {
                                         console.log('what is number beta', number);
                                         PushNotificationIOS.setApplicationIconBadgeNumber(0);
                                         await AsyncStorage.removeItem('@count')
                                     });
+                                    navigate(constants.screens.notification, { exit: notification?.foreground == true ? false : true })
                                 }
-                                utils.navigateTo(navigateToFromAndroid,constants.screens.notification, { fromBackground:true })
-                            // } else {
-                                // utils.navigateTo(navigateToFromAndroid,constants.screens.notification, { fromBackground:true })
-                            // }
+                            } 
+                        }else{
+                            if (Platform.OS == 'android') {
+                                await AsyncStorage.getItem('@count').then(async (count) => {
+                                    console.log('count== from foredsdsdd ', count);
+                                    if (count == null) {
+                                        await AsyncStorage.setItem('@count', '1')
+                                        PushNotification.setApplicationIconBadgeNumber(1)
+                                    }
+                                    else {
+                                        let incrementer = parseInt(count) + 1
+                                        PushNotification.setApplicationIconBadgeNumber(incrementer)
+                                        await AsyncStorage.setItem('@count', incrementer.toString())
+                                    }
+                                })
+                            } 
                         }
                     }
                     // (required) Called when a remote is received or opened, or local notification is opened
@@ -147,10 +156,10 @@ class PushNotificationService {
     }
 
     localNotification = (payload) => {
-        let newStr=payload?.body.trim().split('&amp;nbsp;').map((i)=>{
+        let newStr = payload?.body.trim().split('&amp;nbsp;').map((i) => {
             return i.trim()
         })
-        console.log('what is notification payload',newStr.join(''));
+        console.log('what is notification payload', newStr.join(''));
         if (Platform.OS == 'android') {
             PushNotification.localNotification({
                 userInfo: payload.data,

@@ -54,8 +54,8 @@ const JoinWhatsApp = ({ navigation, route }) => {
                         });
                     } else {
                         PushNotification.removeAllDeliveredNotifications()
-                        // await AsyncStorage.removeItem('@count')
-                        await AsyncStorage.setItem('@count','0')
+                        await AsyncStorage.removeItem('@count')
+                        PushNotification.setApplicationIconBadgeNumber(0)
                     }
 
                     utils.navigateTo(navigation, constants.screens.notification)

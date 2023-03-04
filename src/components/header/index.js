@@ -64,7 +64,7 @@ const Header = ({ title, subTitle, showBackArrow, titleStyle, onPressLeftIcon, s
                     {
                         rightIcon
                         && <TouchableOpacity style={headerStyle.rightIconTouchableShow} activeOpacity={1} onPress={onPressRightIcon}>
-                            {length >= 0&&length != null && checkLength == true && <View style={[{ backgroundColor: 'red', height: 10, width: 10, borderRadius: 10, position: 'absolute', right: 6, top: -6 }, lengthStyle]} />}
+                            {length >= 0&&length!=null&& checkLength == true && <View style={[{ backgroundColor: 'red', height: 10, width: 10, borderRadius: 10, position: 'absolute', right: 6, top: -6 }, lengthStyle]} />}
                             <Image
                                 style={[headerStyle.imgBack, { tintColor: constants.colors.black }, rightIconStyle]}
                                 source={rightIcon}
